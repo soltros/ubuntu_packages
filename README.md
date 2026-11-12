@@ -10,7 +10,7 @@ This is the Ubuntu successor to [soltros_nixpkgs](https://github.com/soltros/sol
 
 | Install name | Application | Packaging |
 |---|---|---|
-| `brave-browser` | Brave browser | Pinned upstream Debian package |
+| `brave-browser` | Brave browser | Pinned upstream Debian payload, adapted for this APT repository |
 | `cabinet-desktop` | Cabinet file locker client | Rust source build |
 | `chatgpt` | ChatGPT desktop | Pinned upstream Debian package |
 | `codex` | Codex CLI | Official precompiled Linux bundle |
@@ -139,4 +139,4 @@ Already installed packages remain installed. Remove individual applications with
 
 ## Licensing
 
-Repository packaging additions use GPL-3.0 as provided in [LICENSE](LICENSE). Applications retain their respective upstream licenses and trademarks; packaging does not relicense them. Upstream Debian packages are preserved byte-for-byte. Bundled VPN Manager retains its own MIT license. See each application's source and license notices.
+Repository packaging additions use GPL-3.0 as provided in [LICENSE](LICENSE). Applications retain their respective upstream licenses and trademarks; packaging does not relicense them. ChatGPT’s upstream Debian package is preserved byte-for-byte. Brave’s payload is repackaged to remove its upstream repository/keyring bootstrap and use this repository’s signing setup. Bundled VPN Manager retains its own MIT license. See each application's source and license notices.

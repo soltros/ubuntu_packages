@@ -24,6 +24,7 @@ def run(*args, cwd=None, env=None):
 def write(root, path, text, mode=0o644):
     p = root / path
     p.parent.mkdir(parents=True, exist_ok=True)
+    if p.is_symlink(): p.unlink()
     p.write_text(text)
     p.chmod(mode)
 
@@ -161,7 +162,31 @@ def build(name, arch, suite, output, allow_restricted=False):
                 got_arch = subprocess.check_output(['dpkg-deb', '-f', str(payload), 'Architecture'], text=True).strip()
                 if (got_name,got_version,got_arch)!=(p.get('deb_name',name),p['version'],arch):
                     raise ValueError('Downloaded Debian package metadata does not match manifest')
-                shutil.copy2(payload, output / f'{got_name}_{got_version}_{arch}.deb')
+                if name != 'brave':
+                    shutil.copy2(payload, output / f'{got_name}_{got_version}_{arch}.deb')
+                    return
+                # Upstream Brave requires its repository keyring and bootstrap
+                # scripts. This archive uses its own APT key and source instead.
+                run('dpkg-deb', '--raw-extract', payload, stage)
+                ctl=stage/'DEBIAN/control'
+                text=ctl.read_text()
+                text=re.sub(r'(?m)^Version: .*$', 'Version: '+p['version']+'-1soltros1~'+suite, text)
+                text=re.sub(r'(?m)^Depends: brave-keyring, ', 'Depends: ', text)
+                ctl.write_text(text)
+                for script in ['postinst','postrm','prerm','preinst']:
+                    (stage/'DEBIAN'/script).unlink(missing_ok=True)
+                for pattern in ['etc/cron.daily/*brave*','etc/apt/sources.list.d/*brave*','opt/brave.com/brave/cron/*']:
+                    for f in stage.glob(pattern):
+                        if f.is_file() or f.is_symlink(): f.unlink()
+                launcher(stage,'brave-browser','/opt/brave.com/brave/brave')
+                launcher(stage,'brave-browser-stable','/opt/brave.com/brave/brave')
+                # Recompute package checksums after replacing the launchers.
+                hashes=[]
+                for f in sorted(stage.rglob('*')):
+                    if f.is_file() and not f.is_symlink() and 'DEBIAN' not in f.relative_to(stage).parts:
+                        hashes.append(f'{hashlib.md5(f.read_bytes()).hexdigest()}  {f.relative_to(stage)}')
+                write(stage,'DEBIAN/md5sums','\n'.join(hashes)+'\n')
+                run('dpkg-deb','--root-owner-group','-Zxz','--build',stage,output/f'brave-browser_{p["version"]}-1soltros1~{suite}_{arch}.deb')
                 return
             install = stage / 'opt' / name
             if kind == 'appimage':
