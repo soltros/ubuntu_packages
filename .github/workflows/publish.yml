@@ -63,6 +63,13 @@ jobs:
           assert r['head_branch']=='main' and r['head_repository']['full_name']==os.environ['REPO']
           assert r['path']=='.github/workflows/build.yml'
           PY
+            # Builds can finish out of order. Never overwrite newer packages
+            # with an older successful run that happened to complete later.
+            latest=$(gh api "repos/$REPO/actions/workflows/build.yml/runs?branch=main&status=success&per_page=1" --jq '.workflow_runs[0].id')
+            if [ "$latest" != "$BUILD_RUN" ]; then
+              echo "Skipping superseded build $BUILD_RUN; newest successful build is $latest."
+              exit 0
+            fi
             gh run download "$BUILD_RUN" --repo "$REPO" --pattern 'debs-*' --dir incoming
           fi
           for suite in stonking; do
