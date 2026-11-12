@@ -50,7 +50,7 @@ class BraveTests(unittest.TestCase):
             subprocess.run(['dpkg-deb','--root-owner-group','--build',str(stage),str(deb)],check=True,stdout=subprocess.DEVNULL)
             def fake_download(info,dest): shutil.copy2(deb,dest)
             with patch.object(build,'download',side_effect=fake_download):
-                build.build('brave','amd64','noble',out)
+                build.build('brave','amd64','stonking',out)
             result=next(out.glob('*.deb'))
             depends=subprocess.check_output(['dpkg-deb','-f',str(result),'Depends'],text=True)
             self.assertNotIn('brave-keyring',depends)
@@ -65,7 +65,7 @@ class IntegrationTests(unittest.TestCase):
     def test_signed_apt_repository(self):
         with tempfile.TemporaryDirectory() as directory:
             tmp=Path(directory);output=tmp/'repo'
-            build.build('vpn-manager','amd64','noble',output)
+            build.build('vpn-manager','amd64','stonking',output)
             deb=next(output.glob('*.deb'))
             self.assertEqual('vpn-manager',subprocess.check_output(['dpkg-deb','-f',str(deb),'Package'],text=True).strip())
             self.assertNotIn('tailscale',subprocess.check_output(['dpkg-deb','-f',str(deb),'Depends'],text=True))
@@ -80,7 +80,7 @@ class IntegrationTests(unittest.TestCase):
             previous=os.environ.get('GNUPGHOME');os.environ['GNUPGHOME']=str(key_home)
             try:
                 subprocess.run(['gpg','--batch','--pinentry-mode','loopback','--passphrase','','--quick-generate-key','Test <test@example.org>','ed25519','sign','1d'],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-                repo.generate(output,'noble','test@example.org')
+                repo.generate(output,'stonking','test@example.org')
                 subprocess.run(['gpg','--verify',str(output/'InRelease')],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
                 for d in ['state/lists/partial','cache/archives/partial','download']:(tmp/d).mkdir(parents=True)
                 source=tmp/'sources.list';source.write_text(f'deb [signed-by={output}/soltros-archive-keyring.asc] file:{output} ./\n')

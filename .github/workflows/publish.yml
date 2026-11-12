@@ -21,7 +21,7 @@ jobs:
     if: >-
       github.event_name != 'workflow_run' ||
       (github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.event == 'push' &&
+       (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch') &&
        github.event.workflow_run.head_branch == 'main' &&
        github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-24.04
@@ -65,7 +65,7 @@ jobs:
           PY
             gh run download "$BUILD_RUN" --repo "$REPO" --pattern 'debs-*' --dir incoming
           fi
-          for suite in noble resolute; do
+          for suite in stonking; do
             mkdir -p "repo-$suite"
             # A refresh reuses the last successful published snapshot; failed builds
             # never replace working packages or publish only half a migration.

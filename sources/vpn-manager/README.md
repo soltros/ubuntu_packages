@@ -31,7 +31,7 @@ managers can still activate connections independently; this app is not a kill sw
 Build and test from the repository root:
 
 ```bash
-python3 scripts/build.py vpn-manager --suite noble
+python3 scripts/build.py vpn-manager --suite stonking
 PYTHONPATH=sources/vpn-manager python3 -m unittest discover -s sources/vpn-manager/tests -v
 ```
 

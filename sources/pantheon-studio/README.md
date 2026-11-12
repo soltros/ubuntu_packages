@@ -21,7 +21,7 @@ Installing the application does not replace Ubuntu's desktop environment.
 To build the package from the repository root:
 
 ```bash
-python3 scripts/build.py pantheon-studio --suite noble
+python3 scripts/build.py pantheon-studio --suite stonking
 ```
 
 Build dependencies are listed in `packages.json`. The build runs desktop-entry,

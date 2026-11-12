@@ -32,7 +32,7 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 ## Supported targets
 
-The CI builds separate **Ubuntu 24.04 LTS (noble)** and **Ubuntu 26.04 LTS (resolute)** packages on amd64. Packages and their dependencies are checked inside the corresponding Ubuntu image. Do not use one series' repository on another Ubuntu release. Other releases are not currently validated.
+The package target is **Ubuntu/Kubuntu 26.10 (stonking), amd64**. CI builds and checks dependencies inside an Ubuntu 26.10 container. Kubuntu uses the same Ubuntu package archive. Package compatibility with 26.10 is being validated; earlier Ubuntu releases are not publishing targets.
 
 Pinned arm64 downloads are retained for Brave, ChatGPT, Codex, Lichii, and Waterfox. Termsmith, Pantheon Studio, and VPN Manager also have arm64 recipes. They can be built on an arm64 host, but arm64 is not yet published by the CI.
 
@@ -48,7 +48,7 @@ sudo apt install ca-certificates curl gnupg
 
 . /etc/os-release
 case "$VERSION_CODENAME" in
-  noble|resolute) suite="$VERSION_CODENAME" ;;
+  stonking) suite="$VERSION_CODENAME" ;;
   *) echo "This Ubuntu release is not supported yet"; exit 1 ;;
 esac
 
@@ -64,7 +64,7 @@ sudo apt update
 sudo apt install codex waterfox vpn-manager
 ```
 
-The flat APT layout is hosted as assets of the `apt-noble` and `apt-resolute` GitHub Releases. Packages use relative filenames in the signed index and can exceed Git's file-size limit. GitHub Pages and an external server are unnecessary.
+The flat APT layout is hosted as assets of the `apt-stonking` GitHub Release. Packages use relative filenames in the signed index and can exceed Git's file-size limit. GitHub Pages and an external server are unnecessary.
 
 For a single application, download its `.deb` from the matching release and run:
 
@@ -118,7 +118,7 @@ Use a clean host/container matching the target Ubuntu release. Install the commo
 
 ```bash
 sudo apt install python3 git ca-certificates dpkg-dev debhelper fakeroot build-essential
-python3 scripts/build.py vpn-manager --suite noble
+python3 scripts/build.py vpn-manager --suite stonking
 python3 -m unittest discover -s tests -v
 ```
 

@@ -16,7 +16,7 @@ an application entry to `$XDG_DATA_HOME/applications`.
 To build a Debian package from this repository's root:
 
 ```bash
-python3 scripts/build.py termsmith --suite noble
+python3 scripts/build.py termsmith --suite stonking
 ```
 
 Build dependencies are listed in `packages.json`. Use an Ubuntu release matching
