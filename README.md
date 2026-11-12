@@ -8,12 +8,11 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 ## Packages
 
-**All 17 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
+**All 15 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
 
 | Install name | Application | Packaging |
 |---|---|---|
 | `brave-browser` | Brave browser | Pinned upstream Debian payload, adapted for this APT repository |
-| `cabinet-desktop` | Cabinet file locker client | Rust source build |
 | `chatgpt` | ChatGPT desktop | Pinned upstream Debian package |
 | `codex` | Codex CLI | Official precompiled Linux bundle |
 | `hideout` | File encryption app | D source build |
@@ -21,7 +20,6 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 | `quick-settings-tray` | GNOME Quick Settings system tray | GNOME extension |
 | `recomplauncher` | Discover and launch PC recompilations | Pinned AppImage with a launcher that does not require FUSE |
 | `sharpemu` | Experimental PS5 emulator | Pinned upstream Linux bundle |
-| `supernova-desktop` | Supernova music client | Flutter source build |
 | `termsmith` | GTK terminal configuration editor | Bundled Vala source build |
 | `vacuumtube` | YouTube TV desktop client | Electron source build |
 | `vpn-manager` | Tailscale and WireGuard manager | Bundled Python app |
@@ -122,7 +120,7 @@ python3 scripts/build.py vpn-manager --suite stonking
 python3 -m unittest discover -s tests -v
 ```
 
-For example, Termsmith also needs Meson, Ninja, pkg-config, Vala, GTK4, Granite 7, and Gee development packages. Supernova requires Flutter 3.35.7 in `PATH`; CI installs it. Rust, D, Electron, Flutter, and Xenia build dependencies are fetched in their isolated build jobs. Do not run builds from an untrusted checkout as root on your workstation.
+For example, Termsmith also needs Meson, Ninja, pkg-config, Vala, GTK4, Granite 7, and Gee development packages. D, Electron, and Xenia build dependencies are fetched in their isolated build jobs. Do not run builds from an untrusted checkout as root on your workstation.
 
 `dist/` contains the generated `.deb` files. `scripts/repository.py` generates `Packages`, `Packages.gz`, `Release`, `InRelease`, `Release.gpg`, the public key, and checksums from a set of built packages.
 

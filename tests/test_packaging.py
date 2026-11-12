@@ -13,7 +13,7 @@ build=load('build','build.py');repo=load('repo','repository.py');updates=load('u
 class ManifestTests(unittest.TestCase):
     def test_manifest_uses_supported_package_builders(self):
         for name,p in build.PACKAGES.items():
-            self.assertIn(p['kind'],['deb','archive','appimage','meson','vpn','extension','cargo','dub','flutter','xenia','npm'],name)
+            self.assertIn(p['kind'],['deb','archive','appimage','meson','vpn','extension','dub','xenia','npm'],name)
             self.assertTrue(p['architectures'],name)
             self.assertEqual(0,subprocess.run(['dpkg','--validate-version',p['version']],capture_output=True).returncode,name)
     def test_downloads_pinned(self):

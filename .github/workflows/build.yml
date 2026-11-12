@@ -46,12 +46,6 @@ jobs:
           names=[re.sub(r'\s*\([^)]*\)','',x).strip() for x in deps.split(',') if x.strip()]
           if names: subprocess.run(['apt-get','install','-y',*names],check=True)
           PY
-      - name: Install Flutter SDK for Supernova
-        if: matrix.package == 'supernova-desktop'
-        run: |
-          git clone --depth 1 --branch 3.35.7 https://github.com/flutter/flutter.git /opt/flutter
-          git config --global --add safe.directory /opt/flutter
-          echo /opt/flutter/bin >> "$GITHUB_PATH"
       - name: Build package
         env:
           PACKAGE: ${{ matrix.package }}

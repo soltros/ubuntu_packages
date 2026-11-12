@@ -240,10 +240,6 @@ def build(name, arch, suite, output, allow_restricted=False):
                 dest = stage/'usr/share/gnome-shell/extensions/quick-settings-tray@soltros'
                 copytree(src,dest)
                 if (dest/'schemas').is_dir(): run('glib-compile-schemas','--strict',dest/'schemas')
-            elif kind == 'cargo':
-                run('cargo','build','--release','--locked',cwd=src)
-                dest=stage/'usr/bin'/name;dest.parent.mkdir(parents=True);shutil.copy2(src/'target/release'/name,dest)
-                desktop(stage,name)
             elif kind == 'dub':
                 run('git','clone','--depth=1','--branch','v0.9.9','https://github.com/Kymorphia/gid.git',src/'gid')
                 f=src/'dub.sdl';s=f.read_text();old='dependency "gid:adw1" version="~>0.9.9"'
@@ -253,13 +249,6 @@ def build(name, arch, suite, output, allow_restricted=False):
                 dest=stage/'usr/bin/hideout';dest.parent.mkdir(parents=True);shutil.copy2(src/'hideout',dest)
                 for path,dest in [('hideout_icon.svg','usr/share/icons/hicolor/scalable/apps/it.andreafontana.hideout.svg'),('it.andreafontana.hideout.desktop','usr/share/applications/it.andreafontana.hideout.desktop'),('data/it.andreafontana.hideout.metainfo.xml','usr/share/metainfo/it.andreafontana.hideout.metainfo.xml')]:
                     write(stage,dest,(src/path).read_text())
-            elif kind == 'flutter':
-                run('flutter','create','--platforms=linux','--project-name','supernova_desktop','--org','com.soltros','.',cwd=src)
-                run('flutter','pub','get','--enforce-lockfile',cwd=src)
-                run('flutter','build','linux','--release',cwd=src)
-                bundle=src/'build/linux'/('x64' if arch=='amd64' else 'arm64')/'release/bundle'
-                copytree(bundle,stage/'opt'/name)
-                launcher(stage,name,'/opt/'+name+'/'+p['entry']);desktop(stage,name)
             elif kind == 'npm':
                 run('npm','ci',cwd=src)
                 run('npx','--no-install','electron-builder','--linux','--dir',cwd=src)
@@ -283,10 +272,24 @@ def build(name, arch, suite, output, allow_restricted=False):
         run('dpkg-deb','--root-owner-group','-Zxz','--build',stage,output/filename)
 
 
+def patch_xenia_premake(src):
+    # The bundled libzip predates modern compiler checks for implicit function
+    # declarations. getpid() needs unistd.h on POSIX; io.h remains Windows-only.
+    for name in ['mkstemp.c','zipint.h']:
+        path=src/'third_party/premake-core/contrib/libzip'/name
+        old='#include <io.h>\n#endif'
+        new='#include <io.h>\n#else\n#include <unistd.h>\n#endif'
+        text=path.read_text()
+        if text.count(old)!=1:
+            raise ValueError('Xenia Premake libzip header patch no longer applies: '+name)
+        path.write_text(text.replace(old,new))
+
+
 def build_xenia(src,stage):
     deps='xbyak imgui catch premake-core snappy premake-export-compile-commands discord-rpc rapidjson aes_128 capstone cpptoml cxxopts SDL2 utfcpp fmt disruptorplus premake-cmake date xxhash FFmpeg premake-androidndk FidelityFX-CAS FidelityFX-FSR Vulkan-Headers glslang SPIRV-Tools VulkanMemoryAllocator'.split()
     run('git','submodule','update','--init','--depth=1','--',*['third_party/'+d for d in deps],cwd=src)
     f=src/'premake5.lua';f.write_text(f.read_text().replace('"FatalWarnings",',''))
+    patch_xenia_premake(src)
     # Build the exact bundled Premake used by upstream instead of a host version.
     run('make','-f','Bootstrap.mak','linux','-j2',cwd=src/'third_party/premake-core')
     premake=src/'third_party/premake-core/bin/release/premake5'
