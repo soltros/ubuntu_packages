@@ -289,6 +289,13 @@ def build_xenia(src,stage):
     deps='xbyak imgui catch premake-core snappy premake-export-compile-commands discord-rpc rapidjson aes_128 capstone cpptoml cxxopts SDL2 utfcpp fmt disruptorplus premake-cmake date xxhash FFmpeg premake-androidndk FidelityFX-CAS FidelityFX-FSR Vulkan-Headers glslang SPIRV-Tools VulkanMemoryAllocator'.split()
     run('git','submodule','update','--init','--depth=1','--',*['third_party/'+d for d in deps],cwd=src)
     f=src/'premake5.lua';f.write_text(f.read_text().replace('"FatalWarnings",',''))
+    # Ubuntu's runtime package supplies the SONAME; the unversioned symlink
+    # exists only in libsdl2-dev and is absent on ordinary client installations.
+    f=src/'src/xenia/base/system_gnulinux.cc'
+    text=f.read_text()
+    if '"libSDL2.so"' not in text:
+        raise ValueError('Xenia SDL runtime patch no longer applies')
+    f.write_text(text.replace('"libSDL2.so"','"libSDL2-2.0.so.0"'))
     patch_xenia_premake(src)
     # Build the exact bundled Premake used by upstream instead of a host version.
     run('make','-f','Bootstrap.mak','linux','-j2',cwd=src/'third_party/premake-core')
