@@ -33,9 +33,9 @@ jobs:
           issue=$(gh issue list --repo "$REPO" --state open --search 'in:title "Ubuntu package updates"' --json number,title --jq '.[] | select(.title == "Ubuntu package updates") | .number' | head -1)
           if [ "$ATTENTION" = true ]; then
             if [ -n "$issue" ]; then
-              gh issue edit "$issue" --repo "$REPO" --body-file update-report.md
+              gh issue edit "$issue" --repo "$REPO" --body-file update-report.md --add-assignee soltros
             else
-              gh issue create --repo "$REPO" --title 'Ubuntu package updates' --body-file update-report.md
+              gh issue create --repo "$REPO" --title 'Ubuntu package updates' --body-file update-report.md --assignee soltros
             fi
           elif [ "$ATTENTION" = false ] && [ -n "$issue" ]; then
             gh issue close "$issue" --repo "$REPO" --reason completed
