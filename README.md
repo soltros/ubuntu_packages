@@ -4,7 +4,7 @@ Personal Ubuntu packages, built and distributed entirely through GitHub. Install
 
 Source recipes, pinned downloads, build checks, update reports, and signed APT publishing live here.
 
-> **Bootstrap status:** Packaging is being migrated. The repository becomes installable after the package build checks pass and the maintainer configures the signing secret once. An app having a recipe here does not mean its Ubuntu build has passed yet. Check the [build runs](https://github.com/soltros/ubuntu_packages/actions/workflows/build.yml) and [Releases](https://github.com/soltros/ubuntu_packages/releases) before installing. Publishing deliberately waits for the complete package set to pass.
+> **Repository status:** Signed APT releases are published through [Releases](https://github.com/soltros/ubuntu_packages/releases). A newly added package appears there only after its complete build passes. Check the [build runs](https://github.com/soltros/ubuntu_packages/actions/workflows/build.yml) for pending packages.
 
 ## Packages
 

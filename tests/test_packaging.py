@@ -61,6 +61,24 @@ class BraveTests(unittest.TestCase):
             self.assertFalse((extract/'usr/bin/brave-browser').is_symlink())
             self.assertIn('/opt/brave.com/brave/brave',(extract/'usr/bin/brave-browser').read_text())
 
+class ReleaseFilenameTests(unittest.TestCase):
+    def test_asset_rename_preserves_package_version_and_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output=Path(directory)
+            build.build('vpn-manager','amd64','stonking',output)
+            original=next(output.glob('*.deb'));data=original.read_bytes()
+            repo.normalize_release_filenames(output)
+            renamed=next(output.glob('*.deb'))
+            self.assertNotIn('~',renamed.name)
+            self.assertEqual(data,renamed.read_bytes())
+            self.assertIn('~stonking',subprocess.check_output(['dpkg-deb','-f',str(renamed),'Version'],text=True))
+    def test_collisions_rejected_before_renaming(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output=Path(directory)
+            for name in ['package_1~2.deb','package_1.2.deb']:(output/name).write_bytes(name.encode())
+            with self.assertRaises(ValueError):repo.normalize_release_filenames(output)
+            self.assertEqual(2,len(list(output.glob('*.deb'))))
+
 class IntegrationTests(unittest.TestCase):
     def test_signed_apt_repository(self):
         with tempfile.TemporaryDirectory() as directory:

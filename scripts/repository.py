@@ -4,6 +4,7 @@ import argparse
 from datetime import datetime, timedelta, timezone
 import gzip
 import hashlib
+import re
 from pathlib import Path
 import subprocess
 
@@ -12,8 +13,23 @@ def capture(*args):
     return subprocess.check_output(args, text=True)
 
 
+def normalize_release_filenames(directory):
+    # GitHub release uploads rewrite characters such as Debian's ~ to periods.
+    # Use that safe alphabet before indexing so Filename matches the real asset.
+    targets={}
+    for path in sorted(Path(directory).glob('*.deb')):
+        name=re.sub(r'[^A-Za-z0-9._-]', '.', path.name)
+        if name in targets:
+            raise ValueError('Release filename collision: '+name)
+        targets[name]=path
+    for name,path in targets.items():
+        if path.name!=name:
+            path.rename(path.with_name(name))
+
+
 def generate(directory, suite, key):
     directory=Path(directory).resolve()
+    normalize_release_filenames(directory)
     packages=[]
     for deb in sorted(directory.glob('*.deb')):
         fields=capture('dpkg-deb','-f',str(deb)).strip()
