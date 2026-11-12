@@ -49,8 +49,12 @@ class IntegrationTests(unittest.TestCase):
             self.assertEqual('vpn-manager',subprocess.check_output(['dpkg-deb','-f',str(deb),'Package'],text=True).strip())
             self.assertNotIn('tailscale',subprocess.check_output(['dpkg-deb','-f',str(deb),'Depends'],text=True))
             key_home=tmp/'gpg';key_home.mkdir(mode=0o700)
-            probe=subprocess.run(['gpg-agent','--homedir',str(key_home),'--daemon'],capture_output=True,text=True)
-            if probe.returncode and "can't create socket: Operation not permitted" in probe.stderr:
+            # A daemon keeps stderr open. Use a file rather than a subprocess
+            # pipe, which would wait forever for EOF after the parent exits.
+            log=tmp/'gpg-agent.log'
+            with log.open('w') as err:
+                probe=subprocess.run(['gpg-agent','--homedir',str(key_home),'--daemon'],stdout=subprocess.DEVNULL,stderr=err,timeout=30)
+            if probe.returncode and "can't create socket: Operation not permitted" in log.read_text():
                 self.skipTest('Host prohibits gpg-agent sockets; full signed APT test runs in Ubuntu CI')
             previous=os.environ.get('GNUPGHOME');os.environ['GNUPGHOME']=str(key_home)
             try:
