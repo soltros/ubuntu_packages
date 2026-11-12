@@ -1,0 +1,2 @@
+studio_test = executable('studio-launcher-test', sources, config_file, 'test-launcher.vala', dependencies: dependencies, c_args: c_args, link_args: ['-lm'])
+test('studio-folders', find_program('dbus-run-session'), args: ['--config-file=@dbus-config@', '--', find_program('xvfb-run').full_path(), '-a', studio_test], env: ['GSETTINGS_SCHEMA_DIR=' + meson.project_build_root() / 'studio-schemas', 'NO_AT_BRIDGE=1'])

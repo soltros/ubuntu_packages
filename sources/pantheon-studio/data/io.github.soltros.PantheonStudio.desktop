@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Pantheon Studio
+Comment=Customize application names, icons, and visibility
+Exec=pantheon-studio
+Icon=preferences-desktop
+Terminal=false
+Categories=Settings;DesktopSettings;
+StartupNotify=true

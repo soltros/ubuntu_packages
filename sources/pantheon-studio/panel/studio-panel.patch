@@ -1,0 +1,23 @@
+--- a/src/Application.vala
++++ b/src/Application.vala
+@@ -86,7 +86,7 @@
+ 
+         var granite_settings = Granite.Settings.get_default ();
+         var gtk_settings = Gtk.Settings.get_default ();
+-        gtk_settings.gtk_icon_theme_name = "elementary";
++        // Follow the desktop icon theme through GTK/XSettings.
+ 
+         gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == DARK;
+ 
+@@ -109,8 +109,11 @@
+         return 0;
+     }
+ 
++    private StudioPanel? studio_panel;
++
+     protected override void startup () {
+         base.startup ();
++        studio_panel = new StudioPanel ();
+ 
+         panel_window = new PanelWindow (this);
+         panel_window.show_all ();

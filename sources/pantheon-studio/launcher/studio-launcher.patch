@@ -1,0 +1,125 @@
+--- a/src/Indicator.vala
++++ b/src/Indicator.vala
+@@ -23,6 +23,9 @@
+     private DBusService? dbus_service = null;
+     private Gtk.Grid? indicator_grid = null;
+     private SlingshotView? view = null;
++    private FileMonitor? studio_monitor;
++    private Gtk.Label? studio_label;
++    private Gtk.Image? studio_icon;
+ 
+     private static GLib.Settings? keybinding_settings;
+     private static GLib.Settings? gala_behavior_settings;
+@@ -80,6 +83,15 @@
+             indicator_grid = new Gtk.Grid ();
+             indicator_grid.attach (indicator_icon, 0, 0, 1, 1);
+             indicator_grid.attach (indicator_label, 1, 0, 1, 1);
++            studio_label = indicator_label;
++            studio_icon = indicator_icon;
++            update_studio_button ();
++            try {
++                var path = new StudioPreferences ().path;
++                DirUtils.create_with_parents (Path.get_dirname (path), 0700);
++                studio_monitor = File.new_for_path (Path.get_dirname (path)).monitor_directory (FileMonitorFlags.NONE);
++                studio_monitor.changed.connect (() => update_studio_button ());
++            } catch (Error e) { warning ("Studio launcher monitor: %s", e.message); }
+             update_tooltip ();
+ 
+             if (keybinding_settings != null) {
+@@ -113,6 +125,14 @@
+         // TODO: Do we need to do anything here?
+     }
+ 
++    private void update_studio_button () {
++        var prefs = StudioPreferences.current ();
++        studio_label.label = prefs.text ("Launcher", "label", _("Applications"));
++        studio_label.no_show_all = !prefs.flag ("Launcher", "show-label", true);
++        studio_label.visible = !studio_label.no_show_all;
++        studio_icon.icon_name = prefs.text ("Launcher", "icon", "system-search-symbolic");
++    }
++
+     private void update_tooltip () {
+         string[] accels = {};
+ 
+--- a/src/SlingshotView.vala
++++ b/src/SlingshotView.vala
+@@ -303,6 +303,7 @@
+     }
+ 
+     public void show_slingshot () {
++        grid_view.populate (app_system);
+         search_entry.text = "";
+         search_entry.grab_focus ();
+ 
+--- a/src/Widgets/AppButton.vala
++++ b/src/Widgets/AppButton.vala
+@@ -9,7 +9,7 @@
+ 
+     public Backend.App app { get; construct; }
+ 
+-    private const int ICON_SIZE = 64;
++    private int ICON_SIZE = StudioPreferences.current ().number ("Launcher", "icon-size", 64, 24, 96);
+ 
+     private Gtk.Label badge;
+     private bool dragging = false; //prevent launching
+--- a/src/Views/GridView.vala
++++ b/src/Views/GridView.vala
+@@ -36,7 +36,7 @@
+         set {
+             var target_column = value.clamp (1, page.columns);
+             var target = get_widget_at (target_column, _focused_row);
+-            if (target != null && target is Widgets.AppButton) {
++            if (target != null && target is Gtk.Button) {
+                 _focused_column = target_column;
+                 target.grab_focus ();
+             }
+@@ -52,7 +52,7 @@
+         set {
+             var target_row = value.clamp (1, page.rows);
+             var target = get_widget_at (_focused_column, target_row);
+-            if (target != null && target is Widgets.AppButton) {
++            if (target != null && target is Gtk.Button) {
+                 _focused_row = target_row;
+                 target.grab_focus ();
+             }
+@@ -114,6 +114,9 @@
+     }
+ 
+     public void populate (Backend.AppSystem app_system) {
++        var prefs = StudioPreferences.current ();
++        page.rows = (uint) prefs.number ("Launcher", "rows", 3, 2, 6);
++        page.columns = (uint) prefs.number ("Launcher", "columns", 5, 3, 8);
+         foreach (Gtk.Grid grid in grids.values) {
+             grid.destroy ();
+         }
+@@ -126,9 +129,27 @@
+         var next_row_index = 0;
+         var next_col_index = 0;
+ 
+-        foreach (Backend.App app in app_system.get_apps_by_name ()) {
+-            var app_button = new Widgets.AppButton (app);
+-            app_button.app_launched.connect (() => app_launched ());
++        var buttons = new Gee.ArrayList<Gtk.Button> ();
++        var grouped = new Gee.HashSet<string> ();
++        foreach (var folder in prefs.folders ()) {
++            var apps = new Gee.ArrayList<Backend.App> ();
++            foreach (var app in app_system.get_apps_by_name ()) {
++                if (app.desktop_id in prefs.members (folder) && !grouped.contains (app.desktop_id)) {
++                    apps.add (app); grouped.add (app.desktop_id);
++                }
++            }
++            if (apps.size == 0) continue;
++            var folder_button = new Widgets.StudioFolder (prefs.text (folder, "name", "Folder"), prefs.text (folder, "icon", "folder"), apps);
++            folder_button.app_launched.connect (() => app_launched ());
++            buttons.add (folder_button);
++        }
++        foreach (var app in app_system.get_apps_by_name ()) {
++            if (grouped.contains (app.desktop_id)) continue;
++            var button = new Widgets.AppButton (app);
++            button.app_launched.connect (() => app_launched ());
++            buttons.add (button);
++        }
++        foreach (var app_button in buttons) {
+ 
+             if (next_col_index == page.columns) {
+                 next_col_index = 0;

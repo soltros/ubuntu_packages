@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=VPN Manager
+Comment=Switch between Tailscale and WireGuard
+Exec=vpn-manager
+Icon=io.github.soltros.VPNManager
+Terminal=false
+Categories=Network;Settings;
+Keywords=VPN;WireGuard;Tailscale;
+StartupNotify=true
+StartupWMClass=io.github.soltros.VPNManager

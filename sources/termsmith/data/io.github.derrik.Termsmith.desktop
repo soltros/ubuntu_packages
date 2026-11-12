@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Termsmith
+Comment=Create and launch reusable terminal profiles
+Exec=termsmith
+Icon=io.github.derrik.Termsmith
+Terminal=false
+Type=Application
+Categories=System;TerminalEmulator;Utility;
+Keywords=terminal;shell;profile;launcher;alacritty;
+StartupNotify=true

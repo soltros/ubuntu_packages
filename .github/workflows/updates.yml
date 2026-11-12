@@ -1,0 +1,45 @@
+name: Check upstream updates
+on:
+  schedule:
+    - cron: '17 10 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: update-scan
+  cancel-in-progress: false
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check pinned packages
+        id: scan
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/check-updates.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: upstream-report
+          path: update-report.*
+      - name: Maintain one update issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ATTENTION: ${{ steps.scan.outputs.attention }}
+        run: |
+          issue=$(gh issue list --repo "$REPO" --state open --search 'in:title "Ubuntu package updates"' --json number,title --jq '.[] | select(.title == "Ubuntu package updates") | .number' | head -1)
+          if [ "$ATTENTION" = true ]; then
+            if [ -n "$issue" ]; then
+              gh issue edit "$issue" --repo "$REPO" --body-file update-report.md
+            else
+              gh issue create --repo "$REPO" --title 'Ubuntu package updates' --body-file update-report.md
+            fi
+          elif [ "$ATTENTION" = false ] && [ -n "$issue" ]; then
+            gh issue close "$issue" --repo "$REPO" --reason completed
+          fi
+      - name: Report scanner failures
+        if: steps.scan.outcome == 'failure'
+        run: exit 1

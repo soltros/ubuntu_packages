@@ -1,0 +1,326 @@
+{
+  "brave": {
+    "version": "1.99.56",
+    "kind": "deb",
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "description": "Brave",
+    "downloads": {
+      "amd64": {
+        "url": "https://github.com/brave/brave-browser/releases/download/v1.99.56/brave-browser_1.99.56_amd64.deb",
+        "sha256": "5b5af4d108758fe5e82b7cb119af203977a90fcb34b9b07319317f863f38bc72"
+      },
+      "arm64": {
+        "url": "https://github.com/brave/brave-browser/releases/download/v1.99.56/brave-browser_1.99.56_arm64.deb",
+        "sha256": "2ce1c7254d9acdf2e8fe15761e469e31432274873c8448773db1b0ba40f18618"
+      }
+    },
+    "deb_name": "brave-browser",
+    "track": {
+      "kind": "release",
+      "repo": "brave/brave-browser",
+      "prefix": "v"
+    }
+  },
+  "chatgpt": {
+    "version": "26.1106.51428",
+    "kind": "deb",
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "description": "Chatgpt",
+    "downloads": {
+      "amd64": {
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1106.51428_amd64.deb",
+        "sha256": "8356a7821930b135b741347faccbc43e1692b4424c3eab710a9af56c0bebb135"
+      },
+      "arm64": {
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1106.51428_arm64.deb",
+        "sha256": "ce49ac9a1efc1b5326504b0169570b8d0973f4b18461fbcc0597bbfe5310a9bb"
+      }
+    },
+    "track": {
+      "kind": "chatgpt"
+    }
+  },
+  "codex": {
+    "version": "0.167.1",
+    "kind": "archive",
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "description": "Codex",
+    "downloads": {
+      "amd64": {
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.167.1/codex-package-x86_64-unknown-linux-musl.tar.gz",
+        "sha256": "a945df3df83e849dd7b74787e27f8a459c1946b0e3afe3dc8eef8a8d1845fd4f"
+      },
+      "arm64": {
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.167.1/codex-package-aarch64-unknown-linux-musl.tar.gz",
+        "sha256": "ef3e1443a7795d596f1601a533d7225a1030488d60c965af1f0610ab95889031"
+      }
+    },
+    "entry": "bin/codex",
+    "depends": "libasound2t64, libstdc++6",
+    "track": {
+      "kind": "release",
+      "repo": "openai/codex",
+      "prefix": "rust-v"
+    }
+  },
+  "lichii": {
+    "version": "150",
+    "kind": "appimage",
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "description": "Lichii",
+    "downloads": {
+      "amd64": {
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-150/lichii-linux-x86_64-pgo.AppImage",
+        "sha256": "287c71b1ae20ffc391410ecef31be550d7b8d25cade3365e86accff81b6edf3f"
+      },
+      "arm64": {
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-150/lichii-linux-aarch64-pgo.AppImage",
+        "sha256": "54a6ca98790489631e65542c06b47c47a7d13eb15208ff371fcd52d961f5bfc2"
+      }
+    },
+    "track": {
+      "kind": "release",
+      "repo": "zortos293/Lichii",
+      "prefix": "build-"
+    }
+  },
+  "recomplauncher": {
+    "version": "0.90.0-beta.36",
+    "kind": "appimage",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Recomplauncher",
+    "downloads": {
+      "amd64": {
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.36/RecompLauncher_0.90.0-beta.36_amd64.AppImage",
+        "sha256": "2e8ca08c036d44c4d5563e717896857f069d7a89c63aa998456c14f78c67ca51"
+      }
+    },
+    "track": {
+      "kind": "prerelease",
+      "repo": "elripalda/RecompLauncher",
+      "prefix": "v"
+    }
+  },
+  "sharpemu": {
+    "version": "0.0.7-pulse",
+    "kind": "archive",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Sharpemu",
+    "downloads": {
+      "amd64": {
+        "url": "https://github.com/sharpemu/sharpemu/releases/download/v0.0.7-pulse/sharpemu-0.0.7-pulse-linux-x64.tar.gz",
+        "sha256": "38d7507a57e891a5763e23fc68c72172d2395931f8f64f59fc522ed4ed3d761e"
+      }
+    },
+    "entry": "SharpEmu",
+    "depends": "libasound2t64, libpulse0, libvulkan1, libgl1, zlib1g, libssl3t64, libicu-dev, libfontconfig1, libsdl2-2.0-0, libx11-6, libxcursor1, libxi6, libxrandr2, libxext6, libxrender1, libxcb1, libice6, libsm6, libwayland-client0, libxkbcommon0",
+    "track": {
+      "kind": "release",
+      "repo": "sharpemu/sharpemu",
+      "prefix": "v"
+    }
+  },
+  "waterfox": {
+    "version": "6.7.8",
+    "kind": "archive",
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "description": "Waterfox",
+    "downloads": {
+      "amd64": {
+        "url": "https://cdn.waterfox.com/waterfox/releases/6.7.8/Linux_x86_64/waterfox-6.7.8.tar.bz2",
+        "sha256": "29b8bcc0265fdea7dcf0471c6ef8e296f48ca6973e039b9d181a93e7b654ef15"
+      },
+      "arm64": {
+        "url": "https://cdn.waterfox.com/waterfox/releases/6.7.8/Linux_aarch64/waterfox-6.7.8.tar.bz2",
+        "sha256": "4b9b18290940432099fa56c53d4d209a509146bdb4c0c8edbe9990d5fcf5e6f9"
+      }
+    },
+    "strip": 1,
+    "entry": "waterfox",
+    "depends": "libgtk-3-0t64, libasound2t64, libdbus-glib-1-2, libxtst6, libnss3, libx11-xcb1, libva2, libpci3, libpipewire-0.3-0",
+    "track": {
+      "kind": "release",
+      "repo": "WaterfoxCo/Waterfox",
+      "prefix": "G"
+    }
+  },
+  "termsmith": {
+    "version": "0.2.0",
+    "kind": "meson",
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "description": "Termsmith",
+    "local": "sources/termsmith",
+    "build_depends": "debhelper-compat (= 13), meson, ninja-build, pkg-config, valac, libgtk-4-dev, libgranite-7-dev, libgee-0.8-dev, xvfb, xauth"
+  },
+  "pantheon-studio": {
+    "version": "0.2.0",
+    "kind": "meson",
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "description": "Pantheon Studio",
+    "local": "sources/pantheon-studio",
+    "build_depends": "debhelper-compat (= 13), meson, ninja-build, pkg-config, valac, libgtk-4-dev, libgranite-7-dev, libgee-0.8-dev, xvfb, xauth"
+  },
+  "vpn-manager": {
+    "version": "0.2.0",
+    "kind": "vpn",
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "description": "Vpn Manager",
+    "local": "sources/vpn-manager",
+    "depends": "python3 (>= 3.10), python3-gi, gir1.2-gtk-4.0, gir1.2-adw-1, network-manager, iproute2, pkexec",
+    "recommends": "tailscale"
+  },
+  "quick-settings-tray": {
+    "version": "1",
+    "kind": "extension",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Quick Settings Tray",
+    "repo": "soltros/quick-settings-tray",
+    "rev": "42992bb4d665469961295419aba769cc3b100981",
+    "track": {
+      "kind": "commit",
+      "repo": "soltros/quick-settings-tray",
+      "branch": "main"
+    },
+    "depends": "gnome-shell",
+    "build_depends": "libglib2.0-bin"
+  },
+  "cabinet-desktop": {
+    "version": "0.1.0~dev20260922",
+    "kind": "cargo",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Cabinet Desktop",
+    "repo": "soltros/Cabinet-Desktop",
+    "rev": "7dfe8b30c9963c0f90e97310d491988767685918",
+    "track": {
+      "kind": "commit",
+      "repo": "soltros/Cabinet-Desktop",
+      "branch": "main"
+    },
+    "build_depends": "cargo, rustc, pkg-config, libgtk-3-dev, libdbus-1-dev, libayatana-appindicator3-dev, libxkbcommon-dev, libwayland-dev, libx11-dev, libxcursor-dev, libxi-dev, libxrandr-dev",
+    "depends": "libgtk-3-0t64, libdbus-1-3, libayatana-appindicator3-1, libxkbcommon0, libwayland-client0, libx11-6, libxcursor1, libxi6, libxrandr2, xdotool"
+  },
+  "addwater": {
+    "version": "1.3",
+    "kind": "meson",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Addwater",
+    "repo": "largestgithubuseronearth/addwater",
+    "rev": "v1.3",
+    "track": {
+      "kind": "release",
+      "repo": "largestgithubuseronearth/addwater",
+      "prefix": "v"
+    },
+    "build_depends": "debhelper-compat (= 13), meson, ninja-build, pkg-config, gettext, python3, python3-gi, libgtk-4-dev, libadwaita-1-dev, libportal-gtk4-dev, gobject-introspection, desktop-file-utils, appstream",
+    "depends": "python3-gi, python3-requests, python3-packaging, gir1.2-gtk-4.0, gir1.2-adw-1, gir1.2-xdp-1.0, gir1.2-xdpgtk4-1.0",
+    "meson_options": [
+      "-Dprofile=default"
+    ],
+    "patch": "addwater"
+  },
+  "hideout": {
+    "version": "0.9.13",
+    "kind": "dub",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Hideout",
+    "repo": "trikko/hideout",
+    "rev": "v0.9.13",
+    "track": {
+      "kind": "release",
+      "repo": "trikko/hideout",
+      "prefix": "v"
+    },
+    "build_depends": "dub, ldc, pkg-config, libadwaita-1-dev, libglib2.0-bin",
+    "depends": "libadwaita-1-0, gnupg"
+  },
+  "supernova-desktop": {
+    "version": "0~git20260921.94c12fd",
+    "kind": "flutter",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Supernova Desktop",
+    "repo": "soltros/Supernova",
+    "rev": "94c12fdc66442b575ff518a3e527fd78ba4db6f6",
+    "track": {
+      "kind": "commit",
+      "repo": "soltros/Supernova",
+      "branch": "feature/flutter-desktop"
+    },
+    "subdir": "desktop-app",
+    "entry": "supernova_desktop",
+    "build_depends": "clang, cmake, ninja-build, pkg-config, libgtk-3-dev, libsecret-1-dev, libmpv-dev",
+    "depends": "libgtk-3-0t64, libsecret-1-0, libmpv2"
+  },
+  "xenia": {
+    "version": "0~git95a5c3e",
+    "kind": "xenia",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Xenia",
+    "repo": "xenia-project/xenia",
+    "rev": "95a5c3ee250f80c3b9d139658649d9ffb6db3eec",
+    "track": {
+      "kind": "commit",
+      "repo": "xenia-project/xenia",
+      "branch": "master"
+    },
+    "build_depends": "clang, lld, llvm, cmake, ninja-build, pkg-config, python3, libgtk-3-dev, libsdl2-dev, libasound2-dev, liblz4-dev, libx11-dev, libxcb1-dev, libvulkan-dev",
+    "depends": "libgtk-3-0t64, libsdl2-2.0-0, libasound2t64, liblz4-1, libx11-6, libxcb1, libvulkan1"
+  },
+  "vacuumtube": {
+    "version": "1.8.2",
+    "kind": "npm",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Vacuumtube",
+    "repo": "shy1132/VacuumTube",
+    "rev": "v1.8.2",
+    "track": {
+      "kind": "release",
+      "repo": "shy1132/VacuumTube",
+      "prefix": "v"
+    },
+    "build_depends": "nodejs, npm",
+    "depends": "libgtk-3-0t64, libnss3, libasound2t64, libgbm1, libxss1, libxtst6, libatk-bridge2.0-0t64, libdrm2, libxkbcommon0",
+    "entry": "vacuumtube"
+  }
+}

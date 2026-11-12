@@ -1,0 +1,89 @@
+name: Publish signed APT repository
+on:
+  workflow_run:
+    workflows: [Build Ubuntu packages]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Successful Build Ubuntu packages run ID (blank to refresh existing packages)'
+        required: false
+  schedule:
+    - cron: '42 9 * * 0'
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: apt-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # Never check out or execute code from the workflow_run's source branch.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Require repository signing configuration
+        env:
+          SIGNING_KEY: ${{ secrets.APT_SIGNING_KEY }}
+          KEY_ID: ${{ vars.APT_SIGNING_KEY_ID }}
+        run: |
+          test -n "$SIGNING_KEY" && test -n "$KEY_ID" || {
+            echo 'Run scripts/setup-signing.sh once from a machine with gh authenticated.'
+            exit 1
+          }
+          install -d -m 700 "$RUNNER_TEMP/gnupg"
+          echo "GNUPGHOME=$RUNNER_TEMP/gnupg" >> "$GITHUB_ENV"
+          printf '%s\n' "$SIGNING_KEY" | gpg --homedir "$RUNNER_TEMP/gnupg" --batch --import
+      - name: Assemble packages and sign indexes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          KEY_ID: ${{ vars.APT_SIGNING_KEY_ID }}
+          BUILD_RUN: ${{ github.event.workflow_run.id || inputs.run_id }}
+        run: |
+          set -euo pipefail
+          # Reject manually supplied artifacts from other workflows or untrusted PRs.
+          if [ -n "$BUILD_RUN" ]; then
+            gh api "repos/$REPO/actions/runs/$BUILD_RUN" > "$RUNNER_TEMP/run.json"
+            python3 - <<'PY'
+          import json, os
+          r=json.load(open(os.environ['RUNNER_TEMP']+'/run.json'))
+          assert r['conclusion']=='success' and r['event'] in ['push','workflow_dispatch']
+          assert r['head_branch']=='main' and r['head_repository']['full_name']==os.environ['REPO']
+          assert r['path']=='.github/workflows/build.yml'
+          PY
+            gh run download "$BUILD_RUN" --repo "$REPO" --pattern 'debs-*' --dir incoming
+          fi
+          for suite in noble resolute; do
+            mkdir -p "repo-$suite"
+            # A refresh reuses the last successful published snapshot; failed builds
+            # never replace working packages or publish only half a migration.
+            if gh release view "apt-$suite" --repo "$REPO" > /dev/null 2>&1; then
+              gh release download "apt-$suite" --repo "$REPO" --pattern '*.deb' --dir "repo-$suite"
+            fi
+            if [ -n "$BUILD_RUN" ]; then
+              rm -f "repo-$suite/"*.deb
+              find incoming -path "*/debs-$suite-*/*.deb" -exec cp '{}' "repo-$suite/" \;
+            fi
+            python3 scripts/repository.py "repo-$suite" --suite "$suite" --key "$KEY_ID"
+            if ! gh release view "apt-$suite" --repo "$REPO" > /dev/null 2>&1; then
+              gh release create "apt-$suite" --repo "$REPO" --title "Soltros Ubuntu — $suite" --notes "Signed APT repository for Ubuntu $suite. See README for installation."
+            fi
+            # Upload packages and indexes before InRelease, which is the trust root.
+            gh release upload "apt-$suite" --repo "$REPO" "repo-$suite/"*.deb "repo-$suite/Packages" "repo-$suite/Packages.gz" "repo-$suite/Release" "repo-$suite/Release.gpg" "repo-$suite/soltros-archive-keyring.asc" "repo-$suite/SHA256SUMS" --clobber
+            gh release upload "apt-$suite" --repo "$REPO" "repo-$suite/InRelease" --clobber
+          done
+      - name: Remove imported private signing key
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/gnupg"

@@ -1,0 +1,71 @@
+name: Build Ubuntu packages
+on:
+  push:
+    branches: [main]
+    paths: ['packages.json', 'scripts/**', 'sources/**', 'tests/**', '.github/workflows/build.yml', '.github/workflows/publish.yml']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest discover -s tests -v
+      - id: matrix
+        run: echo "matrix=$(python3 scripts/matrix.py)" >> "$GITHUB_OUTPUT"
+  build:
+    needs: validate
+    runs-on: ubuntu-24.04
+    container: ubuntu:${{ matrix.ubuntu }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix: ${{ fromJSON(needs.validate.outputs.matrix) }}
+    steps:
+      - name: Install build tools
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates git python3 curl xz-utils bzip2 file dpkg-dev debhelper fakeroot build-essential xvfb xauth
+      - uses: actions/checkout@v4
+      - name: Install package dependencies
+        env:
+          PACKAGE: ${{ matrix.package }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+          p=json.load(open('packages.json'))[os.environ['PACKAGE']]
+          deps=p.get('build_depends','')
+          names=[re.sub(r'\s*\([^)]*\)','',x).strip() for x in deps.split(',') if x.strip()]
+          if names: subprocess.run(['apt-get','install','-y',*names],check=True)
+          PY
+      - name: Install Flutter SDK for Supernova
+        if: matrix.package == 'supernova-desktop'
+        run: |
+          git clone --depth 1 --branch 3.35.7 https://github.com/flutter/flutter.git /opt/flutter
+          git config --global --add safe.directory /opt/flutter
+          echo /opt/flutter/bin >> "$GITHUB_PATH"
+      - name: Build package
+        env:
+          PACKAGE: ${{ matrix.package }}
+          SUITE: ${{ matrix.suite }}
+        run: python3 scripts/build.py "$PACKAGE" --suite "$SUITE"
+      - name: Verify package metadata and contents
+        run: |
+          for deb in dist/*.deb; do
+            dpkg-deb --info "$deb"
+            dpkg-deb --contents "$deb" > /dev/null
+          done
+          # APT must be able to resolve all dependencies in this Ubuntu release.
+          # Recommends (e.g. optional Tailscale) are excluded from resolution.
+          apt-get --simulate --no-install-recommends install ./dist/*.deb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: debs-${{ matrix.suite }}-${{ matrix.package }}
+          path: dist/*.deb
+          if-no-files-found: error
+          retention-days: 14
