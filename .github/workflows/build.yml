@@ -9,12 +9,15 @@ permissions:
   contents: read
 jobs:
   validate:
+    timeout-minutes: 10
     runs-on: ubuntu-24.04
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
-      - run: python3 -m unittest discover -s tests -v
+      - run: |
+          python3 -m unittest discover -s tests -v
+          PYTHONPATH=sources/vpn-manager python3 -m unittest discover -s sources/vpn-manager/tests -v
       - id: matrix
         run: echo "matrix=$(python3 scripts/matrix.py)" >> "$GITHUB_OUTPUT"
   build:
