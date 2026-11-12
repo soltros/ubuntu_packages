@@ -1,8 +1,8 @@
 # Soltros Ubuntu
 
-Personal Ubuntu packages, built and distributed entirely through GitHub. Install an app with APT and get future packaged updates through your normal Ubuntu updates. No Nix or Launchpad account is required to use the packages.
+Personal Ubuntu packages, built and distributed entirely through GitHub. Install an app with APT and get future packaged updates through your normal Ubuntu updates. GitHub hosts the packages and repository indexes.
 
-This is the Ubuntu successor to [soltros_nixpkgs](https://github.com/soltros/soltros_nixpkgs). Source recipes, pinned downloads, bundled applications, build checks, update reports, and signed APT publishing live here.
+Source recipes, pinned downloads, build checks, update reports, and signed APT publishing live here.
 
 > **Bootstrap status:** Packaging is being migrated. The repository becomes installable after the package build checks pass and the maintainer configures the signing secret once. An app having a recipe here does not mean its Ubuntu build has passed yet. Check the [build runs](https://github.com/soltros/ubuntu_packages/actions/workflows/build.yml) and [Releases](https://github.com/soltros/ubuntu_packages/releases) before installing. Publishing deliberately waits for the complete package set to pass.
 
@@ -28,17 +28,13 @@ This is the Ubuntu successor to [soltros_nixpkgs](https://github.com/soltros/sol
 | `addwater` | Firefox GNOME theme manager | Python/Meson source build |
 | `pantheon-studio` | Pantheon customization app | Bundled Vala source build |
 
-The old `vpn-manager-deb` output is the same application as `vpn-manager`; install `vpn-manager`. The Nix `brave` attribute becomes Ubuntu's upstream `brave-browser` name.
-
-Grayjay, Keyguard, Flakebuilder, Flakebuilder GUI, Nixboutique, and nixpkger are excluded by request. There is no dependency on the old Nix repository. `migration.json` accounts for every former exported package and these exclusions.
-
 ## Supported targets
 
 The CI builds separate **Ubuntu 24.04 LTS (noble)** and **Ubuntu 26.04 LTS (resolute)** packages on amd64. Packages and their dependencies are checked inside the corresponding Ubuntu image. Do not use one series' repository on another Ubuntu release. Other releases are not currently validated.
 
 Pinned arm64 downloads are retained for Brave, ChatGPT, Codex, Lichii, and Waterfox. Termsmith, Pantheon Studio, and VPN Manager also have arm64 recipes. They can be built on an arm64 host, but arm64 is not yet published by the CI.
 
-Pantheon Studio's application source is included. Its old NixOS module and version-specific Wingpanel panel/menu patches are retained in `sources/pantheon-studio` as reference; the Ubuntu package does **not** replace Ubuntu's desktop shell or apply those integrations. Installing the app alone does not provide the complete patched Pantheon session.
+Pantheon Studio is packaged as a standalone application. Its optional launcher and panel integrations are not included; installing it does not replace your desktop environment.
 
 ## Add the APT repository
 
@@ -110,7 +106,7 @@ The existing GitHub connection used to prepare this repository cannot create rep
 - **Check upstream updates:** checks upstream releases and branches daily, with stable-only tracking for stable apps and prereleases for RecompLauncher. It maintains one update issue assigned to `soltros` and saves JSON/Markdown reports. Network/API failures are shown as errors, never as “up to date.” Bundled apps are reported separately as local source.
 - **Publish signed APT repository:** publishes only after the entire trusted main-branch build succeeds. PR artifacts cannot trigger a trusted publication. A weekly refresh renews signed metadata for the last working package set. Metadata expires after 14 days, so a stalled publisher is visible to APT.
 
-Upstream scanning reports updates for review; it does not blindly replace versions or checksums. To update a binary package, change its version, versioned URL, and SHA256 in `packages.json`. Update all supported architecture pins together. For source packages, update the pinned `rev` and Debian version. Commit to `main`; successful checks trigger publishing. No Nix hash calculation is involved.
+Upstream scanning reports updates for review; it does not blindly replace versions or checksums. To update a binary package, change its version, versioned URL, and SHA256 in `packages.json`. Update all supported architecture pins together. For source packages, update the pinned `rev` and Debian version. Commit to `main`; successful checks trigger publishing.
 
 Publishing uses a single concurrency group. GitHub Release uploads are not an atomic transaction: clients can briefly see an index mismatch during an update and should retry `apt update`. A failed build leaves the previously published packages available.
 

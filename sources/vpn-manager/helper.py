@@ -9,7 +9,7 @@ import sys
 import tempfile
 from dataclasses import asdict
 
-# The installed directory is immutable in Nix and root-owned in the DEB.
+# The installed application directory is root-owned by the Debian package.
 # Python runs with -I to ignore user Python paths and startup customization.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from backend import Backend, VPNError

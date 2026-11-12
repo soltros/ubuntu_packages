@@ -20,14 +20,14 @@ public class OverrideStore : Object {
     }
     private void verify (string path, KeyFile record) throws Error {
         if (FileUtils.test (path, FileTest.IS_SYMLINK))
-            throw new IOError.FAILED ("This entry is a managed symlink. Change it in your Nix configuration.");
+            throw new IOError.FAILED ("This entry is a managed symlink. Change the original file or remove the symlink before editing.");
         if (read (path) != record.get_string ("Backup", "last"))
             throw new IOError.FAILED ("This entry changed outside Pantheon Studio. Resolve the change before continuing.");
     }
     public void save (string id, string source, string name, string icon, bool hidden) throws Error {
         var path = target (id);
         if (FileUtils.test (path, FileTest.IS_SYMLINK))
-            throw new IOError.FAILED ("This entry is a managed symlink. Change it in your Nix configuration.");
+            throw new IOError.FAILED ("This entry is a managed symlink. Change the original file or remove the symlink before editing.");
         if (name.strip () == "") throw new IOError.INVALID_ARGUMENT ("Enter an application name.");
         var record = new KeyFile ();
         var backup = Path.build_filename (backups, id);

@@ -11,16 +11,11 @@ def load(name,path):
     s=importlib.util.spec_from_file_location(name,ROOT/'scripts'/path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 build=load('build','build.py');repo=load('repo','repository.py');updates=load('updates','check-updates.py')
 class ManifestTests(unittest.TestCase):
-    def test_every_attribute_accounted_for(self):
-        migration=json.loads((ROOT/'migration.json').read_text());aliases=json.loads((ROOT/'aliases.json').read_text())
-        for name in migration['attributes']+migration['extra_packages']:
-            target=aliases.get(name,name)
-            if target=='brave-browser':target='brave'
-            self.assertTrue(target in build.PACKAGES or name in migration['excluded_by_request'],name)
-    def test_exclusions(self):
+    def test_manifest_uses_supported_package_builders(self):
         for name,p in build.PACKAGES.items():
-            self.assertNotIn('nix-bin',p.get('depends',''),name)
-            self.assertNotIn(name,['grayjay','keyguard','nixpkger','nixboutique','flakebuilder','flakebuilder-gui'])
+            self.assertIn(p['kind'],['deb','archive','appimage','meson','vpn','extension','cargo','dub','flutter','xenia','npm'],name)
+            self.assertTrue(p['architectures'],name)
+            self.assertEqual(0,subprocess.run(['dpkg','--validate-version',p['version']],capture_output=True).returncode,name)
     def test_downloads_pinned(self):
         for name,p in build.PACKAGES.items():
             for arch,info in p.get('downloads',{}).items():
@@ -40,6 +35,32 @@ class ManifestTests(unittest.TestCase):
             with tarfile.open(f,'w') as tar:
                 member=tarfile.TarInfo('../escaped');member.size=1;tar.addfile(member,io.BytesIO(b'x'))
             with self.assertRaises(tarfile.FilterError):build.unpack(f,Path(tmp)/'out')
+class BraveTests(unittest.TestCase):
+    def test_brave_repack_drops_repository_bootstrap(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as directory:
+            tmp=Path(directory);stage=tmp/'upstream';out=tmp/'output'
+            build.write(stage,'DEBIAN/control','Package: brave-browser\nVersion: 1.99.56\nArchitecture: amd64\nMaintainer: Test <test@example.org>\nDepends: brave-keyring, libc6\nDescription: test\n')
+            build.write(stage,'DEBIAN/postinst','#!/bin/sh\nexit 1\n',0o755)
+            build.write(stage,'opt/brave.com/brave/brave','fake executable\n',0o755)
+            build.write(stage,'etc/cron.daily/brave-browser','upstream bootstrap\n',0o755)
+            (stage/'usr/bin').mkdir(parents=True)
+            (stage/'usr/bin/brave-browser').symlink_to('/opt/brave.com/brave/brave')
+            deb=tmp/'upstream.deb'
+            subprocess.run(['dpkg-deb','--root-owner-group','--build',str(stage),str(deb)],check=True,stdout=subprocess.DEVNULL)
+            def fake_download(info,dest): shutil.copy2(deb,dest)
+            with patch.object(build,'download',side_effect=fake_download):
+                build.build('brave','amd64','noble',out)
+            result=next(out.glob('*.deb'))
+            depends=subprocess.check_output(['dpkg-deb','-f',str(result),'Depends'],text=True)
+            self.assertNotIn('brave-keyring',depends)
+            extract=tmp/'extract'
+            subprocess.run(['dpkg-deb','--raw-extract',str(result),str(extract)],check=True)
+            self.assertFalse((extract/'DEBIAN/postinst').exists())
+            self.assertFalse((extract/'etc/cron.daily/brave-browser').exists())
+            self.assertFalse((extract/'usr/bin/brave-browser').is_symlink())
+            self.assertIn('/opt/brave.com/brave/brave',(extract/'usr/bin/brave-browser').read_text())
+
 class IntegrationTests(unittest.TestCase):
     def test_signed_apt_repository(self):
         with tempfile.TemporaryDirectory() as directory:

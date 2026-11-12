@@ -1,23 +1,23 @@
 # Termsmith
 
-Termsmith is a small Pantheon-native launcher for reusable Alacritty terminal
-profiles. It is built with GTK 4, Granite 7, and Vala.
+A GTK4 and Granite application for managing reusable Alacritty terminal profiles.
+Profiles contain a display name, icon, working directory, and optional startup command.
+They are stored in `$XDG_CONFIG_HOME/termsmith/profiles.ini`.
 
-Profiles contain a display name, icon, working folder, and optional startup command.
-Termsmith stores them in `$XDG_CONFIG_HOME/termsmith/profiles.ini`. The **Create
-Shortcut** button writes a corresponding desktop entry to
-`$XDG_DATA_HOME/applications`, so it appears in Pantheon's Applications menu.
+Install from the Soltros Ubuntu APT repository:
 
-Click the icon field to search every icon exposed by the active desktop icon
-theme. The chosen icon appears in Termsmith's profile list and in the generated
-Applications-menu shortcut. Existing profiles default to `utilities-terminal`.
-
-## Build from the system flake
-
-```sh
-nix build .#termsmith
-nix run .#termsmith
+```bash
+sudo apt install termsmith alacritty
 ```
 
-The package is also included in `environment.systemPackages`; applying the
-NixOS configuration installs Termsmith and Alacritty system-wide.
+Run `termsmith` or open it from your application menu. Create Shortcut writes
+an application entry to `$XDG_DATA_HOME/applications`.
+
+To build a Debian package from this repository's root:
+
+```bash
+python3 scripts/build.py termsmith --suite noble
+```
+
+Build dependencies are listed in `packages.json`. Use an Ubuntu release matching
+the target suite.

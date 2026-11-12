@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a pinned Ubuntu package without Nix. Run inside the target Ubuntu release."""
+"""Build a pinned Ubuntu Debian package. Run inside the target Ubuntu release."""
 import argparse
 import hashlib
 import json
@@ -30,7 +30,7 @@ def write(root, path, text, mode=0o644):
 
 
 def copytree(src, dst):
-    shutil.copytree(src, dst, dirs_exist_ok=True, ignore=shutil.ignore_patterns('.git', '*.nix', '__pycache__'))
+    shutil.copytree(src, dst, dirs_exist_ok=True, ignore=shutil.ignore_patterns('.git', '__pycache__'))
 
 
 def download(info, dest):
@@ -196,7 +196,7 @@ def build(name, arch, suite, output, allow_restricted=False):
                 shutil.copy2(payload, install / (name+'.AppImage'))
                 (install / (name+'.AppImage')).chmod(0o755)
                 launcher(stage, name, '/opt/'+name+'/'+name+'.AppImage', env={'APPIMAGE_EXTRACT_AND_RUN':'1'})
-                p = dict(p, depends='libasound2t64, libgl1, libegl1, libvulkan1, libgpg-error0, libxkbcommon0, libxcb1, libx11-6, libxi6, libxrandr2, libxcursor1, libxext6, libxfixes3, libxss1, libxtst6, libwayland-client0, libfontconfig1, libfreetype6, libpulse0, libusb-1.0-0, libstdc++6, zlib1g, libgmp10, libcap2, libdecor-0-0, libfribidi0, libharfbuzz0, libudev1, libexpat1, libsm6, libice6')
+                p = dict(p, depends='libasound2t64, libgl1, libegl1, libvulkan1, libgpg-error0, libxkbcommon0, libxcb1, libx11-6, libxi6, libxrandr2, libxcursor1, libxext6, libxfixes3, libxss1, libxtst6, libwayland-client0, libfontconfig1, libfreetype6, libpulse0, libusb-1.0-0, libstdc++6, zlib1g, libgmp10, libcap2, libdecor-0-0, libfribidi0, libharfbuzz0b, libudev1, libexpat1, libsm6, libice6')
             else:
                 unpack(payload, install, p.get('strip',0))
                 entry = install / p['entry']

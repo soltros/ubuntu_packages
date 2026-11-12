@@ -15,7 +15,7 @@ public class Customize : Gtk.Box {
         notebook.append_page (folder_page (), new Gtk.Label ("Folders"));
         notebook.append_page (panel_page (), new Gtk.Label ("Panel"));
         notebook.append_page (desktop_page (), new Gtk.Label ("Desktop"));
-        var hint = new Gtk.Label ("Launcher folders, button controls, and panel appearance require the Pantheon Studio NixOS module. After enabling it, log out and back in once.") { wrap = true, xalign = 0 };
+        var hint = new Gtk.Label ("Launcher folders, button controls, and panel appearance require compatible Pantheon desktop integrations, which are not included in this package.") { wrap = true, xalign = 0 };
         hint.add_css_class ("dim-label"); append (hint);
     }
     private Gtk.Box form () { return new Gtk.Box (Gtk.Orientation.VERTICAL, 12) { margin_top = 18, margin_bottom = 18, margin_start = 18, margin_end = 18 }; }
