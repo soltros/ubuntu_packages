@@ -263,7 +263,7 @@ def build_xenia(src,stage):
     run('git','submodule','update','--init','--depth=1','--',*['third_party/'+d for d in deps],cwd=src)
     f=src/'premake5.lua';f.write_text(f.read_text().replace('"FatalWarnings",',''))
     # Build the exact bundled Premake used by upstream instead of a host version.
-    run('make','-C','build/gmake.unix','-j2',cwd=src/'third_party/premake-core')
+    run('make','-f','Bootstrap.mak','linux','-j2',cwd=src/'third_party/premake-core')
     premake=src/'third_party/premake-core/bin/release/premake5'
     run(premake,'--scripts=third_party/premake-core','--file=premake5.lua','--os=linux','--cc=clang','--test-suite-mode=combined','cmake',cwd=src)
     write(src,'build/version.h','#pragma once\n#define XE_BUILD_BRANCH "master"\n#define XE_BUILD_COMMIT "95a5c3ee250f80c3b9d139658649d9ffb6db3eec"\n#define XE_BUILD_COMMIT_SHORT "95a5c3e"\n#define XE_BUILD_DATE "2026-11-12"\n')
