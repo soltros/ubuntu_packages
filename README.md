@@ -8,6 +8,8 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 ## Packages
 
+**All 17 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
+
 | Install name | Application | Packaging |
 |---|---|---|
 | `brave-browser` | Brave browser | Pinned upstream Debian payload, adapted for this APT repository |
