@@ -8,7 +8,7 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 ## Packages
 
-**All 15 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
+**All 16 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
 
 | Install name | Application | Packaging |
 |---|---|---|
@@ -24,6 +24,7 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 | `vacuumtube` | YouTube TV desktop client | Electron source build |
 | `vpn-manager` | Tailscale and WireGuard manager | Bundled Python app |
 | `waterfox` | Waterfox browser | Pinned upstream Linux bundle |
+| `xemu` | Original Xbox emulator | Official prebuilt Linux payload packaged as a `.deb` |
 | `xenia` | Experimental Xbox 360 emulator | Native Linux source build |
 | `addwater` | Firefox GNOME theme manager | Python/Meson source build |
 | `pantheon-studio` | Pantheon customization app | Bundled Vala source build |
@@ -32,7 +33,7 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 The package target is **Ubuntu/Kubuntu 26.10 (stonking), amd64**. CI builds and checks dependencies inside an Ubuntu 26.10 container. Kubuntu uses the same Ubuntu package archive. Package compatibility with 26.10 is being validated; earlier Ubuntu releases are not publishing targets.
 
-Pinned arm64 downloads are retained for Brave, ChatGPT, Codex, Lichii, and Waterfox. Termsmith, Pantheon Studio, and VPN Manager also have arm64 recipes. They can be built on an arm64 host, but arm64 is not yet published by the CI.
+Pinned arm64 downloads are retained for Brave, ChatGPT, Codex, Lichii, Waterfox, and xemu. Termsmith, Pantheon Studio, and VPN Manager also have arm64 recipes. They can be built on an arm64 host, but arm64 is not yet published by the CI.
 
 Pantheon Studio is packaged as a standalone application. Its optional launcher and panel integrations are not included; installing it does not replace your desktop environment.
 

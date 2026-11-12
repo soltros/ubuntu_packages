@@ -196,6 +196,12 @@ def build(name, arch, suite, output, allow_restricted=False):
                 shutil.copy2(payload, install / (name+'.AppImage'))
                 (install / (name+'.AppImage')).chmod(0o755)
                 launcher(stage, name, '/opt/'+name+'/'+name+'.AppImage', env={'APPIMAGE_EXTRACT_AND_RUN':'1'})
+                if name == 'xemu':
+                    icon=stage/'usr/share/icons/hicolor/scalable/apps/xemu.svg'
+                    icon.parent.mkdir(parents=True,exist_ok=True)
+                    shutil.copy2(ROOT/'assets/xemu.svg',icon)
+                    write(stage,'usr/share/doc/xemu/copyright','xemu upstream license: GNU GPL version 2; see COPYING.\nIcon: xemu-project/xemu, ui/icons/xemu.svg at v0.8.139.\nSource: https://github.com/xemu-project/xemu/tree/v0.8.139\n')
+                    shutil.copy2(ROOT/'assets/xemu-COPYING',stage/'usr/share/doc/xemu/COPYING')
                 p = dict(p, depends='libasound2t64, libgl1, libegl1, libvulkan1, libgpg-error0, libxkbcommon0, libxcb1, libx11-6, libxi6, libxrandr2, libxcursor1, libxext6, libxfixes3, libxss1, libxtst6, libwayland-client0, libfontconfig1, libfreetype6, libpulse0, libusb-1.0-0, libstdc++6, zlib1g, libgmp10, libcap2, libdecor-0-0, libfribidi0, libharfbuzz0b, libudev1, libexpat1, libsm6, libice6')
             else:
                 unpack(payload, install, p.get('strip',0))
@@ -209,7 +215,12 @@ def build(name, arch, suite, output, allow_restricted=False):
                     icon=install/'browser/chrome/icons/default/default128.png'
                     if icon.exists():
                         dest=stage/'usr/share/icons/hicolor/128x128/apps/waterfox.png';dest.parent.mkdir(parents=True);shutil.copy2(icon,dest)
+            if p.get('extra_depends'):
+                p=dict(p,depends=p['depends']+', '+p['extra_depends'])
             if name!='codex': desktop(stage,name)
+            if name=='xemu':
+                path=stage/'usr/share/applications/xemu.desktop'
+                path.write_text(path.read_text().replace('Categories=Utility;','Icon=xemu\nCategories=Game;Emulator;\nStartupWMClass=xemu'))
         else:
             src = source(p, work/'source')
             if p.get('patch') == 'addwater':

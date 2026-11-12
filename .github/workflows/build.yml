@@ -2,7 +2,7 @@ name: Build Ubuntu packages
 on:
   push:
     branches: [main]
-    paths: ['packages.json', 'scripts/**', 'sources/**', 'tests/**', '.github/workflows/build.yml', '.github/workflows/publish.yml']
+    paths: ['packages.json', 'scripts/**', 'assets/**', 'sources/**', 'tests/**', '.github/workflows/build.yml', '.github/workflows/publish.yml']
   pull_request:
   workflow_dispatch:
 permissions:
