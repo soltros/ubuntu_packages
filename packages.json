@@ -266,8 +266,8 @@
       "repo": "xenia-project/xenia",
       "branch": "master"
     },
-    "build_depends": "clang, lld, llvm, cmake, ninja-build, pkg-config, python3, libgtk-3-dev, libsdl2-dev, libasound2-dev, liblz4-dev, libx11-dev, libxcb1-dev, libvulkan-dev",
-    "depends": "libgtk-3-0t64, libsdl2-2.0-0, libasound2t64, liblz4-1, libx11-6, libxcb1, libvulkan1"
+    "build_depends": "clang, lld, llvm, cmake, ninja-build, pkg-config, python3, libgtk-3-dev, libsdl2-dev, libasound2-dev, liblz4-dev, libx11-dev, libxcb1-dev, libvulkan-dev, libx11-xcb-dev",
+    "depends": "libgtk-3-0t64, libsdl2-2.0-0, libasound2t64, liblz4-1, libx11-6, libxcb1, libvulkan1, libx11-xcb1"
   },
   "vacuumtube": {
     "version": "1.8.2",
