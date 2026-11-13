@@ -224,7 +224,7 @@
     "repo": "largestgithubuseronearth/addwater",
     "rev": "v1.3",
     "track": {
-      "kind": "release",
+      "kind": "tag",
       "repo": "largestgithubuseronearth/addwater",
       "prefix": "v"
     },
@@ -374,7 +374,7 @@
     }
   },
   "discord": {
-    "version": "1.0.168",
+    "version": "1.0.169",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -383,8 +383,8 @@
     "deb_name": "discord",
     "downloads": {
       "amd64": {
-        "url": "https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.168/Discord.deb",
-        "sha256": "93d43ad090825b9edcacfb3841506ea51e7040c60d93a9e377d0caca547bea28"
+        "url": "https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.169/Discord.deb",
+        "sha256": "64d39ef66390149c09ec7d20759a2e4aa0b93efc071d073e3e72155eb86639df"
       }
     },
     "track": {

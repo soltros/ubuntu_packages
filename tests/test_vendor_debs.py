@@ -79,13 +79,20 @@ class VendorDebTests(unittest.TestCase):
         p=build.PACKAGES['discord']
         with patch.object(updates,'fetch',return_value={'name':'1.0.169'}) as fetch:
             row=updates.check(p)
-        self.assertEqual(row['status'],'update')
+        self.assertEqual(row['status'],'current')
         self.assertIn('/1.0.169/Discord.deb',row['url'])
         self.assertEqual(fetch.call_args.args[0],'https://discord.com/api/updates/stable?platform=linux')
         with patch.object(updates,'fetch',side_effect=OSError('offline')):
             row=updates.scan({'discord':p})[0]
         self.assertEqual(row['status'],'error')
         self.assertIn('offline',row['error'])
+
+    def test_tag_only_projects_skip_prerelease_tags(self):
+        p=build.PACKAGES['addwater']
+        with patch.object(updates,'fetch',return_value=[{'name':'v1.3'},{'name':'v1.2.1b1'},{'name':'rc1.4'},{'name':'v1.4'}]):
+            row=updates.check(p)
+        self.assertEqual(row['latest'],'1.4')
+        self.assertEqual(row['status'],'update')
 
     def test_missing_release_asset_is_an_error(self):
         with patch.object(updates,'fetch',return_value=[]):

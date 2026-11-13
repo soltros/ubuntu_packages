@@ -76,6 +76,17 @@ def check(p):
     kind=track['kind'];current=p.get('upstream_version',p['version']);extra={}
     if kind=='release_asset':
         latest,extra=release_asset(track);same=latest==current
+    elif kind=='tag':
+        tags=fetch(f"https://api.github.com/repos/{track['repo']}/tags?per_page=100")
+        prefix=track.get('prefix','')
+        versions=[tag['name'].removeprefix(prefix) for tag in tags
+                  if tag['name'].startswith(prefix) and re.fullmatch(r'[0-9]+(?:\.[0-9]+)*',tag['name'].removeprefix(prefix))]
+        if not versions:raise ValueError('No stable upstream tags found')
+        latest=versions[0]
+        for version in versions[1:]:
+            if subprocess.run(['dpkg','--compare-versions',version,'gt',latest],capture_output=True).returncode==0:
+                latest=version
+        same=latest==current
     elif kind=='discord':
         latest=fetch('https://discord.com/api/updates/stable?platform=linux')['name']
         if not re.fullmatch(r'[0-9]+(?:\.[0-9]+)+',latest):raise ValueError('Invalid Discord version')
