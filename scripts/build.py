@@ -157,6 +157,9 @@ def build(name, arch, suite, output, allow_restricted=False):
     with tempfile.TemporaryDirectory(prefix=name+'-') as tmp:
         work = Path(tmp); stage = work / 'root'; stage.mkdir()
         kind = p['kind']
+        if kind == 'appdir':
+            run('python3', ROOT/'scripts/lichii_deb.py', '--arch', arch, '--suite', suite, '--output', output)
+            return
         if kind in ('deb', 'archive'):
             payload = work / 'download'
             download(p['downloads'][arch], payload)

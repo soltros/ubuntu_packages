@@ -31,7 +31,7 @@ def merge(existing, incoming, mode):
             if (name, arch) == (n, a) and subprocess.run(['dpkg', '--compare-versions', version, 'gt', v]).returncode == 0:
                 raise ValueError(f'Refusing downgrade of {name}: {version} -> {v}')
     for deb, (name, arch, _) in current:
-        if (name, arch) in keys or (mode == 'full' and name != 'xemu-perf'):
+        if (name, arch) in keys:
             deb.unlink()
     for deb in additions:
         shutil.copy2(deb, existing / deb.name)

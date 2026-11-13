@@ -21,7 +21,7 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 | `browserclaw` | BrowserOS / BrowserClaw | Verified upstream DEB |
 | `codex` | Codex CLI | Official precompiled Linux bundle |
 | `hideout` | File encryption app | D source build |
-| `lichii` | Lichii emulator | Native CMake source build with Ubuntu Qt and generated library dependencies |
+| `lichii` | Lichii emulator | Pinned AppImage extracted in CI into native files; no AppImage runtime |
 | `quick-settings-tray` | GNOME Quick Settings system tray | GNOME extension |
 | `recomplauncher` | Discover and launch PC recompilations | Official native DEB, adapted to preserve the existing APT package name |
 | `sharpemu` | Experimental PS5 emulator | Pinned upstream Linux bundle |
@@ -36,9 +36,9 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 ### Native emulator and launcher packages
 
-Lichii and xemu compile from pinned source revisions inside Ubuntu 26.10. Debian tooling computes their runtime library dependencies. RecompLauncher uses upstream’s actual native DEB rather than its AppImage; its payload is repackaged as `recomplauncher` so existing installations upgrade normally. The package revisions increase for the native transition.
+Lichii is unpacked from its checksum-pinned upstream AppImage during CI and repackaged as ordinary application files and private libraries. It does not compile from source or extract anything at launch. xemu compiles from pinned source inside Ubuntu 26.10. Debian tooling computes runtime library dependencies. RecompLauncher uses upstream's native DEB, adapted to the existing package identity.
 
-No AppImage is shipped or extracted at launch. Both build CI and the signed publisher run `scripts/verify-native.py`: it rejects AppImage filenames, AppImage ELF signatures (including renamed files), and extraction wrappers. These three applications must provide an ELF executable under `/usr/bin`. This also stops an older in-flight wrapper build from being republished after the native transition.
+No AppImage is shipped or extracted at launch. Both build CI and the signed publisher run `scripts/verify-native.py`: it rejects AppImage filenames, AppImage ELF signatures (including renamed files), and extraction wrappers. xemu and RecompLauncher provide ELF executables under `/usr/bin`; Lichii uses a fixed launcher for its verified private ELF. This also stops an older in-flight wrapper build from being republished after the native transition.
 
 ### Vendor Debian applications
 
@@ -58,7 +58,7 @@ The update scan runs daily and when tracking configuration changes, and maintain
 
 The package target is **Ubuntu/Kubuntu 26.10 (stonking), amd64**. CI builds and checks dependencies inside an Ubuntu 26.10 container. Kubuntu uses the same Ubuntu package archive. Package compatibility with 26.10 is being validated; earlier Ubuntu releases are not publishing targets.
 
-Pinned arm64 downloads are retained for Brave, ChatGPT, Codex and Waterfox. Lichii and xemu source recipes also support native arm64 hosts. Termsmith, Pantheon Studio, and VPN Manager also have arm64 recipes. They can be built on an arm64 host, but arm64 is not yet published by the CI.
+Pinned arm64 downloads are retained for Brave, ChatGPT, Codex and Waterfox. Lichii has a pinned arm64 AppImage for extraction, and xemu supports source builds on arm64. Termsmith, Pantheon Studio, and VPN Manager also have arm64 recipes. They can be built on an arm64 host, but arm64 is not yet published by the CI.
 
 Pantheon Studio is packaged as a standalone application. Its optional launcher and panel integrations are not included; installing it does not replace your desktop environment.
 
@@ -162,3 +162,9 @@ Already installed packages remain installed. Remove individual applications with
 ## Licensing
 
 Repository packaging additions use GPL-3.0 as provided in [LICENSE](LICENSE). Applications retain their respective upstream licenses and trademarks; packaging does not relicense them. ChatGPT’s upstream Debian package is preserved byte-for-byte. Brave’s payload is repackaged to remove its upstream repository/keyring bootstrap and use this repository’s signing setup. Bundled VPN Manager retains its own MIT license. See each application's source and license notices.
+
+## Independent optimized xemu
+
+`XEMU (Optimizations)` is provided by optional package `xemu-perf`, installed alongside stable `xemu`. Its dedicated workflow builds only that package and merges it into the signed APT repository. See [the experiment notes](experiments/xemu/README.md) for the Vulkan cache patch, isolated settings, audio comparison options, and limits.
+
+Manifest-only package changes (including supporting code in the same commit) select changed recipes rather than rebuilding the entire matrix. Shared build changes without recipe changes rebuild the matrix. Publication overlays the successful package set and retains unrelated packages.

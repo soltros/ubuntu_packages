@@ -25,6 +25,10 @@ def verify(deb):
         name=subprocess.check_output(['dpkg-deb','-f',str(deb),'Package'],text=True).strip()
         if name in ['lichii','xemu','recomplauncher']:
             binary=root/'usr/bin'/name
+            if name == 'lichii' and binary.is_file() and binary.read_bytes().startswith(b'#!/bin/sh\n'):
+                if binary.read_text() != '#!/bin/sh\nexec /usr/lib/lichii/usr/bin/lichii "$@"\n':
+                    raise ValueError(f'{deb}: unexpected Lichii native launcher')
+                binary = root / 'usr/lib/lichii/usr/bin/lichii'
             if binary.is_symlink() or not binary.is_file():
                 raise ValueError(f'{deb}: expected native ELF at /usr/bin/{name}')
             with binary.open('rb') as stream:

@@ -74,41 +74,29 @@
   },
   "lichii": {
     "version": "160",
-    "kind": "cmake",
     "architectures": [
       "amd64",
       "arm64"
     ],
     "description": "Lichii native Switch emulator",
-    "repo": "zortos293/Lichii",
-    "rev": "2eb5f081c8734affd272466f89133aa4e3e56e18",
-    "revision": "2soltros1",
     "track": {
       "kind": "release",
       "repo": "zortos293/Lichii",
       "prefix": "build-"
     },
-    "build_depends": "debhelper-compat (= 13), cmake, ninja-build, pkg-config, git, autoconf, libtool, nasm, qt6-base-dev, qt6-base-private-dev, qt6-charts-dev, qt6-tools-dev, qt6-tools-dev-tools, libavfilter-dev, libavcodec-dev, libavformat-dev, libavutil-dev, libswresample-dev, libswscale-dev, libva-dev, libvdpau-dev, libdrm-dev, libpulse-dev, libasound2-dev, libudev-dev, libusb-1.0-0-dev, libglu1-mesa-dev, libvulkan-dev, libxkbcommon-dev, libxkbcommon-x11-0, libssl-dev, libzstd-dev, liblz4-dev, libopus-dev, libboost-dev, libboost-context-dev, libboost-fiber-dev, zlib1g-dev, glslang-tools, spirv-tools, spirv-headers",
-    "cmake_options": [
-      "-DENABLE_QT=ON",
-      "-DENABLE_QT_TRANSLATION=ON",
-      "-DENABLE_WERROR=OFF",
-      "-DENABLE_UPDATE_CHECKER=OFF",
-      "-DUSE_DISCORD_PRESENCE=OFF",
-      "-DYUZU_TESTS=OFF",
-      "-DBUILD_TESTING=OFF",
-      "-DYUZU_CMD=OFF",
-      "-DYUZU_ROOM=OFF",
-      "-DYUZU_ROOM_STANDALONE=OFF",
-      "-DYUZU_USE_BUNDLED_QT=OFF",
-      "-DYUZU_USE_BUNDLED_FFMPEG=OFF",
-      "-DYUZU_USE_EXTERNAL_FFMPEG=OFF",
-      "-DYUZU_USE_BUNDLED_OPENSSL=OFF",
-      "-DYUZU_USE_BUNDLED_SDL3=ON",
-      "-DYUZU_BUILD_PRESET=generic",
-      "-DVulkanHeaders_FORCE_BUNDLED=ON",
-      "-DVulkanUtilityLibraries_FORCE_BUNDLED=ON"
-    ]
+    "kind": "appdir",
+    "revision": "3soltros1",
+    "build_depends": "squashfs-tools",
+    "downloads": {
+      "amd64": {
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-160/lichii-linux-x86_64.AppImage",
+        "sha256": "809ee6a79a4ebcc902233a24ee1adef51688c10d4b61ccd29a83d7f17560f782"
+      },
+      "arm64": {
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-160/lichii-linux-aarch64.AppImage",
+        "sha256": "976d6ea582ddb4664b15e40637bc677195aba1c44fca3ac3665018265ef56a4e"
+      }
+    }
   },
   "recomplauncher": {
     "version": "0.90.0-beta.41",

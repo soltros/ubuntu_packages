@@ -13,29 +13,18 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
-      should_build: ${{ steps.changes.outputs.should_build }}
+      should_build: ${{ steps.matrix.outputs.should_build }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - id: changes
-        env:
-          EVENT: ${{ github.event_name }}
-          BEFORE: ${{ github.event.before }}
-        run: |
-          python3 - <<'PY'
-          import os, subprocess
-          before=os.environ.get('BEFORE','')
-          build=True
-          if os.environ['EVENT']=='push' and before and set(before)!={'0'}:
-              paths=subprocess.check_output(['git','diff','--name-only',before,'HEAD'],text=True).splitlines()
-              build=any(p=='packages.json' or p.startswith(('scripts/','assets/','sources/','tests/')) for p in paths)
-          with open(os.environ['GITHUB_OUTPUT'],'a') as out: out.write('should_build='+str(build).lower()+'\n')
-          PY
       - run: |
           python3 -m unittest discover -s tests -v
           PYTHONPATH=sources/vpn-manager python3 -m unittest discover -s sources/vpn-manager/tests -v
       - id: matrix
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
         run: echo "matrix=$(python3 scripts/matrix.py)" >> "$GITHUB_OUTPUT"
   build:
     if: needs.validate.outputs.should_build == 'true'
@@ -79,6 +68,10 @@ jobs:
           # APT must be able to resolve all dependencies in this Ubuntu release.
           # Recommends (e.g. optional Tailscale) are excluded from resolution.
           apt-get --simulate --no-install-recommends install ./dist/*.deb
+          if [ "${{ matrix.package }}" = lichii ]; then
+            apt-get install -y --no-install-recommends ./dist/*.deb
+            xvfb-run -a lichii --version
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: debs-${{ matrix.suite }}-${{ matrix.package }}

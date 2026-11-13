@@ -44,16 +44,29 @@ class NativeTests(unittest.TestCase):
     def test_source_native_apps_require_real_elf_entrypoint(self):
         with tempfile.TemporaryDirectory() as tmp:
             deb=self.package(Path(tmp),'lichii','usr/bin/lichii',b'#!/bin/sh\nexec /opt/lichii\n')
-            with self.assertRaisesRegex(ValueError,'expected native ELF'):audit.verify(deb)
+            with self.assertRaisesRegex(ValueError,'expected native ELF|unexpected Lichii native launcher'):audit.verify(deb)
 
     def test_no_recipe_uses_appimage_payloads(self):
         for p in build.PACKAGES.values():
             self.assertNotEqual(p['kind'],'appimage')
             for download in p.get('downloads',{}).values():
-                self.assertNotIn('.AppImage',download['url'])
-        self.assertEqual(build.PACKAGES['lichii']['kind'],'cmake')
+                if p['kind'] != 'appdir':
+                    self.assertNotIn('.AppImage',download['url'])
+        self.assertEqual(build.PACKAGES['lichii']['kind'],'appdir')
         self.assertEqual(build.PACKAGES['xemu']['kind'],'xemu')
         self.assertEqual(build.PACKAGES['recomplauncher']['kind'],'deb')
+
+    def test_extracted_lichii_requires_fixed_launcher_and_private_native_elf(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            deb = self.package(root, 'lichii', 'usr/bin/lichii', b'#!/bin/sh\nexec /usr/lib/lichii/usr/bin/lichii "$@"\n')
+            with self.assertRaisesRegex(ValueError, 'expected native ELF'):
+                audit.verify(deb)
+            private = root / 'stage/usr/lib/lichii/usr/bin/lichii'
+            private.parent.mkdir(parents=True)
+            shutil.copy2('/bin/true', private)
+            subprocess.run(['dpkg-deb','--root-owner-group','--build',str(root/'stage'),str(deb)],check=True,stdout=subprocess.DEVNULL)
+            audit.verify(deb)
 
     def test_revision_will_upgrade_existing_same_version_wrappers(self):
         for name in ['lichii','xemu','recomplauncher']:
