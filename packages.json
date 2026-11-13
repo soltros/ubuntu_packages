@@ -1,6 +1,6 @@
 {
   "brave": {
-    "version": "1.99.56",
+    "version": "1.99.57",
     "kind": "deb",
     "architectures": [
       "amd64",
@@ -9,12 +9,12 @@
     "description": "Brave",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/brave/brave-browser/releases/download/v1.99.56/brave-browser_1.99.56_amd64.deb",
-        "sha256": "5b5af4d108758fe5e82b7cb119af203977a90fcb34b9b07319317f863f38bc72"
+        "url": "https://github.com/brave/brave-browser/releases/download/v1.99.57/brave-browser_1.99.57_amd64.deb",
+        "sha256": "8cd14c57f7fd6d79dfd9a25450175b5438a1b11b565ff5d08ad991b702de9fd5"
       },
       "arm64": {
-        "url": "https://github.com/brave/brave-browser/releases/download/v1.99.56/brave-browser_1.99.56_arm64.deb",
-        "sha256": "2ce1c7254d9acdf2e8fe15761e469e31432274873c8448773db1b0ba40f18618"
+        "url": "https://github.com/brave/brave-browser/releases/download/v1.99.57/brave-browser_1.99.57_arm64.deb",
+        "sha256": "d05df4f8a8c494075246820c17897a469614f879938a77557f025fda7be61db4"
       }
     },
     "deb_name": "brave-browser",
@@ -25,7 +25,7 @@
     }
   },
   "chatgpt": {
-    "version": "26.1106.51428",
+    "version": "26.1111.21308",
     "kind": "deb",
     "architectures": [
       "amd64",
@@ -34,12 +34,12 @@
     "description": "Chatgpt",
     "downloads": {
       "amd64": {
-        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1106.51428_amd64.deb",
-        "sha256": "8356a7821930b135b741347faccbc43e1692b4424c3eab710a9af56c0bebb135"
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1111.21308_amd64.deb",
+        "sha256": "4b443bc557350a1b193bc2f1bae207c9ea3c9fb5d94f7c94a5d3dbaa8b552352"
       },
       "arm64": {
-        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1106.51428_arm64.deb",
-        "sha256": "ce49ac9a1efc1b5326504b0169570b8d0973f4b18461fbcc0597bbfe5310a9bb"
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1111.21308_arm64.deb",
+        "sha256": "c5c5aa090968ef7a28b27caed3d03374889d7c8250768814eb4cae5d9b9d9a25"
       }
     },
     "track": {
@@ -47,7 +47,7 @@
     }
   },
   "codex": {
-    "version": "0.167.1",
+    "version": "0.168.0",
     "kind": "archive",
     "architectures": [
       "amd64",
@@ -56,12 +56,12 @@
     "description": "Codex",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.167.1/codex-package-x86_64-unknown-linux-musl.tar.gz",
-        "sha256": "a945df3df83e849dd7b74787e27f8a459c1946b0e3afe3dc8eef8a8d1845fd4f"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.168.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
+        "sha256": "3acbff91c0a8e30767d47c8b6941279a603ab4087280aa3e546537cef3622cb8"
       },
       "arm64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.167.1/codex-package-aarch64-unknown-linux-musl.tar.gz",
-        "sha256": "ef3e1443a7795d596f1601a533d7225a1030488d60c965af1f0610ab95889031"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.168.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
+        "sha256": "127d5990f5b48bb327cf48a1bd1d09d65b7a626186158608189b37e84846dd07"
       }
     },
     "entry": "bin/codex",
@@ -287,22 +287,28 @@
     "depends": "libgtk-3-0t64, libsdl2-2.0-0, libasound2t64, liblz4-1, libx11-6, libxcb1, libvulkan1, libx11-xcb1"
   },
   "vacuumtube": {
-    "version": "1.8.2",
-    "kind": "npm",
+    "version": "2.0.1",
+    "kind": "deb",
     "architectures": [
-      "amd64"
+      "amd64",
+      "arm64"
     ],
-    "description": "Vacuumtube",
-    "repo": "shy1132/VacuumTube",
-    "rev": "v1.8.2",
+    "description": "VacuumTube YouTube TV desktop client",
+    "downloads": {
+      "amd64": {
+        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.0.1/VacuumTube-amd64.deb",
+        "sha256": "95aefe4ed472b3148142268cb772a4655fc781a8671c8ef19967e926d28dc8ae"
+      },
+      "arm64": {
+        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.0.1/VacuumTube-arm64.deb",
+        "sha256": "13e6fa96f59606995549a8fec4c0267e40a35a5be6984a8a7882d8087c6a1ef7"
+      }
+    },
     "track": {
       "kind": "release",
       "repo": "shy1132/VacuumTube",
       "prefix": "v"
-    },
-    "build_depends": "nodejs, npm",
-    "depends": "libgtk-3-0t64, libnss3, libasound2t64, libgbm1, libxss1, libxtst6, libatk-bridge2.0-0t64, libdrm2, libxkbcommon0",
-    "entry": "vacuumtube"
+    }
   },
   "xemu": {
     "version": "0.8.139",

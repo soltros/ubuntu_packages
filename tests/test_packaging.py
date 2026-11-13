@@ -40,7 +40,7 @@ class BraveTests(unittest.TestCase):
         from unittest.mock import patch
         with tempfile.TemporaryDirectory() as directory:
             tmp=Path(directory);stage=tmp/'upstream';out=tmp/'output'
-            build.write(stage,'DEBIAN/control','Package: brave-browser\nVersion: 1.99.56\nArchitecture: amd64\nMaintainer: Test <test@example.org>\nDepends: brave-keyring, libc6\nDescription: test\n')
+            build.write(stage,'DEBIAN/control',f'Package: brave-browser\nVersion: {build.PACKAGES["brave"]["version"]}\nArchitecture: amd64\nMaintainer: Test <test@example.org>\nDepends: brave-keyring, libc6\nDescription: test\n')
             build.write(stage,'DEBIAN/postinst','#!/bin/sh\nexit 1\n',0o755)
             build.write(stage,'opt/brave.com/brave/brave','fake executable\n',0o755)
             build.write(stage,'etc/cron.daily/brave-browser','upstream bootstrap\n',0o755)

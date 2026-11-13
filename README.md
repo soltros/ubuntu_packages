@@ -26,7 +26,7 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 | `recomplauncher` | Discover and launch PC recompilations | Official native DEB, adapted to preserve the existing APT package name |
 | `sharpemu` | Experimental PS5 emulator | Pinned upstream Linux bundle |
 | `termsmith` | GTK terminal configuration editor | Bundled Vala source build |
-| `vacuumtube` | YouTube TV desktop client | Electron source build |
+| `vacuumtube` | YouTube TV desktop client | Verified upstream native DEB |
 | `vpn-manager` | Tailscale and WireGuard manager | Bundled Python app |
 | `waterfox` | Waterfox browser | Pinned upstream Linux bundle |
 | `xemu` | Original Xbox emulator | Native source build using upstream Debian rules |
@@ -52,7 +52,7 @@ sudo apt upgrade
 
 Fresh's package version includes a Debian revision (`0.5.8-1`). The BrowserOS asset `0.52.1.1` currently identifies itself as package `browserclaw`, version `155.0.8318.26`. Its `upstream_version` is tracked separately so asset updates are detected despite that mismatch; inspect DEB metadata when changing the pin. No updater infers BrowserOS's version from its differently named Git tag.
 
-The update scan runs daily and when tracking configuration changes, and maintains the existing update issue assigned to `soltros`. It scans stable DEB assets for Fresh, Bitwarden, Zettlr and BrowserOS, excludes unrelated Bitwarden CLI releases and Fresh's Debian-testing build, and uses Discord's official Linux update endpoint. New downloads and upstream SHA256 digests (when supplied) are included in the issue for review. Network failures or missing assets remain explicit errors. No new signing secret or separate publishing setup is needed.
+The update scan runs daily and when tracking configuration changes, and maintains the existing update issue assigned to `soltros`. Once all upstream pins are current, the issue remains open until the matching package versions are present in the signed APT release; a successful publisher triggers a final scan and closure. It scans stable DEB assets for Fresh, Bitwarden, Zettlr and BrowserOS, excludes unrelated Bitwarden CLI releases and Fresh's Debian-testing build, and uses Discord's official Linux update endpoint. New downloads and upstream SHA256 digests (when supplied) are included in the issue for review. Network failures or missing assets remain explicit errors. No new signing secret or separate publishing setup is needed.
 
 ## Supported targets
 

@@ -2,7 +2,10 @@ name: Check upstream updates
 on:
   push:
     branches: [main]
-    paths: ['packages.json', 'scripts/check-updates.py', 'tests/test_vendor_debs.py', '.github/workflows/updates.yml']
+    paths: ['packages.json', 'scripts/check-updates.py', 'scripts/check-publication.py', 'tests/test_vendor_debs.py', '.github/workflows/updates.yml']
+  workflow_run:
+    workflows: [Publish signed APT repository]
+    types: [completed]
   schedule:
     - cron: '17 10 * * *'
   workflow_dispatch:
@@ -14,6 +17,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   scan:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -29,11 +33,15 @@ jobs:
         with:
           name: upstream-report
           path: update-report.*
+      - name: Check publication of pinned packages
+        id: publication
+        run: python3 scripts/check-publication.py
       - name: Maintain one update issue
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           ATTENTION: ${{ steps.scan.outputs.attention }}
+          PUBLISHED: ${{ steps.publication.outputs.ready }}
         run: |
           issue=$(gh issue list --repo "$REPO" --state open --search 'in:title "Ubuntu package updates"' --json number,title --jq '.[] | select(.title == "Ubuntu package updates") | .number' | head -1)
           if [ "$ATTENTION" = true ]; then
@@ -43,7 +51,12 @@ jobs:
               gh issue create --repo "$REPO" --title 'Ubuntu package updates' --body-file update-report.md --assignee soltros
             fi
           elif [ "$ATTENTION" = false ] && [ -n "$issue" ]; then
-            gh issue close "$issue" --repo "$REPO" --reason completed
+            if [ "$PUBLISHED" = true ]; then
+              gh issue close "$issue" --repo "$REPO" --reason completed
+            else
+              printf '\nPins are updated. Waiting for the validated packages to reach the signed 26.10 APT release.\n' >> update-report.md
+              gh issue edit "$issue" --repo "$REPO" --body-file update-report.md --add-assignee soltros
+            fi
           fi
       - name: Report scanner failures
         if: steps.scan.outcome == 'failure'
