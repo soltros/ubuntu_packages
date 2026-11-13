@@ -415,5 +415,28 @@
       "asset_pattern": "^BrowserOS_neo_v(?P<version>[0-9.]+)_amd64\\.deb$"
     },
     "upstream_version": "0.52.1.1"
+  },
+  "silo": {
+    "version": "1.2.2",
+    "kind": "archive",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "Silo browser picker with browser profile support",
+    "downloads": {
+      "amd64": {
+        "url": "https://github.com/no-faff/Silo/releases/download/v1.2.2/silo-1.2.2-linux-x86_64.tar.gz",
+        "sha256": "0fd3bd56e8a2399fc4b0e8903c513db7e4969ba10ffe095327fee7715aa7ab22"
+      }
+    },
+    "strip": 1,
+    "entry": "silo",
+    "depends": "libc6 (>= 2.39), libadwaita-1-0 (>= 1.5), libgtk-4-1 (>= 4.14), libglib2.0-0t64 (>= 2.80), libpango-1.0-0, libgcc-s1, python3, xdg-utils, desktop-file-utils, coreutils",
+    "build_depends": "",
+    "track": {
+      "kind": "release",
+      "repo": "no-faff/Silo",
+      "prefix": "v"
+    }
   }
 }

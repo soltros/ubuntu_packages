@@ -90,6 +90,32 @@ def launcher(stage, name, entry, *, env=None, chdir=None):
     write(stage, 'usr/bin/' + name, '\n'.join(lines) + '\n', 0o755)
 
 
+def install_silo(stage, bundle):
+    """Install native release files system-wide without running upstream's user installer."""
+    binary = bundle / 'silo'
+    if binary.read_bytes()[:4] != b'\x7fELF':
+        raise ValueError('Silo release does not contain a native ELF')
+    target = stage / 'usr/bin/silo'
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(binary, target)
+    target.chmod(0o755)
+    for source, destination in [
+        ('data/com.nofaff.Silo.desktop', 'usr/share/applications/com.nofaff.Silo.desktop'),
+        ('data/icons/hicolor/128x128/apps/com.nofaff.Silo.png', 'usr/share/icons/hicolor/128x128/apps/com.nofaff.Silo.png'),
+        ('LICENSE', 'usr/share/doc/silo/copyright'),
+        ('README.md', 'usr/share/doc/silo/README.md'),
+        ('native-host/silo-host.py', 'usr/lib/silo/silo-host.py'),
+    ]:
+        dest = stage / destination
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(bundle / source, dest)
+    (stage / 'usr/lib/silo/silo-host.py').chmod(0o755)
+    manifest = json.loads((bundle / 'native-host/com.nofaff.silo.firefox.json').read_text())
+    manifest['path'] = '/usr/lib/silo/silo-host.py'
+    write(stage, 'usr/lib/mozilla/native-messaging-hosts/com.nofaff.silo.json', json.dumps(manifest, indent=2) + '\n')
+    shutil.rmtree(bundle)
+
+
 def deb_version(p,suite):
     return p['version']+'-'+p.get('revision','1soltros1')+'~'+suite
 
@@ -212,7 +238,10 @@ def build(name, arch, suite, output, allow_restricted=False):
                     dest=stage/'usr/share/icons/hicolor/128x128/apps/waterfox.png';dest.parent.mkdir(parents=True);shutil.copy2(icon,dest)
             if p.get('extra_depends'):
                 p=dict(p,depends=p['depends']+', '+p['extra_depends'])
-            if name!='codex': desktop(stage,name)
+            if name=='silo':
+                install_silo(stage, install)
+            elif name!='codex':
+                desktop(stage,name)
         else:
             src = source(p, work/'source')
             if p.get('patch') == 'addwater':

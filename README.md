@@ -8,10 +8,11 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 ## Packages
 
-**All 21 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
+**All 22 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
 
 | Install name | Application | Packaging |
 |---|---|---|
+| `silo` | Silo browser picker with profile support | Verified upstream native binary, desktop entry, icon and Firefox extension host |
 | `brave-browser` | Brave browser | Pinned upstream Debian payload, adapted for this APT repository |
 | `chatgpt` | ChatGPT desktop | Pinned upstream Debian package |
 | `fresh-editor` | Fresh terminal editor | Verified upstream DEB, preserved byte-for-byte |
@@ -168,3 +169,9 @@ Repository packaging additions use GPL-3.0 as provided in [LICENSE](LICENSE). Ap
 `XEMU (Optimizations)` is provided by optional package `xemu-perf`, installed alongside stable `xemu`. Its dedicated workflow builds only that package and merges it into the signed APT repository. See [the experiment notes](experiments/xemu/README.md) for the Vulkan cache patch, isolated settings, audio comparison options, and limits.
 
 Manifest-only package changes (including supporting code in the same commit) select changed recipes rather than rebuilding the entire matrix. Shared build changes without recipe changes rebuild the matrix. Publication overlays the successful package set and retains unrelated packages.
+
+### Silo browser picker
+
+Install with `sudo apt install silo`, then launch **Silo**. Choose whether to register it as your default browser from inside the application; package installation does not change your current browser. The native amd64 release is checksum-pinned, checked on Ubuntu 26.10, and tracked by the normal daily update issue assigned to `soltros`. Only Silo builds when its recipe changes.
+
+The package includes its HTTP/HTTPS desktop entry, icon, MIT licence, and Firefox native-messaging host. Use `sudo apt remove silo` to uninstall the packaged application; upstream's built-in uninstall is intended for a user-local installation. Existing browser defaults and user configuration are not modified by DEB maintainer scripts.
