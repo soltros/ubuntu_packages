@@ -8,12 +8,17 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 ## Packages
 
-**All 16 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
+**All 21 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
 
 | Install name | Application | Packaging |
 |---|---|---|
 | `brave-browser` | Brave browser | Pinned upstream Debian payload, adapted for this APT repository |
 | `chatgpt` | ChatGPT desktop | Pinned upstream Debian package |
+| `fresh-editor` | Fresh terminal editor | Verified upstream DEB, preserved byte-for-byte |
+| `bitwarden` | Bitwarden password manager | Verified upstream desktop DEB |
+| `zettlr` | Zettlr Markdown editor | Verified upstream DEB |
+| `discord` | Discord desktop client | Verified official DEB |
+| `browserclaw` | BrowserOS / BrowserClaw | Verified upstream DEB |
 | `codex` | Codex CLI | Official precompiled Linux bundle |
 | `hideout` | File encryption app | D source build |
 | `lichii` | Lichii emulator | Pinned AppImage with a launcher that does not require FUSE |
@@ -28,6 +33,20 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 | `xenia` | Experimental Xbox 360 emulator | Native Linux source build |
 | `addwater` | Firefox GNOME theme manager | Python/Meson source build |
 | `pantheon-studio` | Pantheon customization app | Bundled Vala source build |
+
+### Vendor Debian applications
+
+Fresh, Bitwarden, Zettlr, Discord and BrowserOS are maintained here rather than downloaded by the post-installer. Their amd64 downloads are versioned and checksum-pinned; CI verifies each DEB's actual package name, version and architecture, then checks dependency resolution in Ubuntu 26.10. Successful builds enter the existing signed APT publication. Install/update them normally:
+
+```bash
+sudo apt update
+sudo apt install fresh-editor bitwarden zettlr discord browserclaw
+sudo apt upgrade
+```
+
+Fresh's package version includes a Debian revision (`0.5.8-1`). The BrowserOS asset `0.52.1.1` currently identifies itself as package `browserclaw`, version `155.0.8318.26`. Its `upstream_version` is tracked separately so asset updates are detected despite that mismatch; inspect DEB metadata when changing the pin. No updater infers BrowserOS's version from its differently named Git tag.
+
+The update scan runs daily and when tracking configuration changes, and maintains the existing update issue assigned to `soltros`. It scans stable DEB assets for Fresh, Bitwarden, Zettlr and BrowserOS, excludes unrelated Bitwarden CLI releases and Fresh's Debian-testing build, and uses Discord's official Linux update endpoint. New downloads and upstream SHA256 digests (when supplied) are included in the issue for review. Network failures or missing assets remain explicit errors. No new signing secret or separate publishing setup is needed.
 
 ## Supported targets
 

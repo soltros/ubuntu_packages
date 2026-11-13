@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import re
 import sys
+import subprocess
 import tarfile
 import urllib.request
 ROOT=Path(__file__).resolve().parents[1]
@@ -37,11 +38,50 @@ def chatgpt_version():
     raise ValueError('No version found in upstream control archive')
 
 
+def release_asset(track):
+    """Find stable desktop DEBs, independent of unrelated tags or CLI releases."""
+    releases=fetch(f"https://api.github.com/repos/{track['repo']}/releases?per_page=100")
+    pattern=re.compile(track['asset_pattern'])
+    candidates=[]
+    for release in releases:
+        if release.get('draft') or release.get('prerelease'):
+            continue
+        if not release['tag_name'].startswith(track.get('tag_prefix','')):
+            continue
+        for asset in release.get('assets',[]):
+            match=pattern.fullmatch(asset['name'])
+            if match:
+                version=match['version']
+                subprocess.run(['dpkg','--validate-version',version],check=True,capture_output=True)
+                candidates.append((version,asset))
+    if not candidates:
+        raise ValueError('No stable Debian release asset matched '+track['asset_pattern'])
+    best=candidates[0]
+    for item in candidates[1:]:
+        newer=subprocess.run(['dpkg','--compare-versions',item[0],'gt',best[0]],capture_output=True)
+        if newer.returncode not in (0,1):
+            raise ValueError('Invalid release asset version')
+        if newer.returncode==0:
+            best=item
+    version,asset=best
+    extra={'url':asset['browser_download_url']}
+    if (asset.get('digest') or '').startswith('sha256:'):
+        extra['sha256']=asset['digest'].split(':',1)[1]
+    return version,extra
+
+
 def check(p):
     track=p.get('track')
     if not track: return dict(status='local',current=p['version'],latest='bundled source')
-    kind=track['kind'];current=p['version']
-    if kind=='commit':
+    kind=track['kind'];current=p.get('upstream_version',p['version']);extra={}
+    if kind=='release_asset':
+        latest,extra=release_asset(track);same=latest==current
+    elif kind=='discord':
+        latest=fetch('https://discord.com/api/updates/stable?platform=linux')['name']
+        if not re.fullmatch(r'[0-9]+(?:\.[0-9]+)+',latest):raise ValueError('Invalid Discord version')
+        same=latest==current
+        extra['url']=f'https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/{latest}/Discord.deb'
+    elif kind=='commit':
         current=p['rev'];latest=fetch(f"https://api.github.com/repos/{track['repo']}/commits/{track['branch']}")['sha']
         same=latest.startswith(current)
     elif kind=='chatgpt':
@@ -53,7 +93,7 @@ def check(p):
         if rel.get('draft') or (kind!='prerelease' and rel.get('prerelease')):raise ValueError('Unexpected release channel')
         tag=rel['tag_name'];prefix=track.get('prefix','')
         latest=tag.removeprefix(prefix);same=latest==current
-    return dict(status='current' if same else 'update',current=current,latest=latest)
+    return dict(status='current' if same else 'update',current=current,latest=latest,**extra)
 
 
 def scan(packages):
@@ -72,6 +112,13 @@ def report(rows):
         text+=f"| {r['package']} | {r['status']} | {r['current']} | {r['latest']} |\n"
     for r in rows:
         if r.get('error'):text+=f"\n- {r['package']}: {r['error']}\n"
+    references=[r for r in rows if r.get('url') and r['status']=='update']
+    if references:
+        text+='\n## Debian downloads to review\n'
+        for r in references:
+            text+=f"\n- {r['package']}: {r['url']}"
+            if r.get('sha256'):text+=f" (upstream SHA256: `{r['sha256']}`)"
+            text+='\n'
     return text
 
 

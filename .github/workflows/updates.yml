@@ -1,5 +1,8 @@
 name: Check upstream updates
 on:
+  push:
+    branches: [main]
+    paths: ['packages.json', 'scripts/check-updates.py', 'tests/test_vendor_debs.py', '.github/workflows/updates.yml']
   schedule:
     - cron: '17 10 * * *'
   workflow_dispatch:
@@ -14,6 +17,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Validate vendor update tracking
+        run: python3 -m unittest discover -s tests -p test_vendor_debs.py -v
       - name: Check pinned packages
         id: scan
         continue-on-error: true
