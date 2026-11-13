@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Reuse only verified package-job artifacts whose recipe matches current main."""
+import hashlib
 import argparse
 import base64
 import importlib.util
@@ -38,7 +39,30 @@ def trusted_run(run, workflow):
             and run['path'] == '.github/workflows/' + workflow)
 
 
+def prune_obsolete(directory):
+    # GitHub retains older release assets even after a newer index is uploaded.
+    # Keep only the newest version per package/architecture before auditing.
+    newest = {}
+    for path in sorted(directory.glob('*.deb')):
+        name, arch, version = merge.fields(path)
+        key = (name, arch)
+        if key not in newest:
+            newest[key] = (path, version)
+            continue
+        previous, old_version = newest[key]
+        if subprocess.run(['dpkg', '--compare-versions', version, 'gt', old_version]).returncode == 0:
+            previous.unlink()
+            newest[key] = (path, version)
+        elif version == old_version:
+            if hashlib.sha256(path.read_bytes()).digest() != hashlib.sha256(previous.read_bytes()).digest():
+                raise ValueError('Conflicting payloads for the same Debian version: ' + name)
+            path.unlink()
+        else:
+            path.unlink()
+
+
 def recover(directory):
+    prune_obsolete(directory)
     recipes = json.loads((ROOT / 'packages.json').read_text())
     expected = publication.expected(recipes)
     current = {name: version for path in directory.glob('*.deb') for name, arch, version in [merge.fields(path)] if arch in ['amd64', 'all'] and version == expected.get(name)}
@@ -85,6 +109,7 @@ def recover(directory):
                 merge.merge(directory, folder, 'xemu-perf')
             print(f"Reused validated xemu-perf artifact from run {run['id']}", flush=True)
             break
+    prune_obsolete(directory)
     if needed:
         print('No reusable matching artifact yet for: ' + ', '.join(sorted(needed)), flush=True)
 
