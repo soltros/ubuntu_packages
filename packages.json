@@ -432,7 +432,7 @@
     "strip": 1,
     "entry": "silo",
     "depends": "libc6 (>= 2.39), libadwaita-1-0 (>= 1.5), libgtk-4-1 (>= 4.14), libglib2.0-0t64 (>= 2.80), libpango-1.0-0, libgcc-s1, python3, xdg-utils, desktop-file-utils, coreutils",
-    "build_depends": "",
+    "build_depends": "xdotool",
     "track": {
       "kind": "release",
       "repo": "no-faff/Silo",

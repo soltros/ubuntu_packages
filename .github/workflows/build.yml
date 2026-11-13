@@ -76,7 +76,7 @@ jobs:
           if [ "${{ matrix.package }}" = silo ]; then
             apt-get install -y --no-install-recommends ./dist/*.deb dbus-daemon
             desktop-file-validate /usr/share/applications/com.nofaff.Silo.desktop
-            dbus-run-session -- xvfb-run -a timeout 20s silo --help
+            dbus-run-session -- xvfb-run -a python3 scripts/smoke-gui.py /usr/bin/silo Silo
           fi
       - uses: actions/upload-artifact@v4
         with:
