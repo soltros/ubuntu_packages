@@ -57,6 +57,7 @@ jobs:
             dpkg-deb --info "$deb"
             dpkg-deb --contents "$deb" > /dev/null
           done
+          python3 scripts/verify-native.py dist/*.deb
           # APT must be able to resolve all dependencies in this Ubuntu release.
           # Recommends (e.g. optional Tailscale) are excluded from resolution.
           apt-get --simulate --no-install-recommends install ./dist/*.deb

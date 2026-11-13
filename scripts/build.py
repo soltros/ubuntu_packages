@@ -90,9 +90,13 @@ def launcher(stage, name, entry, *, env=None, chdir=None):
     write(stage, 'usr/bin/' + name, '\n'.join(lines) + '\n', 0o755)
 
 
+def deb_version(p,suite):
+    return p['version']+'-'+p.get('revision','1soltros1')+'~'+suite
+
+
 def control(stage, name, p, arch, suite):
     package = p.get('deb_name', name)
-    version = p['version'] + '-1soltros1~' + suite
+    version = deb_version(p,suite)
     text = f'Package: {package}\nVersion: {version}\nArchitecture: {arch}\nMaintainer: Soltros <packages@soltros.info>\nSection: utils\nPriority: optional\n'
     if p.get('depends'):
         text += 'Depends: ' + p['depends'] + '\n'
@@ -153,15 +157,18 @@ def build(name, arch, suite, output, allow_restricted=False):
     with tempfile.TemporaryDirectory(prefix=name+'-') as tmp:
         work = Path(tmp); stage = work / 'root'; stage.mkdir()
         kind = p['kind']
-        if kind in ('deb', 'archive', 'appimage'):
+        if kind in ('deb', 'archive'):
             payload = work / 'download'
             download(p['downloads'][arch], payload)
             if kind == 'deb':
                 got_name = subprocess.check_output(['dpkg-deb', '-f', str(payload), 'Package'], text=True).strip()
                 got_version = subprocess.check_output(['dpkg-deb', '-f', str(payload), 'Version'], text=True).strip()
                 got_arch = subprocess.check_output(['dpkg-deb', '-f', str(payload), 'Architecture'], text=True).strip()
-                if (got_name,got_version,got_arch)!=(p.get('deb_name',name),p['version'],arch):
+                if (got_name,got_version,got_arch)!=(p.get('upstream_deb_name',p.get('deb_name',name)),p['version'],arch):
                     raise ValueError('Downloaded Debian package metadata does not match manifest')
+                if p.get('repackage'):
+                    repackage_native_deb(payload,stage,p,name,arch,suite,output)
+                    return
                 if name != 'brave':
                     shutil.copy2(payload, output / f'{got_name}_{got_version}_{arch}.deb')
                     return
@@ -189,38 +196,20 @@ def build(name, arch, suite, output, allow_restricted=False):
                 run('dpkg-deb','--root-owner-group','-Zxz','--build',stage,output/f'brave-browser_{p["version"]}-1soltros1~{suite}_{arch}.deb')
                 return
             install = stage / 'opt' / name
-            if kind == 'appimage':
-                # Keep upstream AppImage intact and extract at runtime: no FUSE or
-                # executing untrusted payloads while building packages.
-                install.mkdir(parents=True)
-                shutil.copy2(payload, install / (name+'.AppImage'))
-                (install / (name+'.AppImage')).chmod(0o755)
-                launcher(stage, name, '/opt/'+name+'/'+name+'.AppImage', env={'APPIMAGE_EXTRACT_AND_RUN':'1'})
-                if name == 'xemu':
-                    icon=stage/'usr/share/icons/hicolor/scalable/apps/xemu.svg'
-                    icon.parent.mkdir(parents=True,exist_ok=True)
-                    shutil.copy2(ROOT/'assets/xemu.svg',icon)
-                    write(stage,'usr/share/doc/xemu/copyright','xemu upstream license: GNU GPL version 2; see COPYING.\nIcon: xemu-project/xemu, ui/icons/xemu.svg at v0.8.139.\nSource: https://github.com/xemu-project/xemu/tree/v0.8.139\n')
-                    shutil.copy2(ROOT/'assets/xemu-COPYING',stage/'usr/share/doc/xemu/COPYING')
-                p = dict(p, depends='libasound2t64, libgl1, libegl1, libvulkan1, libgpg-error0, libxkbcommon0, libxcb1, libx11-6, libxi6, libxrandr2, libxcursor1, libxext6, libxfixes3, libxss1, libxtst6, libwayland-client0, libfontconfig1, libfreetype6, libpulse0, libusb-1.0-0, libstdc++6, zlib1g, libgmp10, libcap2, libdecor-0-0, libfribidi0, libharfbuzz0b, libudev1, libexpat1, libsm6, libice6')
-            else:
-                unpack(payload, install, p.get('strip',0))
-                entry = install / p['entry']
-                if not entry.is_file():
-                    raise ValueError(f'Missing upstream executable: {entry}')
-                entry.chmod(entry.stat().st_mode | 0o111)
-                launcher(stage,name,'/opt/'+name+'/'+p['entry'])
-                if name=='waterfox':
-                    write(install,'distribution/policies.json','{"policies":{"DisableAppUpdate":true}}\n')
-                    icon=install/'browser/chrome/icons/default/default128.png'
-                    if icon.exists():
-                        dest=stage/'usr/share/icons/hicolor/128x128/apps/waterfox.png';dest.parent.mkdir(parents=True);shutil.copy2(icon,dest)
+            unpack(payload, install, p.get('strip',0))
+            entry = install / p['entry']
+            if not entry.is_file():
+                raise ValueError(f'Missing upstream executable: {entry}')
+            entry.chmod(entry.stat().st_mode | 0o111)
+            launcher(stage,name,'/opt/'+name+'/'+p['entry'])
+            if name=='waterfox':
+                write(install,'distribution/policies.json','{"policies":{"DisableAppUpdate":true}}\n')
+                icon=install/'browser/chrome/icons/default/default128.png'
+                if icon.exists():
+                    dest=stage/'usr/share/icons/hicolor/128x128/apps/waterfox.png';dest.parent.mkdir(parents=True);shutil.copy2(icon,dest)
             if p.get('extra_depends'):
                 p=dict(p,depends=p['depends']+', '+p['extra_depends'])
             if name!='codex': desktop(stage,name)
-            if name=='xemu':
-                path=stage/'usr/share/applications/xemu.desktop'
-                path.write_text(path.read_text().replace('Categories=Utility;','Icon=xemu\nCategories=Game;Emulator;\nStartupWMClass=xemu'))
         else:
             src = source(p, work/'source')
             if p.get('patch') == 'addwater':
@@ -235,6 +224,9 @@ def build(name, arch, suite, output, allow_restricted=False):
                         if old not in text: raise ValueError('Patch no longer applies: '+path)
                         text=text.replace(old,new)
                     f.write_text(text)
+            if kind in ('cmake','xemu'):
+                native_source_deb(src,p,name,suite,output)
+                return
             if kind == 'meson':
                 meson_build(src,stage,p,name,suite,work,output)
                 return
@@ -281,6 +273,42 @@ def build(name, arch, suite, output, allow_restricted=False):
         for f in stage.rglob('*'):
             if not f.is_symlink(): os.utime(f,(epoch,epoch))
         run('dpkg-deb','--root-owner-group','-Zxz','--build',stage,output/filename)
+
+
+def repackage_native_deb(payload,stage,p,name,arch,suite,output):
+    """Keep the existing APT package identity while using upstream's native DEB."""
+    run('dpkg-deb','--raw-extract',payload,stage)
+    path=stage/'DEBIAN/control'
+    text=path.read_text()
+    text=re.sub(r'(?m)^Package: .*$', 'Package: '+p.get('deb_name',name),text)
+    text=re.sub(r'(?m)^Version: .*$', 'Version: '+deb_version(p,suite),text)
+    # A manually installed upstream package owns the same executable.
+    text=text.rstrip()+'\nConflicts: '+p['upstream_deb_name']+'\nReplaces: '+p['upstream_deb_name']+'\n'
+    path.write_text(text)
+    run('dpkg-deb','--root-owner-group','-Zxz','--build',stage,output/f'{name}_{deb_version(p,suite)}_{arch}.deb')
+
+
+def native_source_deb(src,p,name,suite,output):
+    version=deb_version(p,suite)
+    if p['kind']=='xemu':
+        # Use the native Debian rules maintained by xemu itself. They install
+        # dist/xemu as /usr/bin/xemu, with icons and shlibs dependencies.
+        write(src,'XEMU_VERSION',p['version']+'\n')
+        write(src,'XEMU_COMMIT',p['rev']+'\n')
+        env=dict(os.environ,CC='clang-21',CXX='clang++-21',CC_LD='lld-21',CXX_LD='lld-21',AR='llvm-ar-21',RANLIB='llvm-ranlib-21',NM='llvm-nm-21',DEB_BUILD_OPTIONS='parallel=2',XEMU_BUILD_OPTIONS='-j2')
+    else:
+        shutil.rmtree(src/'debian',ignore_errors=True)
+        write(src,'debian/control',f"Source: {name}\nSection: games\nPriority: optional\nMaintainer: Soltros <packages@soltros.info>\nBuild-Depends: {p['build_depends']}\nStandards-Version: 4.7.0\nRules-Requires-Root: no\n\nPackage: {name}\nArchitecture: any\nDepends: ${{shlibs:Depends}}, ${{misc:Depends}}\nDescription: {p['description']}\n Built from pinned source for Ubuntu.\n")
+        options=' '.join(p['cmake_options'])
+        write(src,'debian/rules','#!/usr/bin/make -f\n%:\n\tdh $@ --buildsystem=cmake+ninja\n\noverride_dh_auto_configure:\n\tdh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr '+options+'\n\noverride_dh_auto_test:\n\ttrue\n',0o755)
+        write(src,'debian/source/format','3.0 (quilt)\n')
+        write(src,'debian/copyright',(src/'LICENSE.txt').read_text())
+        env=dict(os.environ,DEB_BUILD_OPTIONS='parallel=2',CMAKE_BUILD_PARALLEL_LEVEL='2')
+    write(src,'debian/changelog',f'{name} ({version}) {suite}; urgency=medium\n\n  * Build native Ubuntu package from pinned upstream source.\n\n -- Soltros <packages@soltros.info>  Fri, 13 Nov 2026 00:00:00 +0000\n')
+    run('dpkg-buildpackage','-b','-us','-uc',cwd=src,env=env)
+    artifacts=list(src.parent.glob('*.deb'))
+    if not artifacts:raise ValueError('No native Debian build artifacts')
+    for artifact in artifacts:shutil.copy2(artifact,output/artifact.name)
 
 
 def patch_xenia_premake(src):

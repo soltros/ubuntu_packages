@@ -73,40 +73,57 @@
     }
   },
   "lichii": {
-    "version": "150",
-    "kind": "appimage",
+    "version": "160",
+    "kind": "cmake",
     "architectures": [
       "amd64",
       "arm64"
     ],
-    "description": "Lichii",
-    "downloads": {
-      "amd64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-150/lichii-linux-x86_64-pgo.AppImage",
-        "sha256": "287c71b1ae20ffc391410ecef31be550d7b8d25cade3365e86accff81b6edf3f"
-      },
-      "arm64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-150/lichii-linux-aarch64-pgo.AppImage",
-        "sha256": "54a6ca98790489631e65542c06b47c47a7d13eb15208ff371fcd52d961f5bfc2"
-      }
-    },
+    "description": "Lichii native Switch emulator",
+    "repo": "zortos293/Lichii",
+    "rev": "2eb5f081c8734affd272466f89133aa4e3e56e18",
+    "revision": "2soltros1",
     "track": {
       "kind": "release",
       "repo": "zortos293/Lichii",
       "prefix": "build-"
-    }
+    },
+    "build_depends": "debhelper-compat (= 13), cmake, ninja-build, pkg-config, git, autoconf, libtool, nasm, qt6-base-dev, qt6-base-private-dev, qt6-charts-dev, qt6-tools-dev, qt6-tools-dev-tools, libavfilter-dev, libavcodec-dev, libavformat-dev, libavutil-dev, libswresample-dev, libswscale-dev, libva-dev, libvdpau-dev, libdrm-dev, libpulse-dev, libasound2-dev, libudev-dev, libusb-1.0-0-dev, libglu1-mesa-dev, libvulkan-dev, libxkbcommon-dev, libxkbcommon-x11-0, libssl-dev, libzstd-dev, liblz4-dev, libopus-dev, libboost-dev, libboost-context-dev, libboost-fiber-dev, zlib1g-dev, glslang-tools, spirv-tools, spirv-headers",
+    "cmake_options": [
+      "-DENABLE_QT=ON",
+      "-DENABLE_QT_TRANSLATION=ON",
+      "-DENABLE_WERROR=OFF",
+      "-DENABLE_UPDATE_CHECKER=OFF",
+      "-DUSE_DISCORD_PRESENCE=OFF",
+      "-DYUZU_TESTS=OFF",
+      "-DBUILD_TESTING=OFF",
+      "-DYUZU_CMD=OFF",
+      "-DYUZU_ROOM=OFF",
+      "-DYUZU_ROOM_STANDALONE=OFF",
+      "-DYUZU_USE_BUNDLED_QT=OFF",
+      "-DYUZU_USE_BUNDLED_FFMPEG=OFF",
+      "-DYUZU_USE_EXTERNAL_FFMPEG=OFF",
+      "-DYUZU_USE_BUNDLED_OPENSSL=OFF",
+      "-DYUZU_USE_BUNDLED_SDL3=ON",
+      "-DYUZU_BUILD_PRESET=generic",
+      "-DVulkanHeaders_FORCE_BUNDLED=ON",
+      "-DVulkanUtilityLibraries_FORCE_BUNDLED=ON"
+    ]
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.36",
-    "kind": "appimage",
+    "version": "0.90.0-beta.41",
+    "kind": "deb",
     "architectures": [
       "amd64"
     ],
-    "description": "Recomplauncher",
+    "description": "RecompLauncher native desktop application",
+    "upstream_deb_name": "recomp-launcher",
+    "repackage": true,
+    "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.36/RecompLauncher_0.90.0-beta.36_amd64.AppImage",
-        "sha256": "2e8ca08c036d44c4d5563e717896857f069d7a89c63aa998456c14f78c67ca51"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.41/RecompLauncher_0.90.0-beta.41_amd64.deb",
+        "sha256": "3f29bc774e1decad3404a8f2b7e41a9c54ae55184156ff0396b4e679744c1b13"
       }
     },
     "track": {
@@ -289,28 +306,21 @@
   },
   "xemu": {
     "version": "0.8.139",
-    "kind": "appimage",
+    "kind": "xemu",
     "architectures": [
       "amd64",
       "arm64"
     ],
-    "description": "Original Xbox emulator",
-    "downloads": {
-      "amd64": {
-        "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-x86_64.AppImage",
-        "sha256": "220282aacf09b30b35c55ba900a774fb6940c70deca1408bc70a4c9cc67c322f"
-      },
-      "arm64": {
-        "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-aarch64.AppImage",
-        "sha256": "5f132b3a97c365bf22e8dc286954586ee0cf2202d63958dfcebc8fe9d742ecd4"
-      }
-    },
-    "extra_depends": "libglib2.0-0t64, libpixman-1-0, libgbm1, libdrm2",
+    "description": "Native original Xbox emulator",
+    "repo": "xemu-project/xemu",
+    "rev": "aa54c34cae1c09410d74c69a44210a9867fe2d16",
+    "revision": "2soltros1",
     "track": {
       "kind": "release",
       "repo": "xemu-project/xemu",
       "prefix": "v"
-    }
+    },
+    "build_depends": "debhelper, cmake, git, python3, python3-pip, python3-tomli, python3-yaml, python3-venv, meson, ninja-build, pkg-config, libepoxy-dev, libpixman-1-dev, libsdl2-dev, libsamplerate0-dev, zlib1g-dev, libssl-dev, libpcap-dev, libslirp-dev, libvulkan-dev, libusb-1.0-0-dev, libcurl4-gnutls-dev, libpipewire-0.3-dev, clang-21, lld-21, llvm-21"
   },
   "fresh": {
     "version": "0.5.8-1",

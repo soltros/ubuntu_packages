@@ -21,18 +21,24 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 | `browserclaw` | BrowserOS / BrowserClaw | Verified upstream DEB |
 | `codex` | Codex CLI | Official precompiled Linux bundle |
 | `hideout` | File encryption app | D source build |
-| `lichii` | Lichii emulator | Pinned AppImage with a launcher that does not require FUSE |
+| `lichii` | Lichii emulator | Native CMake source build with Ubuntu Qt and generated library dependencies |
 | `quick-settings-tray` | GNOME Quick Settings system tray | GNOME extension |
-| `recomplauncher` | Discover and launch PC recompilations | Pinned AppImage with a launcher that does not require FUSE |
+| `recomplauncher` | Discover and launch PC recompilations | Official native DEB, adapted to preserve the existing APT package name |
 | `sharpemu` | Experimental PS5 emulator | Pinned upstream Linux bundle |
 | `termsmith` | GTK terminal configuration editor | Bundled Vala source build |
 | `vacuumtube` | YouTube TV desktop client | Electron source build |
 | `vpn-manager` | Tailscale and WireGuard manager | Bundled Python app |
 | `waterfox` | Waterfox browser | Pinned upstream Linux bundle |
-| `xemu` | Original Xbox emulator | Official prebuilt Linux payload packaged as a `.deb` |
+| `xemu` | Original Xbox emulator | Native source build using upstream Debian rules |
 | `xenia` | Experimental Xbox 360 emulator | Native Linux source build |
 | `addwater` | Firefox GNOME theme manager | Python/Meson source build |
 | `pantheon-studio` | Pantheon customization app | Bundled Vala source build |
+
+### Native emulator and launcher packages
+
+Lichii and xemu compile from pinned source revisions inside Ubuntu 26.10. Debian tooling computes their runtime library dependencies. RecompLauncher uses upstream’s actual native DEB rather than its AppImage; its payload is repackaged as `recomplauncher` so existing installations upgrade normally. The package revisions increase for the native transition.
+
+No AppImage is shipped or extracted at launch. Both build CI and the signed publisher run `scripts/verify-native.py`: it rejects AppImage filenames, AppImage ELF signatures (including renamed files), and extraction wrappers. These three applications must provide an ELF executable under `/usr/bin`. This also stops an older in-flight wrapper build from being republished after the native transition.
 
 ### Vendor Debian applications
 
@@ -52,7 +58,7 @@ The update scan runs daily and when tracking configuration changes, and maintain
 
 The package target is **Ubuntu/Kubuntu 26.10 (stonking), amd64**. CI builds and checks dependencies inside an Ubuntu 26.10 container. Kubuntu uses the same Ubuntu package archive. Package compatibility with 26.10 is being validated; earlier Ubuntu releases are not publishing targets.
 
-Pinned arm64 downloads are retained for Brave, ChatGPT, Codex, Lichii, Waterfox, and xemu. Termsmith, Pantheon Studio, and VPN Manager also have arm64 recipes. They can be built on an arm64 host, but arm64 is not yet published by the CI.
+Pinned arm64 downloads are retained for Brave, ChatGPT, Codex and Waterfox. Lichii and xemu source recipes also support native arm64 hosts. Termsmith, Pantheon Studio, and VPN Manager also have arm64 recipes. They can be built on an arm64 host, but arm64 is not yet published by the CI.
 
 Pantheon Studio is packaged as a standalone application. Its optional launcher and panel integrations are not included; installing it does not replace your desktop environment.
 

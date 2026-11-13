@@ -83,6 +83,7 @@ jobs:
               rm -f "repo-$suite/"*.deb
               find incoming -path "*/debs-$suite-*/*.deb" -exec cp '{}' "repo-$suite/" \;
             fi
+            python3 scripts/verify-native.py "repo-$suite/"*.deb
             python3 scripts/repository.py "repo-$suite" --suite "$suite" --key "$KEY_ID"
             if ! gh release view "apt-$suite" --repo "$REPO" > /dev/null 2>&1; then
               gh release create "apt-$suite" --repo "$REPO" --title "Soltros Ubuntu — $suite" --notes "Signed APT repository for Ubuntu $suite. See README for installation."
