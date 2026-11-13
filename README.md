@@ -8,32 +8,43 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 ## Packages
 
-**All 22 package definitions are in [packages.json](packages.json).** The [`sources/`](sources/) directory holds only the three locally maintained apps; other packages use pinned upstream code or verified binary downloads. Built `.deb` files are published through [Releases](https://github.com/soltros/ubuntu_packages/releases).
+<!-- BEGIN GENERATED PACKAGE LIST -->
 
-| Install name | Application | Packaging |
-|---|---|---|
-| `silo` | Silo browser picker with profile support | Verified upstream native binary, desktop entry, icon and Firefox extension host |
-| `brave-browser` | Brave browser | Pinned upstream Debian payload, adapted for this APT repository |
-| `chatgpt` | ChatGPT desktop | Pinned upstream Debian package |
-| `fresh-editor` | Fresh terminal editor | Verified upstream DEB, preserved byte-for-byte |
-| `bitwarden` | Bitwarden password manager | Verified upstream desktop DEB |
-| `zettlr` | Zettlr Markdown editor | Verified upstream DEB |
-| `discord` | Discord desktop client | Verified official DEB |
-| `browserclaw` | BrowserOS / BrowserClaw | Verified upstream DEB |
-| `codex` | Codex CLI | Official precompiled Linux bundle |
-| `hideout` | File encryption app | D source build |
-| `lichii` | Lichii emulator | Pinned AppImage extracted in CI into native files; no AppImage runtime |
-| `quick-settings-tray` | GNOME Quick Settings system tray | GNOME extension |
-| `recomplauncher` | Discover and launch PC recompilations | Official native DEB, adapted to preserve the existing APT package name |
-| `sharpemu` | Experimental PS5 emulator | Pinned upstream Linux bundle |
-| `termsmith` | GTK terminal configuration editor | Bundled Vala source build |
-| `vacuumtube` | YouTube TV desktop client | Verified upstream native DEB |
-| `vpn-manager` | Tailscale and WireGuard manager | Bundled Python app |
-| `waterfox` | Waterfox browser | Pinned upstream Linux bundle |
-| `xemu` | Original Xbox emulator | Native source build using upstream Debian rules |
-| `xenia` | Experimental Xbox 360 emulator | Native Linux source build |
-| `addwater` | Firefox GNOME theme manager | Python/Meson source build |
-| `pantheon-studio` | Pantheon customization app | Bundled Vala source build |
+**22 standard definitions in [packages.json](packages.json), plus the independently built `xemu-perf` definition.**
+
+Targets: Ubuntu/Kubuntu 26.04 (`resolute`), Ubuntu/Kubuntu 26.10 (`stonking`). Each release must pass its own CI checks before publication.
+
+| Install name | Description | Pinned version | Architectures | Packaging | Update tracking | Definition |
+|---|---|---|---|---|---|---|
+| `addwater` | Addwater | 1.3 | amd64 | Meson source build | Upstream tag; daily assigned issue | [packages.json](packages.json) |
+| `bitwarden` | Bitwarden password manager | 2026.10.4 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
+| `brave-browser` | Brave | 1.99.57 | amd64, arm64 | Upstream native DEB; adapted for existing package identity/repository | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `browserclaw` | BrowserOS (BrowserClaw) browser | 155.0.8318.26 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
+| `chatgpt` | Chatgpt | 26.1111.21308 | amd64, arm64 | Upstream native DEB | Upstream chatgpt; daily assigned issue | [packages.json](packages.json) |
+| `codex` | Codex | 0.168.0 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `discord` | Discord desktop client | 1.0.169 | amd64 | Upstream native DEB | Upstream discord; daily assigned issue | [packages.json](packages.json) |
+| `fresh-editor` | Fresh terminal editor | 0.5.8-1 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
+| `hideout` | Hideout | 0.9.13 | amd64 | D source build | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `lichii` | Lichii native Switch emulator | 160 | amd64, arm64 | AppImage unpacked in CI; native files in DEB | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `pantheon-studio` | Pantheon Studio | 0.2.0 | amd64, arm64 | Meson source build | Locally maintained source | [packages.json](packages.json) |
+| `quick-settings-tray` | Quick Settings Tray | 1 | amd64 | GNOME Shell extension | Upstream commit; daily assigned issue | [packages.json](packages.json) |
+| `recomplauncher` | RecompLauncher native desktop application | 0.90.0-beta.41 | amd64 | Upstream native DEB; adapted for existing package identity/repository | Upstream prerelease; daily assigned issue | [packages.json](packages.json) |
+| `sharpemu` | Sharpemu | 0.0.7-pulse | amd64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `silo` | Silo browser picker with browser profile support | 1.2.2 | amd64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `termsmith` | Termsmith | 0.2.0 | amd64, arm64 | Meson source build | Locally maintained source | [packages.json](packages.json) |
+| `vacuumtube` | VacuumTube YouTube TV desktop client | 2.0.1 | amd64, arm64 | Upstream native DEB | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `vpn-manager` | Vpn Manager | 0.2.0 | amd64, arm64 | Bundled Python app | Locally maintained source | [packages.json](packages.json) |
+| `waterfox` | Waterfox | 6.7.8 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `xemu` | Native original Xbox emulator | 0.8.139 | amd64, arm64 | Native source build with upstream Debian rules | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `xenia` | Xenia | 0~git95a5c3e | amd64 | Native Linux source build | Upstream commit; daily assigned issue | [packages.json](packages.json) |
+| `zettlr` | Zettlr Markdown editor | 4.9.0 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
+| `xemu-perf` | XEMU (Optimizations) | 0.8.139-1soltrosperf1 (+ target suite) | amd64 | Native source build with pinned Vulkan cache patch | Dedicated daily source/patch checks and assigned issue | [package.json](experiments/xemu/package.json) |
+
+Versions above are definition pins, not a claim that every build has been published. Check the matching [signed release](https://github.com/soltros/ubuntu_packages/releases) for availability.
+
+The [`sources/`](sources/) directory holds locally maintained applications. Download hashes, build dependencies, and upstream tracking are recorded in the linked definitions.
+
+<!-- END GENERATED PACKAGE LIST -->
 
 ### Native emulator and launcher packages
 
@@ -199,3 +210,14 @@ sudo apt update
 ```
 
 This extends the package repository; the separate desktop post-installer still targets Kubuntu 26.10.
+
+## Keeping the package catalogue current
+
+The package list above is generated from `packages.json`, the optimized xemu definition, and `scripts/suites.json`. After adding/removing a package or changing its pin, architecture, packaging kind or update tracking, run:
+
+```bash
+python3 docs/package-list.py
+python3 docs/package-list.py --check
+```
+
+The dedicated documentation workflow checks pull requests and automatically synchronizes the README on main. It does not start package builds for documentation-only updates.
