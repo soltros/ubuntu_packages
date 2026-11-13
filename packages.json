@@ -47,7 +47,7 @@
     }
   },
   "codex": {
-    "version": "0.168.0",
+    "version": "0.169.0",
     "kind": "archive",
     "architectures": [
       "amd64",
@@ -56,12 +56,12 @@
     "description": "Codex",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.168.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
-        "sha256": "3acbff91c0a8e30767d47c8b6941279a603ab4087280aa3e546537cef3622cb8"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.169.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
+        "sha256": "3b8ed091149cc63a59046b9f094bcfa21cdb4dda15ede441ce369bcee4a71ba0"
       },
       "arm64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.168.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
-        "sha256": "127d5990f5b48bb327cf48a1bd1d09d65b7a626186158608189b37e84846dd07"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.169.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
+        "sha256": "c8d0b4ab2a97c595b70b10412d36d0d5464dcef1e1d3246b073d48017cdf5a4f"
       }
     },
     "entry": "bin/codex",
@@ -73,7 +73,7 @@
     }
   },
   "lichii": {
-    "version": "160",
+    "version": "177",
     "architectures": [
       "amd64",
       "arm64"
@@ -89,17 +89,17 @@
     "build_depends": "squashfs-tools, libfontconfig1, libharfbuzz0b, libfribidi0, libegl1, libopengl0, libusb-1.0-0",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-160/lichii-linux-x86_64.AppImage",
-        "sha256": "809ee6a79a4ebcc902233a24ee1adef51688c10d4b61ccd29a83d7f17560f782"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-177/lichii-linux-x86_64.AppImage",
+        "sha256": "a2b76c608c61c369dbe8b4b61e6990cb56ede8b1f29245f51f73d414373a6d85"
       },
       "arm64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-160/lichii-linux-aarch64.AppImage",
-        "sha256": "976d6ea582ddb4664b15e40637bc677195aba1c44fca3ac3665018265ef56a4e"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-177/lichii-linux-aarch64.AppImage",
+        "sha256": "beb0059843fdc4a9cbf429f838aa923c2672c49a2f542df9e67f5cc5e8dff014"
       }
     }
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.41",
+    "version": "0.90.0-beta.42",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -110,8 +110,8 @@
     "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.41/RecompLauncher_0.90.0-beta.41_amd64.deb",
-        "sha256": "3f29bc774e1decad3404a8f2b7e41a9c54ae55184156ff0396b4e679744c1b13"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.42/RecompLauncher_0.90.0-beta.42_amd64.deb",
+        "sha256": "ed34a74b478823199be5698aa43c9c979dba9b7bfb19805dc78fe1e983890aaa"
       }
     },
     "track": {
@@ -358,7 +358,7 @@
     }
   },
   "zettlr": {
-    "version": "4.9.0",
+    "version": "4.10.0",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -367,8 +367,8 @@
     "deb_name": "zettlr",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/Zettlr/Zettlr/releases/download/v4.9.0/Zettlr-4.9.0-amd64.deb",
-        "sha256": "1411b2f544f106e7bae8ed844181d854255c5d0e0c959e9ece8a1fd5f91a9f4f"
+        "url": "https://github.com/Zettlr/Zettlr/releases/download/v4.10.0/Zettlr-4.10.0-amd64.deb",
+        "sha256": "6466d2f718dfdbed18d382a0ebf8b00173ad6eb62e83a21dd4fdbf4a11cc6650"
       }
     },
     "track": {

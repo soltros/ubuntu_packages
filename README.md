@@ -21,14 +21,14 @@ Targets: Ubuntu/Kubuntu 26.04 (`resolute`), Ubuntu/Kubuntu 26.10 (`stonking`). E
 | `brave-browser` | Brave | 1.99.57 | amd64, arm64 | Upstream native DEB; adapted for existing package identity/repository | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `browserclaw` | BrowserOS (BrowserClaw) browser | 155.0.8318.26 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
 | `chatgpt` | Chatgpt | 26.1111.21308 | amd64, arm64 | Upstream native DEB | Upstream chatgpt; daily assigned issue | [packages.json](packages.json) |
-| `codex` | Codex | 0.168.0 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `codex` | Codex | 0.169.0 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `discord` | Discord desktop client | 1.0.169 | amd64 | Upstream native DEB | Upstream discord; daily assigned issue | [packages.json](packages.json) |
 | `fresh-editor` | Fresh terminal editor | 0.5.8-1 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
 | `hideout` | Hideout | 0.9.13 | amd64 | D source build | Upstream release; daily assigned issue | [packages.json](packages.json) |
-| `lichii` | Lichii native Switch emulator | 160 | amd64, arm64 | AppImage unpacked in CI; native files in DEB | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `lichii` | Lichii native Switch emulator | 177 | amd64, arm64 | AppImage unpacked in CI; native files in DEB | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `pantheon-studio` | Pantheon Studio | 0.2.0 | amd64, arm64 | Meson source build | Locally maintained source | [packages.json](packages.json) |
 | `quick-settings-tray` | Quick Settings Tray | 1 | amd64 | GNOME Shell extension | Upstream commit; daily assigned issue | [packages.json](packages.json) |
-| `recomplauncher` | RecompLauncher native desktop application | 0.90.0-beta.41 | amd64 | Upstream native DEB; adapted for existing package identity/repository | Upstream prerelease; daily assigned issue | [packages.json](packages.json) |
+| `recomplauncher` | RecompLauncher native desktop application | 0.90.0-beta.42 | amd64 | Upstream native DEB; adapted for existing package identity/repository | Upstream prerelease; daily assigned issue | [packages.json](packages.json) |
 | `sharpemu` | Sharpemu | 0.0.7-pulse | amd64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `silo` | Silo browser picker with browser profile support | 1.2.2 | amd64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `termsmith` | Termsmith | 0.2.0 | amd64, arm64 | Meson source build | Locally maintained source | [packages.json](packages.json) |
@@ -37,7 +37,7 @@ Targets: Ubuntu/Kubuntu 26.04 (`resolute`), Ubuntu/Kubuntu 26.10 (`stonking`). E
 | `waterfox` | Waterfox | 6.7.8 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `xemu` | Native original Xbox emulator | 0.8.139 | amd64, arm64 | Native source build with upstream Debian rules | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `xenia` | Xenia | 0~git95a5c3e | amd64 | Native Linux source build | Upstream commit; daily assigned issue | [packages.json](packages.json) |
-| `zettlr` | Zettlr Markdown editor | 4.9.0 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
+| `zettlr` | Zettlr Markdown editor | 4.10.0 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
 | `xemu-perf` | XEMU (Optimizations) | 0.8.139-1soltrosperf1 (+ target suite) | amd64 | Native source build with pinned Vulkan cache patch | Dedicated daily source/patch checks and assigned issue | [package.json](experiments/xemu/package.json) |
 
 Versions above are definition pins, not a claim that every build has been published. Check the matching [signed release](https://github.com/soltros/ubuntu_packages/releases) for availability.
