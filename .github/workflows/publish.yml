@@ -87,6 +87,7 @@ jobs:
             if [ -n "$BUILD_RUN" ]; then
               python3 experiments/xemu/merge_repo.py "repo-$suite" incoming --mode "$mode"
             fi
+            python3 experiments/publishing/reuse_artifacts.py "repo-$suite"
             python3 scripts/verify-native.py "repo-$suite/"*.deb
             python3 scripts/repository.py "repo-$suite" --suite "$suite" --key "$KEY_ID"
             if ! gh release view "apt-$suite" --repo "$REPO" > /dev/null 2>&1; then

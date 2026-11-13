@@ -39,6 +39,7 @@ def package(arch, suite, output):
             if path.is_symlink() and not path.resolve().is_relative_to(extracted.resolve()):
                 raise ValueError('Escaping AppDir symlink: ' + str(path))
         stage = work / 'root'
+        (stage / 'DEBIAN').mkdir(parents=True)
         private = stage / 'usr/lib/lichii/usr'
         shutil.copytree(source, private, symlinks=True)
         if (private / 'bin/lichii').read_bytes()[:4] != b'\x7fELF':

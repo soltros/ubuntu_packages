@@ -86,7 +86,7 @@
     },
     "kind": "appdir",
     "revision": "3soltros1",
-    "build_depends": "squashfs-tools",
+    "build_depends": "squashfs-tools, libfontconfig1, libharfbuzz0b, libfribidi0, libegl1, libopengl0, libusb-1.0-0",
     "downloads": {
       "amd64": {
         "url": "https://github.com/zortos293/Lichii/releases/download/build-160/lichii-linux-x86_64.AppImage",
