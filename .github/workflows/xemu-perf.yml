@@ -1,0 +1,56 @@
+name: Build optimized xemu
+on:
+  push:
+    branches: [main]
+    paths: ['experiments/xemu/**', '.github/workflows/xemu-perf.yml']
+  pull_request:
+    paths: ['experiments/xemu/**', '.github/workflows/xemu-perf.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: xemu-perf-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container: ubuntu:26.10
+    timeout-minutes: 120
+    steps:
+      - name: Install base tools
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates git python3 curl xz-utils file dpkg-dev debhelper fakeroot build-essential
+      - uses: actions/checkout@v4
+      - name: Test optimized package and repository merging
+        run: python3 -m unittest discover -s experiments/xemu/tests -v
+      - name: Install xemu build dependencies
+        run: |
+          python3 - <<'PY'
+          import json, re, subprocess
+          deps=json.load(open('packages.json'))['xemu']['build_depends']
+          names=[re.sub(r'\s*\([^)]*\)', '', x).strip() for x in deps.split(',') if x.strip()]
+          subprocess.run(['apt-get', 'install', '-y', *names], check=True)
+          PY
+      - name: Compile and package XEMU (Optimizations)
+        run: python3 experiments/xemu/build.py
+      - name: Validate native payload and resolvable dependencies
+        run: |
+          python3 scripts/verify-native.py dist/*.deb
+          apt-get --simulate --no-install-recommends install ./dist/*.deb
+          python3 - <<'PY'
+          import pathlib, subprocess, tempfile
+          for deb in pathlib.Path('dist').glob('*.deb'):
+              assert subprocess.check_output(['dpkg-deb','-f',str(deb),'Package'],text=True).strip() == 'xemu-perf'
+              with tempfile.TemporaryDirectory() as folder:
+                  subprocess.run(['dpkg-deb','-x',str(deb),folder],check=True)
+                  root=pathlib.Path(folder)
+                  assert (root/'usr/lib/xemu-perf/xemu').read_bytes()[:4] == b'\x7fELF'
+                  assert 'Name=XEMU (Optimizations)\n' in (root/'usr/share/applications/xemu-perf.desktop').read_text()
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: debs-stonking-xemu-perf
+          path: dist/xemu-perf_*.deb
+          if-no-files-found: error
+          retention-days: 14

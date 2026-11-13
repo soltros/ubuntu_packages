@@ -1,0 +1,39 @@
+name: Check optimized xemu updates
+on:
+  schedule:
+    - cron: '37 10 * * *'
+  push:
+    branches: [main]
+    paths: ['experiments/xemu/package.json', 'experiments/xemu/check-updates.py', '.github/workflows/xemu-perf-updates.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: xemu-perf-updates
+  cancel-in-progress: false
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - id: scan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 experiments/xemu/check-updates.py
+      - name: Maintain assigned update issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ATTENTION: ${{ steps.scan.outputs.attention }}
+        run: |
+          issue=$(gh issue list --repo "$REPO" --state open --search '"XEMU (Optimizations) updates" in:title' --json number,title --jq '.[] | select(.title == "XEMU (Optimizations) updates") | .number' | head -1)
+          if [ "$ATTENTION" = true ]; then
+            if [ -n "$issue" ]; then
+              gh issue edit "$issue" --repo "$REPO" --body-file xemu-perf-update.md --add-assignee soltros
+            else
+              gh issue create --repo "$REPO" --title 'XEMU (Optimizations) updates' --body-file xemu-perf-update.md --assignee soltros
+            fi
+          elif [ -n "$issue" ]; then
+            gh issue edit "$issue" --repo "$REPO" --body-file xemu-perf-update.md --add-assignee soltros
+          fi

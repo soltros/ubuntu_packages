@@ -13,14 +13,32 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
+      should_build: ${{ steps.changes.outputs.should_build }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: changes
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          python3 - <<'PY'
+          import os, subprocess
+          before=os.environ.get('BEFORE','')
+          build=True
+          if os.environ['EVENT']=='push' and before and set(before)!={'0'}:
+              paths=subprocess.check_output(['git','diff','--name-only',before,'HEAD'],text=True).splitlines()
+              build=any(p=='packages.json' or p.startswith(('scripts/','assets/','sources/','tests/')) for p in paths)
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out: out.write('should_build='+str(build).lower()+'\n')
+          PY
       - run: |
           python3 -m unittest discover -s tests -v
           PYTHONPATH=sources/vpn-manager python3 -m unittest discover -s sources/vpn-manager/tests -v
       - id: matrix
         run: echo "matrix=$(python3 scripts/matrix.py)" >> "$GITHUB_OUTPUT"
   build:
+    if: needs.validate.outputs.should_build == 'true'
     needs: validate
     runs-on: ubuntu-24.04
     container: ubuntu:${{ matrix.ubuntu }}

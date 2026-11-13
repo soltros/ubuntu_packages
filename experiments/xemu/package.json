@@ -1,0 +1,7 @@
+{
+  "version": "0.8.139-1soltrosperf1~stonking",
+  "base_revision": "aa54c34cae1c09410d74c69a44210a9867fe2d16",
+  "upstream_pr": 2993,
+  "upstream_patch_revision": "98ab977bb75b9c54ceabda870bfc78232731574a",
+  "patch_sha256": "bf11195e0f5e9ff39fc06475edd901f32b1b0e92a123c7fc4291b3a18e058a98"
+}
