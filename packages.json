@@ -85,7 +85,7 @@
       "prefix": "build-"
     },
     "kind": "appdir",
-    "revision": "3soltros1",
+    "revision": "4soltros1",
     "build_depends": "squashfs-tools, libfontconfig1, libharfbuzz0b, libfribidi0, libegl1, libopengl0, libusb-1.0-0",
     "downloads": {
       "amd64": {

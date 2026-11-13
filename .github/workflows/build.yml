@@ -70,7 +70,8 @@ jobs:
           apt-get --simulate --no-install-recommends install ./dist/*.deb
           if [ "${{ matrix.package }}" = lichii ]; then
             apt-get install -y --no-install-recommends ./dist/*.deb
-            xvfb-run -a lichii --version
+            apt-get install -y xdotool
+            xvfb-run -a python3 scripts/smoke-lichii.py
           fi
       - uses: actions/upload-artifact@v4
         with:
