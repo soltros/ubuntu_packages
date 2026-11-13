@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build the pinned cache backport as a side-by-side native xemu-perf DEB."""
+import os
 import hashlib
 import importlib.util
 import json
@@ -58,6 +59,8 @@ def repackage(deb, output, version):
 
 
 def main():
+    suite = os.environ.get('SUITE', 'stonking')
+    if suite not in ['resolute', 'stonking']: raise ValueError('Unsupported suite')
     metadata = json.loads((HERE / 'package.json').read_text())
     p = json.loads((ROOT / 'packages.json').read_text())['xemu']
     if p['rev'] != metadata['base_revision']:
@@ -72,11 +75,11 @@ def main():
         builder.run('git', 'apply', patch, cwd=src)
         original = work / 'debs'
         original.mkdir()
-        builder.native_source_deb(src, p, 'xemu', 'stonking', original)
+        builder.native_source_deb(src, p, 'xemu', suite, original)
         debs = list(original.glob('xemu_*.deb'))
         if len(debs) != 1:
             raise ValueError('Expected exactly one native xemu DEB')
-        result = repackage(debs[0], ROOT / 'dist', metadata['version'])
+        result = repackage(debs[0], ROOT / 'dist', metadata['version'].split('~')[0]+'~'+suite)
         print('Built', result)
 
 

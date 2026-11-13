@@ -37,13 +37,13 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 ### Native emulator and launcher packages
 
-Lichii is unpacked from its checksum-pinned upstream AppImage during CI and repackaged as ordinary application files and private libraries. It does not compile from source or extract anything at launch. xemu compiles from pinned source inside Ubuntu 26.10. Debian tooling computes runtime library dependencies. RecompLauncher uses upstream's native DEB, adapted to the existing package identity.
+Lichii is unpacked from its checksum-pinned upstream AppImage during CI and repackaged as ordinary application files and private libraries. It does not compile from source or extract anything at launch. xemu compiles from pinned source inside each target Ubuntu release. Debian tooling computes runtime library dependencies. RecompLauncher uses upstream's native DEB, adapted to the existing package identity.
 
 No AppImage is shipped or extracted at launch. Both build CI and the signed publisher run `scripts/verify-native.py`: it rejects AppImage filenames, AppImage ELF signatures (including renamed files), and extraction wrappers. xemu and RecompLauncher provide ELF executables under `/usr/bin`; Lichii uses a fixed launcher for its verified private ELF. This also stops an older in-flight wrapper build from being republished after the native transition.
 
 ### Vendor Debian applications
 
-Fresh, Bitwarden, Zettlr, Discord and BrowserOS are maintained here rather than downloaded by the post-installer. Their amd64 downloads are versioned and checksum-pinned; CI verifies each DEB's actual package name, version and architecture, then checks dependency resolution in Ubuntu 26.10. Successful builds enter the existing signed APT publication. Install/update them normally:
+Fresh, Bitwarden, Zettlr, Discord and BrowserOS are maintained here rather than downloaded by the post-installer. Their amd64 downloads are versioned and checksum-pinned; CI verifies each DEB's actual package name, version and architecture, then checks dependency resolution independently in Ubuntu 26.04 and 26.10. Successful builds enter the existing signed APT publication. Install/update them normally:
 
 ```bash
 sudo apt update
@@ -57,7 +57,7 @@ The update scan runs daily and when tracking configuration changes, and maintain
 
 ## Supported targets
 
-The package target is **Ubuntu/Kubuntu 26.10 (stonking), amd64**. CI builds and checks dependencies inside an Ubuntu 26.10 container. Kubuntu uses the same Ubuntu package archive. Package compatibility with 26.10 is being validated; earlier Ubuntu releases are not publishing targets.
+The package targets are **Ubuntu/Kubuntu 26.04 (resolute) and 26.10 (stonking), amd64**. CI builds and validates each target in its own container. Kubuntu uses the same Ubuntu package archive.
 
 Pinned arm64 downloads are retained for Brave, ChatGPT, Codex and Waterfox. Lichii has a pinned arm64 AppImage for extraction, and xemu supports source builds on arm64. Termsmith, Pantheon Studio, and VPN Manager also have arm64 recipes. They can be built on an arm64 host, but arm64 is not yet published by the CI.
 
@@ -73,7 +73,7 @@ sudo apt install ca-certificates curl gnupg
 
 . /etc/os-release
 case "$VERSION_CODENAME" in
-  stonking) suite="$VERSION_CODENAME" ;;
+  resolute|stonking) suite="$VERSION_CODENAME" ;;
   *) echo "This Ubuntu release is not supported yet"; exit 1 ;;
 esac
 
@@ -89,7 +89,7 @@ sudo apt update
 sudo apt install codex waterfox vpn-manager
 ```
 
-The flat APT layout is hosted as assets of the `apt-stonking` GitHub Release. Packages use relative filenames in the signed index and can exceed Git's file-size limit. GitHub Pages and an external server are unnecessary.
+The flat APT layout is hosted as assets of the matching `apt-resolute` or `apt-stonking` GitHub Release. Packages use relative filenames in the signed index and can exceed Git's file-size limit. GitHub Pages and an external server are unnecessary.
 
 For a single application, download its `.deb` from the matching release and run:
 
@@ -175,3 +175,27 @@ Manifest-only package changes (including supporting code in the same commit) sel
 Install with `sudo apt install silo`, then launch **Silo**. Choose whether to register it as your default browser from inside the application; package installation does not change your current browser. The native amd64 release is checksum-pinned, checked on Ubuntu 26.10, and tracked by the normal daily update issue assigned to `soltros`. Only Silo builds when its recipe changes.
 
 The package includes its HTTP/HTTPS desktop entry, icon, MIT licence, and Firefox native-messaging host. Use `sudo apt remove silo` to uninstall the packaged application; upstream's built-in uninstall is intended for a user-local installation. Existing browser defaults and user configuration are not modified by DEB maintainer scripts.
+
+## Ubuntu 26.04 and 26.10
+
+Both Ubuntu/Kubuntu releases have independent container builds and dependency checks:
+
+| Release | Codename | Signed release |
+|---|---|---|
+| 26.04 LTS | resolute | `apt-resolute` |
+| 26.10 | stonking | `apt-stonking` |
+
+The optimized xemu workflow also builds both versions. Source-built DEBs carry the target suite in their version. Vendor DEBs are independently checked against each Ubuntu release. Artifact recovery only accepts jobs for the matching suite; publishing never copies another Ubuntu release's build into your index. The update checker tracks one set of upstream pins and checks that both signed releases contain those versions.
+
+Use the matching suite in the APT setup commands below (run only after the matching signed release has been published):
+
+```bash
+. /etc/os-release
+case "$VERSION_CODENAME" in resolute|stonking) suite="$VERSION_CODENAME" ;; *) echo 'Unsupported Ubuntu release'; exit 1 ;; esac
+base="https://github.com/soltros/ubuntu_packages/releases/download/apt-$suite"
+curl -fsSL "$base/soltros-archive-keyring.asc" | gpg --dearmor | sudo tee /etc/apt/keyrings/soltros.gpg >/dev/null
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/soltros.gpg] $base ./" | sudo tee /etc/apt/sources.list.d/soltros.list
+sudo apt update
+```
+
+This extends the package repository; the separate desktop post-installer still targets Kubuntu 26.10.

@@ -27,7 +27,7 @@ if __name__ == '__main__':
         previous = json.loads(subprocess.check_output(['git', 'show', before + ':packages.json'], cwd=ROOT, text=True))
         paths = subprocess.check_output(['git', 'diff', '--name-only', before, 'HEAD'], cwd=ROOT, text=True).splitlines()
     names = select(current, previous, paths, os.environ.get('EVENT', 'workflow_dispatch'))
-    print(json.dumps({'include': [{'package': name, 'ubuntu': '26.10', 'suite': 'stonking'} for name in names]}))
+    print(json.dumps({'include': [{'package': name, 'ubuntu': ubuntu, 'suite': suite} for name in names for suite, ubuntu in json.loads((ROOT/'scripts/suites.json').read_text()).items()]}))
     if os.environ.get('GITHUB_OUTPUT'):
         with open(os.environ['GITHUB_OUTPUT'], 'a') as stream:
             stream.write('should_build=' + str(bool(names)).lower() + '\n')

@@ -14,7 +14,15 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    container: ubuntu:26.10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {ubuntu: '26.04', suite: resolute}
+          - {ubuntu: '26.10', suite: stonking}
+    container: ubuntu:${{ matrix.ubuntu }}
+    env:
+      SUITE: ${{ matrix.suite }}
     timeout-minutes: 120
     steps:
       - name: Install base tools
@@ -50,7 +58,7 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: debs-stonking-xemu-perf
+          name: debs-${{ matrix.suite }}-xemu-perf
           path: dist/xemu-perf_*.deb
           if-no-files-found: error
           retention-days: 14

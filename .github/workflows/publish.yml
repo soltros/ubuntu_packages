@@ -68,7 +68,7 @@ jobs:
             pattern='debs-*'
             if [ "$workflow" = xemu-perf.yml ]; then
               mode=xemu-perf
-              pattern=debs-stonking-xemu-perf
+              pattern='debs-*-xemu-perf'
             fi
             count=$(gh api "repos/$REPO/actions/runs/$BUILD_RUN/artifacts" --jq '.total_count')
             if [ "$count" = 0 ]; then
@@ -77,7 +77,7 @@ jobs:
             fi
             gh run download "$BUILD_RUN" --repo "$REPO" --pattern "$pattern" --dir incoming
           fi
-          for suite in stonking; do
+          for suite in resolute stonking; do
             mkdir -p "repo-$suite"
             # A refresh reuses the last successful published snapshot; failed builds
             # never replace working packages or publish only half a migration.
@@ -85,9 +85,20 @@ jobs:
               gh release download "apt-$suite" --repo "$REPO" --pattern '*.deb' --dir "repo-$suite"
             fi
             if [ -n "$BUILD_RUN" ]; then
-              python3 experiments/xemu/merge_repo.py "repo-$suite" incoming --mode "$mode"
+              mkdir -p "incoming-$suite"
+              find incoming -path "*/debs-$suite-*/*.deb" -exec cp '{}' "incoming-$suite/" \;
+              # A build run may contain artifacts for only one release.
+              if ! compgen -G "incoming-$suite/*.deb" > /dev/null; then
+                echo "No artifacts for $suite; leaving this release unchanged."
+                continue
+              fi
+              python3 experiments/xemu/merge_repo.py "repo-$suite" "incoming-$suite" --mode "$mode"
             fi
-            python3 experiments/publishing/reuse_artifacts.py "repo-$suite"
+            python3 experiments/publishing/reuse_artifacts.py "repo-$suite" --suite "$suite"
+            if ! compgen -G "repo-$suite/*.deb" > /dev/null; then
+              echo "No validated packages for $suite yet; not publishing an empty repository."
+              continue
+            fi
             python3 scripts/verify-native.py "repo-$suite/"*.deb
             python3 scripts/repository.py "repo-$suite" --suite "$suite" --key "$KEY_ID"
             if ! gh release view "apt-$suite" --repo "$REPO" > /dev/null 2>&1; then

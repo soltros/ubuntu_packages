@@ -54,7 +54,7 @@ jobs:
             if [ "$PUBLISHED" = true ]; then
               gh issue close "$issue" --repo "$REPO" --reason completed
             else
-              printf '\nPins are updated. Waiting for the validated packages to reach the signed 26.10 APT release.\n' >> update-report.md
+              printf '\nPins are updated. Waiting for the validated packages to reach the signed 26.04 and 26.10 APT releases.\n' >> update-report.md
               gh issue edit "$issue" --repo "$REPO" --body-file update-report.md --add-assignee soltros
             fi
           fi

@@ -384,7 +384,7 @@ def main():
     a=argparse.ArgumentParser(description=__doc__)
     a.add_argument('package',choices=PACKAGES)
     a.add_argument('--arch',default=subprocess.check_output(['dpkg','--print-architecture'],text=True).strip())
-    a.add_argument('--suite',choices=['stonking'],default='stonking')
+    a.add_argument('--suite',choices=['resolute','stonking'],default='stonking')
     a.add_argument('--output',type=Path,default=ROOT/'dist')
     a.add_argument('--allow-restricted',action='store_true')
     args=a.parse_args()

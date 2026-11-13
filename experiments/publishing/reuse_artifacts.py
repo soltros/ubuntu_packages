@@ -61,10 +61,11 @@ def prune_obsolete(directory):
             path.unlink()
 
 
-def recover(directory):
+def recover(directory, suite='stonking'):
+    ubuntu = {'resolute':'26.04','stonking':'26.10'}[suite]
     prune_obsolete(directory)
     recipes = json.loads((ROOT / 'packages.json').read_text())
-    expected = publication.expected(recipes)
+    expected = publication.expected(recipes,suite)
     current = {name: version for path in directory.glob('*.deb') for name, arch, version in [merge.fields(path)] if arch in ['amd64', 'all'] and version == expected.get(name)}
     needed = {name for name in recipes if current.get(recipes[name].get('deb_name', name)) != expected[recipes[name].get('deb_name', name)]}
     for run in api('actions/workflows/build.yml/runs?branch=main&per_page=12')['workflow_runs']:
@@ -79,8 +80,8 @@ def recover(directory):
         jobs = api(f"actions/runs/{run['id']}/jobs?per_page=100")['jobs']
         passed = {j['name'] for j in jobs if j['conclusion'] == 'success'}
         for name in sorted(needed.copy()):
-            artifact = f'debs-stonking-{name}'
-            if old.get(name) != recipes[name] or artifact not in artifacts or f'build ({name}, 26.10, stonking)' not in passed:
+            artifact = f'debs-{suite}-{name}'
+            if old.get(name) != recipes[name] or artifact not in artifacts or f'build ({name}, {ubuntu}, {suite})' not in passed:
                 continue
             with tempfile.TemporaryDirectory() as folder:
                 subprocess.run(['gh', 'run', 'download', str(run['id']), '--repo', REPO, '--name', artifact, '--dir', folder], check=True)
@@ -93,18 +94,19 @@ def recover(directory):
             needed.remove(name)
     # Optimized xemu is independent of the stable recipe manifest.
     pin = json.loads((ROOT / 'experiments/xemu/package.json').read_text())
-    present = any(merge.fields(p) == ('xemu-perf', 'amd64', pin['version']) for p in directory.glob('*.deb'))
+    version = pin['version'].split('~')[0]+'~'+suite
+    present = any(merge.fields(p) == ('xemu-perf', 'amd64', version) for p in directory.glob('*.deb'))
     if not present:
         for run in api('actions/workflows/xemu-perf.yml/runs?branch=main&status=success&per_page=8')['workflow_runs']:
             if not trusted_run(run, 'xemu-perf.yml') or file_at('experiments/xemu/package.json', run['head_sha']) != pin:
                 continue
             artifacts = api(f"actions/runs/{run['id']}/artifacts?per_page=100")['artifacts']
-            if not any(a['name'] == 'debs-stonking-xemu-perf' and not a['expired'] for a in artifacts):
+            if not any(a['name'] == f'debs-{suite}-xemu-perf' and not a['expired'] for a in artifacts):
                 continue
             with tempfile.TemporaryDirectory() as folder:
-                subprocess.run(['gh', 'run', 'download', str(run['id']), '--repo', REPO, '--name', 'debs-stonking-xemu-perf', '--dir', folder], check=True)
+                subprocess.run(['gh', 'run', 'download', str(run['id']), '--repo', REPO, '--name', f'debs-{suite}-xemu-perf', '--dir', folder], check=True)
                 debs = list(Path(folder).rglob('*.deb'))
-                if len(debs) != 1 or merge.fields(debs[0]) != ('xemu-perf', 'amd64', pin['version']):
+                if len(debs) != 1 or merge.fields(debs[0]) != ('xemu-perf', 'amd64', version):
                     raise ValueError('Unexpected optimized xemu package')
                 merge.merge(directory, folder, 'xemu-perf')
             print(f"Reused validated xemu-perf artifact from run {run['id']}", flush=True)
@@ -117,4 +119,6 @@ def recover(directory):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('directory', type=Path)
-    recover(parser.parse_args().directory)
+    parser.add_argument('--suite',default='stonking',choices=['resolute','stonking'])
+    args=parser.parse_args()
+    recover(args.directory,args.suite)
