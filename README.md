@@ -222,3 +222,10 @@ python3 docs/package-list.py --check
 ```
 
 The dedicated documentation workflow checks pull requests and automatically synchronizes the README on main. It does not start package builds for documentation-only updates.
+
+
+### HelloNzb desktop downloader
+
+Install with `sudo apt install hellonzb` and launch **HelloNzb** from the desktop menu or run `hellonzb` in a terminal. The package installs the upstream HelloNzb **1.5.1** Java Swing JAR under `/usr/share/hellonzb/`, a shell launcher under `/usr/bin/`, an icon and an NZB file association. Java is an APT dependency rather than a bundled JVM. On Wayland desktops Swing runs through XWayland. Preferences and downloads remain user-specific.
+
+The release is pinned to SourceForge's 1.5.1 JAR with SHA-256 `c12cd91cbf991e85ae3930c4a4d31522a0b31b3ab8a42c98525387e1be2197ed` (also verified against the uploaded JAR). The Ubuntu 26.04 and 26.10 builds validate the package and smoke-test its Swing window under Xvfb. The `Architecture: all` package is Java bytecode, currently built in the amd64 CI matrix. The optional `par2` utility can support archive repairs; extraction tools may need separate installation.
