@@ -10,7 +10,7 @@ Source recipes, pinned downloads, build checks, update reports, and signed APT p
 
 <!-- BEGIN GENERATED PACKAGE LIST -->
 
-**22 standard definitions in [packages.json](packages.json), plus the independently built `xemu-perf` definition.**
+**23 standard definitions in [packages.json](packages.json), plus the independently built `xemu-perf` definition.**
 
 Targets: Ubuntu/Kubuntu 26.04 (`resolute`), Ubuntu/Kubuntu 26.10 (`stonking`). Each release must pass its own CI checks before publication.
 
@@ -24,6 +24,7 @@ Targets: Ubuntu/Kubuntu 26.04 (`resolute`), Ubuntu/Kubuntu 26.10 (`stonking`). E
 | `codex` | Codex | 0.169.0 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `discord` | Discord desktop client | 1.0.169 | amd64 | Upstream native DEB | Upstream discord; daily assigned issue | [packages.json](packages.json) |
 | `fresh-editor` | Fresh terminal editor | 0.5.8-1 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
+| `hellonzb` | HelloNzb Java Swing Usenet NZB downloader | 1.5.1 | amd64 | Pinned Java application with desktop launcher | Locally maintained source | [packages.json](packages.json) |
 | `hideout` | Hideout | 0.9.13 | amd64 | D source build | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `lichii` | Lichii native Switch emulator | 177 | amd64, arm64 | AppImage unpacked in CI; native files in DEB | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `pantheon-studio` | Pantheon Studio | 0.2.0 | amd64, arm64 | Meson source build | Locally maintained source | [packages.json](packages.json) |
