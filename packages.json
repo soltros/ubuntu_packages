@@ -73,7 +73,7 @@
     }
   },
   "lichii": {
-    "version": "177",
+    "version": "228",
     "architectures": [
       "amd64",
       "arm64"
@@ -89,17 +89,17 @@
     "build_depends": "squashfs-tools, libfontconfig1, libharfbuzz0b, libfribidi0, libegl1, libopengl0, libusb-1.0-0",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-177/lichii-linux-x86_64.AppImage",
-        "sha256": "a2b76c608c61c369dbe8b4b61e6990cb56ede8b1f29245f51f73d414373a6d85"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-228/lichii-linux-x86_64.AppImage",
+        "sha256": "be124f449d75a7d8929feb45de8774bcf7819d25a47161ca357de5311e6ff08c"
       },
       "arm64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-177/lichii-linux-aarch64.AppImage",
-        "sha256": "beb0059843fdc4a9cbf429f838aa923c2672c49a2f542df9e67f5cc5e8dff014"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-228/lichii-linux-aarch64.AppImage",
+        "sha256": "0ec4f2833bdfd68c80d414740a21c1e03bca34c2f0ca4327ceedaa65c9965732"
       }
     }
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.50",
+    "version": "0.90.0-beta.52",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -110,8 +110,8 @@
     "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.50/RecompLauncher_0.90.0-beta.50_amd64.deb",
-        "sha256": "e2ed7ec7a72e29076422a64abc255f5dde520480dfcb2529f7ad5db595f39fb7"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.52/RecompLauncher_0.90.0-beta.52_amd64.deb",
+        "sha256": "3da61b063d5badb5d1b94e4ac4a09c41124fbd3bf5b7014f935eb72e34ed990c"
       }
     },
     "track": {
@@ -275,7 +275,7 @@
     "depends": "libgtk-3-0t64, libsdl2-2.0-0, libasound2t64, liblz4-1, libx11-6, libxcb1, libvulkan1, libx11-xcb1"
   },
   "vacuumtube": {
-    "version": "2.0.1",
+    "version": "2.1.0",
     "kind": "deb",
     "architectures": [
       "amd64",
@@ -284,12 +284,12 @@
     "description": "VacuumTube YouTube TV desktop client",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.0.1/VacuumTube-amd64.deb",
-        "sha256": "95aefe4ed472b3148142268cb772a4655fc781a8671c8ef19967e926d28dc8ae"
+        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.1.0/VacuumTube-amd64.deb",
+        "sha256": "90651f2f18f64c515e847123341ea6aa1fc794d27cdebfdb0700ea13e3425567"
       },
       "arm64": {
-        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.0.1/VacuumTube-arm64.deb",
-        "sha256": "13e6fa96f59606995549a8fec4c0267e40a35a5be6984a8a7882d8087c6a1ef7"
+        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.1.0/VacuumTube-arm64.deb",
+        "sha256": "b12f06ff5557a285bca8c07af3d57e982b3c2b5381205bcf5a065d0a13b47ca7"
       }
     },
     "track": {
