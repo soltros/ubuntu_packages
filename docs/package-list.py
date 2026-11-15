@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 START = '<!-- BEGIN GENERATED PACKAGE LIST -->'
 END = '<!-- END GENERATED PACKAGE LIST -->'
-METHODS = {'deb': 'Upstream native DEB', 'archive': 'Upstream native binary archive', 'appdir': 'AppImage unpacked in CI; native files in DEB', 'meson': 'Meson source build', 'vpn': 'Bundled Python app', 'extension': 'GNOME Shell extension', 'dub': 'D source build', 'xenia': 'Native Linux source build', 'cmake': 'CMake source build', 'xemu': 'Native source build with upstream Debian rules', 'npm': 'Electron source build'}
+METHODS = {'deb': 'Upstream native DEB', 'archive': 'Upstream native binary archive', 'appdir': 'AppImage unpacked in CI; native files in DEB', 'meson': 'Meson source build', 'vpn': 'Bundled Python app', 'extension': 'GNOME Shell extension', 'dub': 'D source build', 'xenia': 'Native Linux source build', 'cmake': 'CMake source build', 'xemu': 'Native source build with upstream Debian rules', 'npm': 'Electron source build', 'jar': 'Pinned Java application with desktop launcher'}
 
 
 def cell(value):
