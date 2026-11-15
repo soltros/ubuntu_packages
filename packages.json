@@ -453,6 +453,7 @@
       }
     },
     "depends": "default-jre, ca-certificates",
-    "recommends": "par2"
+    "recommends": "par2",
+    "revision": "2soltros1"
   }
 }
