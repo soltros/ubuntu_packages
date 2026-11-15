@@ -147,7 +147,7 @@ The existing GitHub connection used to prepare this repository cannot create rep
 
 Upstream scanning reports updates for review; it does not blindly replace versions or checksums. To update a binary package, change its version, versioned URL, and SHA256 in `packages.json`. Update all supported architecture pins together. For source packages, update the pinned `rev` and Debian version. Commit to `main`; successful checks trigger publishing.
 
-Publishing uses a single concurrency group. GitHub Release uploads are not an atomic transaction: clients can briefly see an index mismatch during an update and should retry `apt update`. A failed build leaves the previously published packages available.
+Each successful signed APT publication now removes obsolete versioned `.deb` assets from that Ubuntu suite's GitHub Release. Cleanup is driven by the newly published `Packages` index and runs only after `InRelease` is uploaded and both remote index files match. The publisher refuses to prune if any indexed package asset is missing and never deletes signing keys, APT metadata, or other non-DEB assets. Ubuntu 26.04 and 26.10 are handled separately. Previously published versions are not retained as downloadable release assets after a successful cleanup.\n\nPublishing uses a single concurrency group. GitHub Release uploads are not an atomic transaction: clients can briefly see an index mismatch during an update and should retry `apt update`. A failed build leaves the previously published packages available.
 
 ## Build and test locally
 
