@@ -107,6 +107,9 @@ jobs:
             # Upload packages and indexes before InRelease, which is the trust root.
             gh release upload "apt-$suite" --repo "$REPO" "repo-$suite/"*.deb "repo-$suite/Packages" "repo-$suite/Packages.gz" "repo-$suite/Release" "repo-$suite/Release.gpg" "repo-$suite/soltros-archive-keyring.asc" "repo-$suite/SHA256SUMS" --clobber
             gh release upload "apt-$suite" --repo "$REPO" "repo-$suite/InRelease" --clobber
+            # Clean up obsolete versioned DEBs only after the signed index is live.
+            # The pruner verifies remote Packages/InRelease and required assets first.
+            python3 scripts/prune-release-assets.py "repo-$suite" --repo "$REPO" --suite "$suite"
           done
       - name: Remove imported private signing key
         if: always()
