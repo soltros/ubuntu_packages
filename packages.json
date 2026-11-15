@@ -438,5 +438,21 @@
       "repo": "no-faff/Silo",
       "prefix": "v"
     }
+  },
+  "hellonzb": {
+    "version": "1.5.1",
+    "kind": "jar",
+    "architectures": [
+      "amd64"
+    ],
+    "description": "HelloNzb Java Swing Usenet NZB downloader",
+    "downloads": {
+      "amd64": {
+        "url": "https://downloads.sourceforge.net/project/hellonzb/version%201.5.1/HelloNzb.jar",
+        "sha256": "c12cd91cbf991e85ae3930c4a4d31522a0b31b3ab8a42c98525387e1be2197ed"
+      }
+    },
+    "depends": "default-jre, ca-certificates",
+    "recommends": "par2"
   }
 }
