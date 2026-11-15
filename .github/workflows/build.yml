@@ -73,6 +73,21 @@ jobs:
             apt-get install -y xdotool
             xvfb-run -a python3 scripts/smoke-lichii.py
           fi
+          if [ "${{ matrix.package }}" = hellonzb ]; then
+            apt-get install -y --no-install-recommends ./dist/*.deb
+            apt-get install -y desktop-file-utils
+            desktop-file-validate /usr/share/applications/hellonzb.desktop
+            test -s /usr/share/icons/hicolor/48x48/apps/hellonzb.png
+            test -s /usr/share/hellonzb/HelloNzb.jar
+            set +e
+            timeout 12s xvfb-run -a hellonzb > /tmp/hellonzb-smoke.log 2>&1
+            rc=$?
+            set -e
+            cat /tmp/hellonzb-smoke.log
+            # A GUI that survives the smoke window is running successfully.
+            test "$rc" -eq 124
+            if grep -E 'Exception in thread|NoClassDefFoundError|UnsupportedClassVersionError|HeadlessException' /tmp/hellonzb-smoke.log; then exit 1; fi
+          fi
           if [ "${{ matrix.package }}" = silo ]; then
             apt-get install -y --no-install-recommends ./dist/*.deb dbus-daemon
             desktop-file-validate /usr/share/applications/com.nofaff.Silo.desktop
