@@ -99,7 +99,7 @@
     }
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.52",
+    "version": "0.90.0-beta.57",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -110,8 +110,8 @@
     "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.52/RecompLauncher_0.90.0-beta.52_amd64.deb",
-        "sha256": "3da61b063d5badb5d1b94e4ac4a09c41124fbd3bf5b7014f935eb72e34ed990c"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.57/RecompLauncher_0.90.0-beta.57_amd64.deb",
+        "sha256": "ad313839e669c59f91f7a0daa86c5591bf761cfc48a3c4e44bba814a6c19104c"
       }
     },
     "track": {
@@ -378,7 +378,7 @@
     }
   },
   "discord": {
-    "version": "1.0.169",
+    "version": "1.0.170",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -387,8 +387,8 @@
     "deb_name": "discord",
     "downloads": {
       "amd64": {
-        "url": "https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.169/Discord.deb",
-        "sha256": "64d39ef66390149c09ec7d20759a2e4aa0b93efc071d073e3e72155eb86639df"
+        "url": "https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.170/Discord.deb",
+        "sha256": "b57679faa9e3cac1daa7eeea55e9c26b697ce769b5123f88a662ce58184b4807"
       }
     },
     "track": {
