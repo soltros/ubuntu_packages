@@ -77,10 +77,10 @@ class VendorDebTests(unittest.TestCase):
 
     def test_discord_official_endpoint_and_failure_reporting(self):
         p=build.PACKAGES['discord']
-        with patch.object(updates,'fetch',return_value={'name':'1.0.169'}) as fetch:
+        with patch.object(updates,'fetch',return_value={'name':p['version']}) as fetch:
             row=updates.check(p)
         self.assertEqual(row['status'],'current')
-        self.assertIn('/1.0.169/Discord.deb',row['url'])
+        self.assertIn(f"/{p['version']}/Discord.deb",row['url'])
         self.assertEqual(fetch.call_args.args[0],'https://discord.com/api/updates/stable?platform=linux')
         with patch.object(updates,'fetch',side_effect=OSError('offline')):
             row=updates.scan({'discord':p})[0]
