@@ -73,7 +73,7 @@
     }
   },
   "lichii": {
-    "version": "228",
+    "version": "316",
     "architectures": [
       "amd64",
       "arm64"
@@ -89,17 +89,17 @@
     "build_depends": "squashfs-tools, libfontconfig1, libharfbuzz0b, libfribidi0, libegl1, libopengl0, libusb-1.0-0",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-228/lichii-linux-x86_64.AppImage",
-        "sha256": "be124f449d75a7d8929feb45de8774bcf7819d25a47161ca357de5311e6ff08c"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-316/lichii-linux-x86_64.AppImage",
+        "sha256": "0c905dc25710894605883619d88fb915f2da03a4c26ae85e3a1b2b724d638b5e"
       },
       "arm64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-228/lichii-linux-aarch64.AppImage",
-        "sha256": "0ec4f2833bdfd68c80d414740a21c1e03bca34c2f0ca4327ceedaa65c9965732"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-316/lichii-linux-aarch64.AppImage",
+        "sha256": "011d246c736b7dd6419da4cb73d1e35883946742c25fc0455dfa18e8ea7e337b"
       }
     }
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.57",
+    "version": "0.90.0-beta.59",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -110,8 +110,8 @@
     "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.57/RecompLauncher_0.90.0-beta.57_amd64.deb",
-        "sha256": "ad313839e669c59f91f7a0daa86c5591bf761cfc48a3c4e44bba814a6c19104c"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.59/RecompLauncher_0.90.0-beta.59_amd64.deb",
+        "sha256": "f127db31cfa5f884844844ab0f1117a5fd0d9f721fe2ab478fdd2e6a194e1999"
       }
     },
     "track": {
@@ -317,7 +317,7 @@
     "build_depends": "debhelper, cmake, git, python3, python3-pip, python3-tomli, python3-yaml, python3-venv, meson, ninja-build, pkg-config, libepoxy-dev, libpixman-1-dev, libsdl2-dev, libsamplerate0-dev, zlib1g-dev, libssl-dev, libpcap-dev, libslirp-dev, libvulkan-dev, libusb-1.0-0-dev, libcurl4-gnutls-dev, libpipewire-0.3-dev, clang-21, lld-21, llvm-21"
   },
   "fresh": {
-    "version": "0.5.8-1",
+    "version": "0.5.9-1",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -326,8 +326,8 @@
     "deb_name": "fresh-editor",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/sinelaw/fresh/releases/download/v0.5.8/fresh-editor_0.5.8-1_amd64.deb",
-        "sha256": "57bfebe9ef7aac6efcf1adb20f1407ddd6771badc7b83777bf700faa7612ae28"
+        "url": "https://github.com/sinelaw/fresh/releases/download/v0.5.9/fresh-editor_0.5.9-1_amd64.deb",
+        "sha256": "4b8367344ba83befbce3233d16da2096cec54c388c6e1ffe5d4394bae46d7efe"
       }
     },
     "track": {

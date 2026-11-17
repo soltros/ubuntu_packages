@@ -70,10 +70,10 @@ class VendorDebTests(unittest.TestCase):
 
     def test_fresh_excludes_debian_testing_flavor(self):
         p=build.PACKAGES['fresh']
-        rows=[release('v0.5.8',['fresh-editor_0.5.8-1_amd64.deb','fresh-editor_99.0-1_amd64.debian-testing.deb'])]
+        rows=[release('v'+p['version'].rsplit('-',1)[0],[f"fresh-editor_{p['version']}_amd64.deb",'fresh-editor_99.0-1_amd64.debian-testing.deb'])]
         with patch.object(updates,'fetch',return_value=rows):row=updates.check(p)
         self.assertEqual(row['status'],'current')
-        self.assertEqual(row['latest'],'0.5.8-1')
+        self.assertEqual(row['latest'],p['version'])
 
     def test_discord_official_endpoint_and_failure_reporting(self):
         p=build.PACKAGES['discord']
