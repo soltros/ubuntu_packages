@@ -99,7 +99,7 @@
     }
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.59",
+    "version": "0.90.0-beta.63",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -110,8 +110,8 @@
     "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.59/RecompLauncher_0.90.0-beta.59_amd64.deb",
-        "sha256": "f127db31cfa5f884844844ab0f1117a5fd0d9f721fe2ab478fdd2e6a194e1999"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.63/RecompLauncher_0.90.0-beta.63_amd64.deb",
+        "sha256": "8e35bf053a3e389825bdb3838c3ae749c45cb12a92d94df0132deaea54ec38f8"
       }
     },
     "track": {
