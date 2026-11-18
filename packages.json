@@ -25,7 +25,7 @@
     }
   },
   "chatgpt": {
-    "version": "26.1111.21308",
+    "version": "26.1111.71025",
     "kind": "deb",
     "architectures": [
       "amd64",
@@ -34,12 +34,12 @@
     "description": "Chatgpt",
     "downloads": {
       "amd64": {
-        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1111.21308_amd64.deb",
-        "sha256": "4b443bc557350a1b193bc2f1bae207c9ea3c9fb5d94f7c94a5d3dbaa8b552352"
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1111.71025_amd64.deb",
+        "sha256": "8197424cbcea3a7c0d445a544eaa6b99df8b8ef8b1d182e2b743f702753c7a70"
       },
       "arm64": {
-        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1111.21308_arm64.deb",
-        "sha256": "c5c5aa090968ef7a28b27caed3d03374889d7c8250768814eb4cae5d9b9d9a25"
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1111.71025_arm64.deb",
+        "sha256": "55d861fb4c8d1b54033e4d4178f344f0b9247352bf80290420f44d15dec4a2ba"
       }
     },
     "track": {
@@ -47,7 +47,7 @@
     }
   },
   "codex": {
-    "version": "0.169.0",
+    "version": "0.170.0",
     "kind": "archive",
     "architectures": [
       "amd64",
@@ -56,12 +56,12 @@
     "description": "Codex",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.169.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
-        "sha256": "3b8ed091149cc63a59046b9f094bcfa21cdb4dda15ede441ce369bcee4a71ba0"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.170.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
+        "sha256": "a77ff87be7ba809d715728270a78f5ce3527dc07529416d1ef8929b90b8475eb"
       },
       "arm64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.169.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
-        "sha256": "c8d0b4ab2a97c595b70b10412d36d0d5464dcef1e1d3246b073d48017cdf5a4f"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.170.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
+        "sha256": "3f7e1ae38c4fe27322e082b855e8eec936d08fa538d62b71c07e2a53f34e8847"
       }
     },
     "entry": "bin/codex",
@@ -73,7 +73,7 @@
     }
   },
   "lichii": {
-    "version": "316",
+    "version": "341",
     "architectures": [
       "amd64",
       "arm64"
@@ -89,17 +89,17 @@
     "build_depends": "squashfs-tools, libfontconfig1, libharfbuzz0b, libfribidi0, libegl1, libopengl0, libusb-1.0-0",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-316/lichii-linux-x86_64.AppImage",
-        "sha256": "0c905dc25710894605883619d88fb915f2da03a4c26ae85e3a1b2b724d638b5e"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-341/lichii-linux-x86_64.AppImage",
+        "sha256": "97d20e38d4c95dba230cb71f5b9258fb116ba09a1e37259b39c0a0a44ff1638c"
       },
       "arm64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-316/lichii-linux-aarch64.AppImage",
-        "sha256": "011d246c736b7dd6419da4cb73d1e35883946742c25fc0455dfa18e8ea7e337b"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-341/lichii-linux-aarch64.AppImage",
+        "sha256": "3a5ce9dae6530bb4cc16aa3390319926c5814146ce1e5c34d2525f485a1eb35f"
       }
     }
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.63",
+    "version": "0.90.0-beta.64",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -110,8 +110,8 @@
     "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.63/RecompLauncher_0.90.0-beta.63_amd64.deb",
-        "sha256": "8e35bf053a3e389825bdb3838c3ae749c45cb12a92d94df0132deaea54ec38f8"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.64/RecompLauncher_0.90.0-beta.64_amd64.deb",
+        "sha256": "e7b223f04bfac71e2d8824c4c4d4a396e12ef396f4d0f94503d13a088ee82a07"
       }
     },
     "track": {
@@ -275,7 +275,7 @@
     "depends": "libgtk-3-0t64, libsdl2-2.0-0, libasound2t64, liblz4-1, libx11-6, libxcb1, libvulkan1, libx11-xcb1"
   },
   "vacuumtube": {
-    "version": "2.1.0",
+    "version": "2.1.1",
     "kind": "deb",
     "architectures": [
       "amd64",
@@ -284,12 +284,12 @@
     "description": "VacuumTube YouTube TV desktop client",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.1.0/VacuumTube-amd64.deb",
-        "sha256": "90651f2f18f64c515e847123341ea6aa1fc794d27cdebfdb0700ea13e3425567"
+        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.1.1/VacuumTube-amd64.deb",
+        "sha256": "107dacc33ed55f953908429f38ff87e3a913df3141a0e4a6b354f3c514290710"
       },
       "arm64": {
-        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.1.0/VacuumTube-arm64.deb",
-        "sha256": "b12f06ff5557a285bca8c07af3d57e982b3c2b5381205bcf5a065d0a13b47ca7"
+        "url": "https://github.com/shy1132/VacuumTube/releases/download/v2.1.1/VacuumTube-arm64.deb",
+        "sha256": "7fbbc9fd2dc9de253522798f9ff7cf06fce888a4d49ccce04718d83428bcff46"
       }
     },
     "track": {
