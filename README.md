@@ -20,7 +20,7 @@ Targets: Ubuntu/Kubuntu 26.04 (`resolute`), Ubuntu/Kubuntu 26.10 (`stonking`). E
 | `bitwarden` | Bitwarden password manager | 2026.10.4 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
 | `brave-browser` | Brave | 1.100.58 | amd64, arm64 | Upstream native DEB; adapted for existing package identity/repository | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `browserclaw` | BrowserOS (BrowserClaw) browser | 155.0.8318.26 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
-| `chatgpt` | Chatgpt | 26.1111.71025 | amd64, arm64 | Upstream native DEB | Upstream chatgpt; daily assigned issue | [packages.json](packages.json) |
+| `chatgpt` | Chatgpt | 26.1111.71704 | amd64, arm64 | Upstream native DEB | Upstream chatgpt; daily assigned issue | [packages.json](packages.json) |
 | `codex` | Codex | 0.170.0 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `discord` | Discord desktop client | 1.0.170 | amd64 | Upstream native DEB | Upstream discord; daily assigned issue | [packages.json](packages.json) |
 | `fresh-editor` | Fresh terminal editor | 0.5.9-1 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
