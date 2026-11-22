@@ -47,7 +47,7 @@
     }
   },
   "codex": {
-    "version": "0.170.0",
+    "version": "0.171.0",
     "kind": "archive",
     "architectures": [
       "amd64",
@@ -56,12 +56,12 @@
     "description": "Codex",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.170.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
-        "sha256": "a77ff87be7ba809d715728270a78f5ce3527dc07529416d1ef8929b90b8475eb"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.171.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
+        "sha256": "8391d67757496bfd14893eca6cbf0c96994bf2627566ff1f018f70600c9ef6b3"
       },
       "arm64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.170.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
-        "sha256": "3f7e1ae38c4fe27322e082b855e8eec936d08fa538d62b71c07e2a53f34e8847"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.171.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
+        "sha256": "d8c43bee6cf11b01eb18b95f4d7961092bc40228180808859e70dabb7784c1c9"
       }
     },
     "entry": "bin/codex",
@@ -73,7 +73,7 @@
     }
   },
   "lichii": {
-    "version": "341",
+    "version": "366",
     "architectures": [
       "amd64",
       "arm64"
@@ -89,17 +89,17 @@
     "build_depends": "squashfs-tools, libfontconfig1, libharfbuzz0b, libfribidi0, libegl1, libopengl0, libusb-1.0-0",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-341/lichii-linux-x86_64.AppImage",
-        "sha256": "97d20e38d4c95dba230cb71f5b9258fb116ba09a1e37259b39c0a0a44ff1638c"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-366/lichii-linux-x86_64.AppImage",
+        "sha256": "490769b0703ca72e28e3801711c03120222a1c3c5acb4b4a77a23802d715271c"
       },
       "arm64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-341/lichii-linux-aarch64.AppImage",
-        "sha256": "3a5ce9dae6530bb4cc16aa3390319926c5814146ce1e5c34d2525f485a1eb35f"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-366/lichii-linux-aarch64.AppImage",
+        "sha256": "ff1945dea990e94abff4332990b9e0a60a2a10aac0f0b464b5700ebee8f15285"
       }
     }
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.65",
+    "version": "0.90.0-beta.67",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -110,8 +110,8 @@
     "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.65/RecompLauncher_0.90.0-beta.65_amd64.deb",
-        "sha256": "f673ce993611b7cfa84e031bfc5bf146785e5b605ba4f8ed0a85011f9d5a994b"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.67/RecompLauncher_0.90.0-beta.67_amd64.deb",
+        "sha256": "2c7cea6701fbb19e2db07ed64c8f671a711ef8a3a9d617e18b4fcccca2763b46"
       }
     },
     "track": {
