@@ -1,0 +1,55 @@
+name: Automatically update upstream packages
+on:
+  schedule:
+    - cron: '31 11 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: automatic-package-updates
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Scan upstream updates
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/check-updates.py
+      - name: Refresh verified package downloads
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/auto-update.py
+      - name: Synchronize package documentation
+        run: python3 docs/package-list.py
+      - name: Validate package definitions and tests
+        run: |
+          python3 -m json.tool packages.json >/dev/null
+          python3 -m unittest discover -s tests -v
+          python3 docs/package-list.py --check
+      - name: Commit updated definitions
+        id: commit
+        run: |
+          set -euo pipefail
+          git add packages.json README.md
+          if git diff --cached --quiet; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore(packages): automatically refresh verified upstream pins'
+          git push origin HEAD:main
+          echo 'changed=true' >> "$GITHUB_OUTPUT"
+      - name: Start builds explicitly after the bot commit
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # GITHUB_TOKEN pushes do not trigger other push workflows.
+          gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref main
