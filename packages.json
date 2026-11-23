@@ -73,7 +73,7 @@
     }
   },
   "lichii": {
-    "version": "366",
+    "version": "386",
     "architectures": [
       "amd64",
       "arm64"
@@ -89,17 +89,17 @@
     "build_depends": "squashfs-tools, libfontconfig1, libharfbuzz0b, libfribidi0, libegl1, libopengl0, libusb-1.0-0",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-366/lichii-linux-x86_64.AppImage",
-        "sha256": "490769b0703ca72e28e3801711c03120222a1c3c5acb4b4a77a23802d715271c"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-386/lichii-linux-x86_64.AppImage",
+        "sha256": "6f8ad7619c9425e29105bc97a62031614b824576134d6dbeec9046b15ee47ad7"
       },
       "arm64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-366/lichii-linux-aarch64.AppImage",
-        "sha256": "ff1945dea990e94abff4332990b9e0a60a2a10aac0f0b464b5700ebee8f15285"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-386/lichii-linux-aarch64.AppImage",
+        "sha256": "79b821b790e313635aabc4d746162566d6243e250c02846a06205e69a12cb39e"
       }
     }
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.67",
+    "version": "0.90.0-beta.68",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -110,8 +110,8 @@
     "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.67/RecompLauncher_0.90.0-beta.67_amd64.deb",
-        "sha256": "2c7cea6701fbb19e2db07ed64c8f671a711ef8a3a9d617e18b4fcccca2763b46"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.68/RecompLauncher_0.90.0-beta.68_amd64.deb",
+        "sha256": "efd95589b4aad105e57b12900dad9f70a09ff09d9fc65c0d4f095ac2a614a9bc"
       }
     },
     "track": {
