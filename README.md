@@ -139,6 +139,14 @@ The script generates a dedicated RSA4096 signing key, saves its private half as 
 
 The existing GitHub connection used to prepare this repository cannot create repository secrets. Until this step is complete, the publisher fails with an explicit setup message instead of publishing unsigned packages.
 
+## Unattended package updates
+
+The [automatic package updater](.github/workflows/auto-update.yml) runs daily at **11:31 UTC**, or on demand through **Actions → Automatically update upstream packages → Run workflow**. It first runs the existing upstream scanner, then updates version pins, download URLs and SHA-256 checksums for supported prebuilt applications. The updater verifies that every declared architecture has an upstream download; for assets without a published SHA-256, it downloads and hashes the actual file, and validates Debian package metadata where applicable.
+
+When an update is found, the bot regenerates this package catalogue, runs the unit tests, commits updated recipes to `main` and explicitly dispatches the Ubuntu package build (GitHub's default token does not trigger a second push workflow). The existing build pipeline checks both Ubuntu 26.04 and 26.10, and the signed APT publisher runs only after a successful trusted build. Installed packages then receive updates through normal APT upgrades.
+
+The bot intentionally skips source-built packages, special version mappings (including BrowserOS), and failed or ambiguous upstream checks. Those continue to appear in the existing assigned update issue for manual review. An update can also remain outstanding if either Ubuntu build or signed publication fails. No new signing key or personal access token is needed if the repository allows GitHub Actions to write contents and dispatch workflows.
+
 ## How automation works
 
 - **Build Ubuntu packages:** runs on package-related pushes, pull requests, or manual dispatch. Each app gets an isolated Ubuntu build for each supported release. Downloads are SHA256 checked. Source builds use pinned upstream revisions. Debian metadata, archive contents, and dependency resolution are checked. Build artifacts are kept for 14 days.
