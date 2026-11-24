@@ -45,8 +45,12 @@ jobs:
         run: |
           set -euo pipefail
           # Search all states to reuse the original issue rather than create duplicates.
-          issue=$(gh issue list --repo "$REPO" --state all --limit 100 --json number,title \
-            --jq '[.[] | select(.title == "Ubuntu package updates") | .number] | min // empty')
+          issue=$(gh issue list --repo "$REPO" --state open --limit 100 --json number,title \
+            --jq '[.[] | select(.title == "Ubuntu package updates") | .number] | sort | .[0] // empty')
+          if [ -z "$issue" ]; then
+            issue=$(gh issue list --repo "$REPO" --state closed --limit 100 --json number,title \
+              --jq '[.[] | select(.title == "Ubuntu package updates") | .number] | sort | last // empty')
+          fi
           # An absent output on scanner failure must never be interpreted as 'current'.
           if [ "$ATTENTION" != false ] || [ "$PUBLISHED" != true ]; then
             if [ "$ATTENTION" = false ]; then
