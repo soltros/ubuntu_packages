@@ -43,19 +43,26 @@ jobs:
           ATTENTION: ${{ steps.scan.outputs.attention }}
           PUBLISHED: ${{ steps.publication.outputs.ready }}
         run: |
-          issue=$(gh issue list --repo "$REPO" --state open --search 'in:title "Ubuntu package updates"' --json number,title --jq '.[] | select(.title == "Ubuntu package updates") | .number' | head -1)
-          if [ "$ATTENTION" = true ]; then
+          set -euo pipefail
+          # Search all states to reuse the original issue rather than create duplicates.
+          issue=$(gh issue list --repo "$REPO" --state all --limit 100 --json number,title \
+            --jq '[.[] | select(.title == "Ubuntu package updates") | .number] | min // empty')
+          # An absent output on scanner failure must never be interpreted as 'current'.
+          if [ "$ATTENTION" != false ] || [ "$PUBLISHED" != true ]; then
+            if [ "$ATTENTION" = false ]; then
+              printf '\\nPins are current, but awaiting confirmed publication in BOTH 26.04 and 26.10.\\n' >> update-report.md
+            fi
             if [ -n "$issue" ]; then
               gh issue edit "$issue" --repo "$REPO" --body-file update-report.md --add-assignee soltros
+              gh issue reopen "$issue" --repo "$REPO" || test "$(gh issue view "$issue" --repo "$REPO" --json state --jq .state)" = OPEN
             else
               gh issue create --repo "$REPO" --title 'Ubuntu package updates' --body-file update-report.md --assignee soltros
             fi
-          elif [ "$ATTENTION" = false ] && [ -n "$issue" ]; then
-            if [ "$PUBLISHED" = true ]; then
+          elif [ -n "$issue" ]; then
+            # Refresh stale report BEFORE closing, so the body never lists old updates.
+            gh issue edit "$issue" --repo "$REPO" --body-file update-report.md
+            if [ "$(gh issue view "$issue" --repo "$REPO" --json state --jq .state)" = OPEN ]; then
               gh issue close "$issue" --repo "$REPO" --reason completed
-            else
-              printf '\nPins are updated. Waiting for the validated packages to reach the signed 26.04 and 26.10 APT releases.\n' >> update-report.md
-              gh issue edit "$issue" --repo "$REPO" --body-file update-report.md --add-assignee soltros
             fi
           fi
       - name: Report scanner failures
