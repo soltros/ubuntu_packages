@@ -42,11 +42,14 @@ def hash_download(url, deb_name=None, version=None, arch=None):
                 temp.write(chunk)
         temp.flush()
         if deb_name:
-            fields = subprocess.check_output(
-                ['dpkg-deb', '-f', temp.name, '${Package}\\n${Version}\\n${Architecture}\\n'],
-                text=True).splitlines()
-            if fields != [deb_name, version, arch]:
-                raise ValueError('Upstream DEB metadata mismatch: ' + repr(fields))
+            control = subprocess.check_output(
+                ['dpkg-deb', '-f', temp.name], text=True)
+            fields = dict(line.split(': ', 1) for line in control.splitlines()
+                          if ': ' in line and not line[0].isspace())
+            actual = [fields.get('Package'), fields.get('Version'),
+                      fields.get('Architecture')]
+            if actual != [deb_name, version, arch]:
+                raise ValueError('Upstream DEB metadata mismatch: ' + repr(actual))
         return sha.hexdigest()
 
 
