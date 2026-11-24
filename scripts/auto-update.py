@@ -43,7 +43,7 @@ def hash_download(url, deb_name=None, version=None, arch=None):
         temp.flush()
         if deb_name:
             fields = subprocess.check_output(
-                ['dpkg-deb', '-f', temp.name, 'Package', 'Version', 'Architecture'],
+                ['dpkg-deb', '-f', temp.name, '${Package}\\n${Version}\\n${Architecture}\\n'],
                 text=True).splitlines()
             if fields != [deb_name, version, arch]:
                 raise ValueError('Upstream DEB metadata mismatch: ' + repr(fields))
