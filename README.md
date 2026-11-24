@@ -18,11 +18,11 @@ Targets: Ubuntu/Kubuntu 26.04 (`resolute`), Ubuntu/Kubuntu 26.10 (`stonking`). E
 |---|---|---|---|---|---|---|
 | `addwater` | Addwater | 1.3 | amd64 | Meson source build | Upstream tag; daily assigned issue | [packages.json](packages.json) |
 | `bitwarden` | Bitwarden password manager | 2026.10.4 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
-| `brave-browser` | Brave | 1.100.58 | amd64, arm64 | Upstream native DEB; adapted for existing package identity/repository | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `brave-browser` | Brave | 1.100.59 | amd64, arm64 | Upstream native DEB; adapted for existing package identity/repository | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `browserclaw` | BrowserOS (BrowserClaw) browser | 155.0.8318.26 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
-| `chatgpt` | Chatgpt | 26.1111.71704 | amd64, arm64 | Upstream native DEB | Upstream chatgpt; daily assigned issue | [packages.json](packages.json) |
-| `codex` | Codex | 0.171.0 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
-| `discord` | Discord desktop client | 1.0.170 | amd64 | Upstream native DEB | Upstream discord; daily assigned issue | [packages.json](packages.json) |
+| `chatgpt` | Chatgpt | 26.1120.50957 | amd64, arm64 | Upstream native DEB | Upstream chatgpt; daily assigned issue | [packages.json](packages.json) |
+| `codex` | Codex | 0.172.0 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `discord` | Discord desktop client | 1.0.171 | amd64 | Upstream native DEB | Upstream discord; daily assigned issue | [packages.json](packages.json) |
 | `fresh-editor` | Fresh terminal editor | 0.5.9-1 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
 | `hellonzb` | HelloNzb Java Swing Usenet NZB downloader | 1.5.1 | amd64 | Pinned Java application with desktop launcher | Locally maintained source | [packages.json](packages.json) |
 | `hideout` | Hideout | 0.9.13 | amd64 | D source build | Upstream release; daily assigned issue | [packages.json](packages.json) |
@@ -30,7 +30,7 @@ Targets: Ubuntu/Kubuntu 26.04 (`resolute`), Ubuntu/Kubuntu 26.10 (`stonking`). E
 | `pantheon-studio` | Pantheon Studio | 0.2.0 | amd64, arm64 | Meson source build | Locally maintained source | [packages.json](packages.json) |
 | `quick-settings-tray` | Quick Settings Tray | 1 | amd64 | GNOME Shell extension | Upstream commit; daily assigned issue | [packages.json](packages.json) |
 | `recomplauncher` | RecompLauncher native desktop application | 0.90.0-beta.68 | amd64 | Upstream native DEB; adapted for existing package identity/repository | Upstream prerelease; daily assigned issue | [packages.json](packages.json) |
-| `sharpemu` | Sharpemu | 0.0.7-pulse | amd64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `sharpemu` | Sharpemu | 0.0.8-ember | amd64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `silo` | Silo browser picker with browser profile support | 1.2.2 | amd64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `termsmith` | Termsmith | 0.2.0 | amd64, arm64 | Meson source build | Locally maintained source | [packages.json](packages.json) |
 | `vacuumtube` | VacuumTube YouTube TV desktop client | 2.1.1 | amd64, arm64 | Upstream native DEB | Upstream release; daily assigned issue | [packages.json](packages.json) |

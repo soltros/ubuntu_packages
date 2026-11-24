@@ -1,6 +1,6 @@
 {
   "brave": {
-    "version": "1.100.58",
+    "version": "1.100.59",
     "kind": "deb",
     "architectures": [
       "amd64",
@@ -9,12 +9,12 @@
     "description": "Brave",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/brave/brave-browser/releases/download/v1.100.58/brave-browser_1.100.58_amd64.deb",
-        "sha256": "2d9d1e664efd60343c77324c836be402cbe57ce12549975584dfa7d073f156a5"
+        "url": "https://github.com/brave/brave-browser/releases/download/v1.100.59/brave-browser_1.100.59_amd64.deb",
+        "sha256": "eff29257c56974a79d74aa8c168d5062557da36c0c82c8c2412de70fdcb17861"
       },
       "arm64": {
-        "url": "https://github.com/brave/brave-browser/releases/download/v1.100.58/brave-browser_1.100.58_arm64.deb",
-        "sha256": "7c8be21226c05317045d46b7ef32569999e19eba1e58c0ed12256fefe25a23e9"
+        "url": "https://github.com/brave/brave-browser/releases/download/v1.100.59/brave-browser_1.100.59_arm64.deb",
+        "sha256": "da7bb47083f53d4d1a32083bfaa0a34a68eb2e0bd6182cfd61e18cfc8c7b4f84"
       }
     },
     "deb_name": "brave-browser",
@@ -25,7 +25,7 @@
     }
   },
   "chatgpt": {
-    "version": "26.1111.71704",
+    "version": "26.1120.50957",
     "kind": "deb",
     "architectures": [
       "amd64",
@@ -34,12 +34,12 @@
     "description": "Chatgpt",
     "downloads": {
       "amd64": {
-        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1111.71704_amd64.deb",
-        "sha256": "01eef7c77c835f7e1afb92ba1c29178a4c19d6c66573bdd3b86520e2abf806a4"
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1120.50957_amd64.deb",
+        "sha256": "e8ab38df96d6070fd5d4582a606490637728243bb529e9edae19b3f0a6e664d2"
       },
       "arm64": {
-        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1111.71704_arm64.deb",
-        "sha256": "f0550dee1f99127d357ad760aef739c557d49bd67728d2f105d00a7a4780f740"
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1120.50957_arm64.deb",
+        "sha256": "d11adb9a13d21bc5f514885924207af0e8689a978328550e3a43895a69603d89"
       }
     },
     "track": {
@@ -47,7 +47,7 @@
     }
   },
   "codex": {
-    "version": "0.171.0",
+    "version": "0.172.0",
     "kind": "archive",
     "architectures": [
       "amd64",
@@ -56,12 +56,12 @@
     "description": "Codex",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.171.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
-        "sha256": "8391d67757496bfd14893eca6cbf0c96994bf2627566ff1f018f70600c9ef6b3"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.172.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
+        "sha256": "63e3b00065ed7f62166d0522e17f663cb866a31d80d03e63365482ed34a1d991"
       },
       "arm64": {
-        "url": "https://github.com/openai/codex/releases/download/rust-v0.171.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
-        "sha256": "d8c43bee6cf11b01eb18b95f4d7961092bc40228180808859e70dabb7784c1c9"
+        "url": "https://github.com/openai/codex/releases/download/rust-v0.172.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
+        "sha256": "faf17b8071927f33346a805dc8cb45de4e08c0d75cf0e5e68cecddca28b8861e"
       }
     },
     "entry": "bin/codex",
@@ -121,7 +121,7 @@
     }
   },
   "sharpemu": {
-    "version": "0.0.7-pulse",
+    "version": "0.0.8-ember",
     "kind": "archive",
     "architectures": [
       "amd64"
@@ -129,8 +129,8 @@
     "description": "Sharpemu",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/sharpemu/sharpemu/releases/download/v0.0.7-pulse/sharpemu-0.0.7-pulse-linux-x64.tar.gz",
-        "sha256": "38d7507a57e891a5763e23fc68c72172d2395931f8f64f59fc522ed4ed3d761e"
+        "url": "https://github.com/sharpemu/sharpemu/releases/download/v0.0.8-ember/sharpemu-0.0.8-ember-linux-x64.tar.gz",
+        "sha256": "f7908fc1d3d7bfacd44f60cc6d9c9d2b9f868b21e5cdf29b0deca6e7084b62c4"
       }
     },
     "entry": "SharpEmu",
@@ -378,7 +378,7 @@
     }
   },
   "discord": {
-    "version": "1.0.170",
+    "version": "1.0.171",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -387,8 +387,8 @@
     "deb_name": "discord",
     "downloads": {
       "amd64": {
-        "url": "https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.170/Discord.deb",
-        "sha256": "b57679faa9e3cac1daa7eeea55e9c26b697ce769b5123f88a662ce58184b4807"
+        "url": "https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.171/Discord.deb",
+        "sha256": "d9a091f1b3afbdf18ee341b52b75fbb62db21f1e18a6a87ad68da54fd6ec4a10"
       }
     },
     "track": {
