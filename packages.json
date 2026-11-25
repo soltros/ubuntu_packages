@@ -73,7 +73,7 @@
     }
   },
   "lichii": {
-    "version": "386",
+    "version": "410",
     "architectures": [
       "amd64",
       "arm64"
@@ -89,12 +89,12 @@
     "build_depends": "squashfs-tools, libfontconfig1, libharfbuzz0b, libfribidi0, libegl1, libopengl0, libusb-1.0-0",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-386/lichii-linux-x86_64.AppImage",
-        "sha256": "6f8ad7619c9425e29105bc97a62031614b824576134d6dbeec9046b15ee47ad7"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-410/lichii-linux-x86_64.AppImage",
+        "sha256": "90cf654a17d2faa07e4898383cc7c63d01d551973f11b49e8e6a3c7ffe8533bd"
       },
       "arm64": {
-        "url": "https://github.com/zortos293/Lichii/releases/download/build-386/lichii-linux-aarch64.AppImage",
-        "sha256": "79b821b790e313635aabc4d746162566d6243e250c02846a06205e69a12cb39e"
+        "url": "https://github.com/zortos293/Lichii/releases/download/build-410/lichii-linux-aarch64.AppImage",
+        "sha256": "2a128d5509a729590ffc6ca0d738a6843a7bb7f675307cf0ba9047be7030350f"
       }
     }
   },
