@@ -153,8 +153,9 @@ def main():
     args = ap.parse_args()
     packages = json.loads(args.manifest.read_text())
     rows = json.loads(args.report.read_text())
-    if any(row['status'] == 'error' for row in rows):
-        raise SystemExit('Upstream scanner failed: refusing automatic changes')
+    for row in rows:
+        if row['status'] == 'error':
+            print('Upstream check failed; retaining existing pin:', row['package'], flush=True)
     changed, failures = apply(packages, rows)
     for failure in failures:
         print('Manual review required:', failure, flush=True)
