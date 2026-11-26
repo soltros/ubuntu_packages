@@ -109,7 +109,9 @@ def update_one(name, p, row):
             if not source.startswith(prefix):
                 raise ValueError('Missing trusted release asset link')
             tag_override = urllib.parse.unquote(source[len(prefix):].split('/', 1)[0])
-        assets = assets_for(track, latest, tag_override)
+        # Waterfox distributes Linux tarballs on its CDN, not GitHub release assets.
+        if name != 'waterfox':
+            assets = assets_for(track, latest, tag_override)
         urls = {}
         for arch, old in p['downloads'].items():
             previous = old['url']
