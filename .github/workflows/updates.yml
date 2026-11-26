@@ -46,10 +46,18 @@ jobs:
           set -euo pipefail
           # Search all states to reuse the original issue rather than create duplicates.
           issue=$(gh issue list --repo "$REPO" --state open --limit 100 --json number,title \
-            --jq '[.[] | select(.title == "Ubuntu package updates") | .number] | sort | .[0] // empty')
+            --jq '[.[] | select(.title == "Ubuntu package updates") | .number] | sort | last // empty')
           if [ -z "$issue" ]; then
             issue=$(gh issue list --repo "$REPO" --state closed --limit 100 --json number,title \
               --jq '[.[] | select(.title == "Ubuntu package updates") | .number] | sort | last // empty')
+          fi
+          # Consolidate duplicate open tracking issues into the selected issue.
+          if [ -n "$issue" ]; then
+            for duplicate in $(gh issue list --repo "$REPO" --state open --limit 100 --json number,title --jq '.[] | select(.title == "Ubuntu package updates") | .number'); do
+              if [ "$duplicate" != "$issue" ]; then
+                gh issue close "$duplicate" --repo "$REPO" --comment "Consolidated into #$issue." --reason "not planned"
+              fi
+            done
           fi
           # An absent output on scanner failure must never be interpreted as 'current'.
           if [ "$ATTENTION" != false ] || [ "$PUBLISHED" != true ]; then
