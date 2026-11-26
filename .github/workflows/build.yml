@@ -5,6 +5,11 @@ on:
     paths: ['packages.json', 'scripts/**', 'assets/**', 'sources/**', 'tests/**', '.github/workflows/build.yml', '.github/workflows/publish.yml']
   pull_request:
   workflow_dispatch:
+    inputs:
+      pending_only:
+        description: Build only versions missing from the published APT indexes
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -25,6 +30,7 @@ jobs:
         env:
           EVENT: ${{ github.event_name }}
           BEFORE: ${{ github.event.before }}
+          PENDING_ONLY: ${{ inputs.pending_only }}
         run: echo "matrix=$(python3 scripts/matrix.py)" >> "$GITHUB_OUTPUT"
   build:
     if: needs.validate.outputs.should_build == 'true'
