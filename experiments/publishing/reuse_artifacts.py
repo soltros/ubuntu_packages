@@ -87,7 +87,7 @@ def recover(directory, suite='stonking'):
                 subprocess.run(['gh', 'run', 'download', str(run['id']), '--repo', REPO, '--name', artifact, '--dir', folder], check=True)
                 debs = list(Path(folder).rglob('*.deb'))
                 package = recipes[name].get('deb_name', name)
-                if len(debs) != 1 or merge.fields(debs[0]) != (package, 'amd64', expected[package]):
+                if len(debs) != 1 or merge.fields(debs[0]) not in [(package, arch, expected[package]) for arch in ('amd64', 'all')]:
                     raise ValueError('Unexpected package in trusted artifact ' + artifact)
                 merge.merge(directory, folder, 'full')
             print(f"Reused validated {name} artifact from run {run['id']}", flush=True)
@@ -97,8 +97,11 @@ def recover(directory, suite='stonking'):
     version = pin['version'].split('~')[0]+'~'+suite
     present = any(merge.fields(p) == ('xemu-perf', 'amd64', version) for p in directory.glob('*.deb'))
     if not present:
-        for run in api('actions/workflows/xemu-perf.yml/runs?branch=main&status=success&per_page=8')['workflow_runs']:
+        for run in api('actions/workflows/xemu-perf.yml/runs?branch=main&per_page=8')['workflow_runs']:
             if not trusted_run(run, 'xemu-perf.yml') or file_at('experiments/xemu/package.json', run['head_sha']) != pin:
+                continue
+            jobs = api(f"actions/runs/{run['id']}/jobs?per_page=100")['jobs']
+            if not any(j['conclusion'] == 'success' and j['name'] == f'build ({ubuntu}, {suite})' for j in jobs):
                 continue
             artifacts = api(f"actions/runs/{run['id']}/artifacts?per_page=100")['artifacts']
             if not any(a['name'] == f'debs-{suite}-xemu-perf' and not a['expired'] for a in artifacts):
