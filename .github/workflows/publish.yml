@@ -88,6 +88,12 @@ jobs:
             # The pruner verifies remote Packages/InRelease and required assets first.
             python3 scripts/prune-release-assets.py "repo-$suite" --repo "$REPO" --suite "$suite"
           done
+      - name: Verify both remote package indexes
+        id: published
+        run: python3 scripts/check-publication.py
+      - name: Flag packages still awaiting publication
+        if: steps.published.outputs.ready != 'true'
+        run: exit 1
       - name: Remove imported private signing key
         if: always()
         run: rm -rf "$RUNNER_TEMP/gnupg"
