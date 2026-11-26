@@ -1,0 +1,47 @@
+name: Report package automation failures
+on:
+  workflow_run:
+    workflows: [Automatically update upstream packages, Build Ubuntu packages, Build optimized xemu, Publish signed APT repository]
+    types: [completed]
+permissions:
+  actions: read
+  issues: write
+concurrency:
+  group: package-alert-${{ github.event.workflow_run.workflow_id }}
+  cancel-in-progress: false
+jobs:
+  report:
+    if: github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository && github.event.workflow_run.event != 'pull_request'
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      RUN_ID: ${{ github.event.workflow_run.id }}
+      WORKFLOW: ${{ github.event.workflow_run.name }}
+      CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+      RUN_URL: ${{ github.event.workflow_run.html_url }}
+    steps:
+      - name: Maintain assigned failure issue
+        shell: bash
+        run: |
+          set -euo pipefail
+          title="Automation failure: $WORKFLOW"
+          issue=$(gh issue list --repo "$REPO" --state open --limit 100 --json number,title | jq -r --arg title "$title" '.[] | select(.title == $title) | .number' | head -n1)
+          if [ "$CONCLUSION" = success ]; then
+            if [ -n "$issue" ]; then
+              gh issue close "$issue" --repo "$REPO" --comment "Workflow recovered: $RUN_URL"
+            fi
+            exit 0
+          fi
+          if [ "$CONCLUSION" = skipped ]; then exit 0; fi
+          {
+            printf 'Workflow: %s\n\nResult: %s\n\nRun: %s\n\n' "$WORKFLOW" "$CONCLUSION" "$RUN_URL"
+            echo 'Jobs not successful:'
+            gh api --paginate "repos/$REPO/actions/runs/$RUN_ID/jobs?per_page=100" --jq '.jobs[] | select(.conclusion != "success" and .conclusion != "skipped") | "- " + .name + " (" + (.conclusion // "unknown") + "): " + .html_url'
+            printf '\nPreviously published packages remain available. The next scheduled updater retries unpublished versions.\n'
+          } > "$RUNNER_TEMP/issue.md"
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --repo "$REPO" --body-file "$RUNNER_TEMP/issue.md"
+          else
+            gh issue create --repo "$REPO" --title "$title" --body-file "$RUNNER_TEMP/issue.md" --assignee soltros
+          fi
