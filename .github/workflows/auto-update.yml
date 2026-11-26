@@ -30,6 +30,19 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/auto-update.py
+      - name: Advance optimized xemu base while retaining the reviewed patch
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('experiments/xemu/package.json')
+          pin=json.loads(p.read_text())
+          stable=json.load(open('packages.json'))['xemu']
+          if pin['base_revision'] != stable['rev']:
+              pin['base_revision']=stable['rev']
+              pin['version']=stable['version']+'-1soltrosperf1~stonking'
+              p.write_text(json.dumps(pin,indent=2)+'\n')
+          PY
       - name: Synchronize package documentation
         run: python3 docs/package-list.py
       - name: Validate package definitions and tests
@@ -41,7 +54,7 @@ jobs:
         id: commit
         run: |
           set -euo pipefail
-          git add packages.json README.md
+          git add packages.json README.md experiments/xemu/package.json
           if git diff --cached --quiet; then
             echo 'changed=false' >> "$GITHUB_OUTPUT"
             exit 0
