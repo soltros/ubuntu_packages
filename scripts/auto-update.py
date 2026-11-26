@@ -14,7 +14,7 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 AUTO = frozenset(('brave', 'chatgpt', 'codex', 'lichii', 'recomplauncher',
                   'sharpemu', 'waterfox', 'vacuumtube', 'fresh', 'bitwarden',
-                  'zettlr', 'discord', 'silo'))
+                  'zettlr', 'discord', 'silo', 'browseros', 'addwater', 'hideout', 'xemu', 'xenia', 'quick-settings-tray'))
 SHA256 = re.compile(r'^[a-f0-9]{64}$')
 
 
@@ -65,7 +65,24 @@ def assets_for(track, latest, tag_override=None):
 
 
 def update_one(name, p, row):
-    latest, current = row['latest'], p['version']
+    latest, current = row['latest'], p.get('upstream_version', p['version'])
+    if p['kind'] in ('meson', 'dub', 'xemu', 'xenia', 'extension'):
+        track = p['track']
+        ref = latest if track['kind'] == 'commit' else track.get('prefix', '') + latest
+        commit = get_json('https://api.github.com/repos/' + track['repo'] + '/commits/' + urllib.parse.quote(ref, safe=''))
+        sha = commit['sha']
+        if not re.fullmatch(r'[a-f0-9]{40}', sha):
+            raise ValueError('Invalid upstream commit')
+        result = dict(p, rev=sha)
+        if track['kind'] == 'commit':
+            stamp = re.sub(r'[^0-9]', '', commit['commit']['committer']['date'])[:14]
+            base = p['version'].split('+git')[0].split('~git')[0]
+            result['version'] = base + '+git' + stamp + '.' + sha[:7]
+        else:
+            result['version'] = latest
+        subprocess.run(['dpkg', '--validate-version', result['version']], check=True)
+        subprocess.run(['dpkg', '--compare-versions', result['version'], 'gt', p['version']], check=True)
+        return result
     if not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9._~+-]*', latest) or latest == current:
         raise ValueError('Invalid new version')
     track = p['track']
@@ -123,7 +140,21 @@ def update_one(name, p, row):
     for arch, url in urls.items():
         filename = urllib.parse.unquote(urllib.parse.urlsplit(url).path.rsplit('/', 1)[-1])
         digest = assets.get(filename, {}).get('digest', '')
-        digest = digest[7:] if digest.startswith('sha256:') else ''
+        digest = digest[7:] if digest and digest.startswith('sha256:') else ''
+        if name == 'browseros':
+            with tempfile.NamedTemporaryFile(suffix='.deb') as temp:
+                subprocess.run(['curl', '-fLsS', '--proto', '=https', '--proto-redir', '=https', '--max-time', '600', '-o', temp.name, url], check=True)
+                package, version, architecture = [subprocess.check_output(['dpkg-deb', '-f', temp.name, field], text=True).strip() for field in ('Package', 'Version', 'Architecture')]
+                if (package, architecture) != (p['deb_name'], arch):
+                    raise ValueError('BrowserOS package identity changed')
+                subprocess.run(['dpkg', '--compare-versions', version, 'gt', p['version']], check=True)
+                with open(temp.name, 'rb') as stream:
+                    actual_digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+                if digest and digest != actual_digest:
+                    raise ValueError('BrowserOS digest mismatch')
+                digest = actual_digest
+                result['version'] = version
+                result['upstream_version'] = latest
         if not SHA256.fullmatch(digest):
             deb = p.get('upstream_deb_name', p.get('deb_name', name)) if p['kind'] == 'deb' else None
             digest = hash_download(url, deb_name=deb, version=latest, arch=arch)
@@ -162,6 +193,9 @@ def main():
     print('Updated:', ', '.join(changed) or '(none)', flush=True)
     if changed and not args.dry_run:
         args.manifest.write_text(json.dumps(packages, indent=2) + '\n')
+    if os.getenv('GITHUB_OUTPUT'):
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+            output.write('attention=' + str(bool(failures) or any(row['status'] == 'error' for row in rows)).lower() + '\n')
     if os.getenv('GITHUB_STEP_SUMMARY'):
         with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
             summary.write('## Package updater\n\nUpdated: ' +
