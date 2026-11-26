@@ -21,6 +21,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/check-updates.py
+        continue-on-error: true
       - name: Refresh verified package downloads
         env:
           GH_TOKEN: ${{ github.token }}
@@ -46,10 +47,13 @@ jobs:
           git commit -m 'chore(packages): automatically refresh verified upstream pins'
           git push origin HEAD:main
           echo 'changed=true' >> "$GITHUB_OUTPUT"
-      - name: Start builds explicitly after the bot commit
-        if: steps.commit.outputs.changed == 'true'
+      - name: Check published versions
+        id: publication
+        run: python3 scripts/check-publication.py
+      - name: Start builds explicitly for unpublished versions
+        if: steps.commit.outputs.changed == 'true' || steps.publication.outputs.ready != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           # GITHUB_TOKEN pushes do not trigger other push workflows.
-          gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref main
+          gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref main -f pending_only=true
