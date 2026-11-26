@@ -99,7 +99,7 @@
     }
   },
   "recomplauncher": {
-    "version": "0.90.0-beta.68",
+    "version": "0.90.0-beta.69",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -110,8 +110,8 @@
     "revision": "2soltros1",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.68/RecompLauncher_0.90.0-beta.68_amd64.deb",
-        "sha256": "efd95589b4aad105e57b12900dad9f70a09ff09d9fc65c0d4f095ac2a614a9bc"
+        "url": "https://github.com/elripalda/RecompLauncher/releases/download/v0.90.0-beta.69/RecompLauncher_0.90.0-beta.69_amd64.deb",
+        "sha256": "fa0067f116f8dbc2310ee1f9c360b849e81778477ee9a5cf474f64e27a105aaa"
       }
     },
     "track": {
@@ -142,7 +142,7 @@
     }
   },
   "waterfox": {
-    "version": "6.7.8",
+    "version": "6.7.9",
     "kind": "archive",
     "architectures": [
       "amd64",
@@ -151,12 +151,12 @@
     "description": "Waterfox",
     "downloads": {
       "amd64": {
-        "url": "https://cdn.waterfox.com/waterfox/releases/6.7.8/Linux_x86_64/waterfox-6.7.8.tar.bz2",
-        "sha256": "29b8bcc0265fdea7dcf0471c6ef8e296f48ca6973e039b9d181a93e7b654ef15"
+        "url": "https://cdn.waterfox.com/waterfox/releases/6.7.9/Linux_x86_64/waterfox-6.7.9.tar.bz2",
+        "sha256": "b528cca5e96a2d9676b021277c1cb632f9e10dbfa27e845866278754e0c8c5b6"
       },
       "arm64": {
-        "url": "https://cdn.waterfox.com/waterfox/releases/6.7.8/Linux_aarch64/waterfox-6.7.8.tar.bz2",
-        "sha256": "4b9b18290940432099fa56c53d4d209a509146bdb4c0c8edbe9990d5fcf5e6f9"
+        "url": "https://cdn.waterfox.com/waterfox/releases/6.7.9/Linux_aarch64/waterfox-6.7.9.tar.bz2",
+        "sha256": "6586b715b4ac92e6e4cede5347e20a1d3a456f8fe6651b193411325a66e2e261"
       }
     },
     "strip": 1,
@@ -358,7 +358,7 @@
     }
   },
   "zettlr": {
-    "version": "4.10.0",
+    "version": "4.11.0",
     "kind": "deb",
     "architectures": [
       "amd64"
@@ -367,8 +367,8 @@
     "deb_name": "zettlr",
     "downloads": {
       "amd64": {
-        "url": "https://github.com/Zettlr/Zettlr/releases/download/v4.10.0/Zettlr-4.10.0-amd64.deb",
-        "sha256": "6466d2f718dfdbed18d382a0ebf8b00173ad6eb62e83a21dd4fdbf4a11cc6650"
+        "url": "https://github.com/Zettlr/Zettlr/releases/download/v4.11.0/Zettlr-4.11.0-amd64.deb",
+        "sha256": "52ade1012e395d7401ac8207f7a58244d8bed4ff2ed3fae2a370e0e9ce068cac"
       }
     },
     "track": {

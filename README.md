@@ -29,16 +29,16 @@ Targets: Ubuntu/Kubuntu 26.04 (`resolute`), Ubuntu/Kubuntu 26.10 (`stonking`). E
 | `lichii` | Lichii native Switch emulator | 410 | amd64, arm64 | AppImage unpacked in CI; native files in DEB | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `pantheon-studio` | Pantheon Studio | 0.2.0 | amd64, arm64 | Meson source build | Locally maintained source | [packages.json](packages.json) |
 | `quick-settings-tray` | Quick Settings Tray | 1 | amd64 | GNOME Shell extension | Upstream commit; daily assigned issue | [packages.json](packages.json) |
-| `recomplauncher` | RecompLauncher native desktop application | 0.90.0-beta.68 | amd64 | Upstream native DEB; adapted for existing package identity/repository | Upstream prerelease; daily assigned issue | [packages.json](packages.json) |
+| `recomplauncher` | RecompLauncher native desktop application | 0.90.0-beta.69 | amd64 | Upstream native DEB; adapted for existing package identity/repository | Upstream prerelease; daily assigned issue | [packages.json](packages.json) |
 | `sharpemu` | Sharpemu | 0.0.8-ember | amd64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `silo` | Silo browser picker with browser profile support | 1.2.2 | amd64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `termsmith` | Termsmith | 0.2.0 | amd64, arm64 | Meson source build | Locally maintained source | [packages.json](packages.json) |
 | `vacuumtube` | VacuumTube YouTube TV desktop client | 2.1.1 | amd64, arm64 | Upstream native DEB | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `vpn-manager` | Vpn Manager | 0.2.0 | amd64, arm64 | Bundled Python app | Locally maintained source | [packages.json](packages.json) |
-| `waterfox` | Waterfox | 6.7.8 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
+| `waterfox` | Waterfox | 6.7.9 | amd64, arm64 | Upstream native binary archive | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `xemu` | Native original Xbox emulator | 0.8.139 | amd64, arm64 | Native source build with upstream Debian rules | Upstream release; daily assigned issue | [packages.json](packages.json) |
 | `xenia` | Xenia | 0~git95a5c3e | amd64 | Native Linux source build | Upstream commit; daily assigned issue | [packages.json](packages.json) |
-| `zettlr` | Zettlr Markdown editor | 4.10.0 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
+| `zettlr` | Zettlr Markdown editor | 4.11.0 | amd64 | Upstream native DEB | Upstream release_asset; daily assigned issue | [packages.json](packages.json) |
 | `xemu-perf` | XEMU (Optimizations) | 0.8.139-1soltrosperf1 (+ target suite) | amd64 | Native source build with pinned Vulkan cache patch | Dedicated daily source/patch checks and assigned issue | [package.json](experiments/xemu/package.json) |
 
 Versions above are definition pins, not a claim that every build has been published. Check the matching [signed release](https://github.com/soltros/ubuntu_packages/releases) for availability.
