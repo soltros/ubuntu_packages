@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: '31 11 * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/auto-update.yml']
 permissions:
   contents: write
   actions: write
@@ -23,6 +26,7 @@ jobs:
         run: python3 scripts/check-updates.py
         continue-on-error: true
       - name: Refresh verified package downloads
+        id: refresh
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/auto-update.py
@@ -57,3 +61,22 @@ jobs:
         run: |
           # GITHUB_TOKEN pushes do not trigger other push workflows.
           gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref main -f pending_only=true
+      - name: Retry optimized xemu if unpublished
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! python3 - <<'PY'
+          import json, urllib.request
+          pin=json.load(open('experiments/xemu/package.json'))['version'].split('~')[0]
+          for suite in ('resolute','stonking'):
+              with urllib.request.urlopen('https://github.com/soltros/ubuntu_packages/releases/download/apt-'+suite+'/Packages',timeout=30) as response:
+                  index=response.read().decode()
+              if not any('Package: xemu-perf' in p.splitlines() and 'Version: '+pin+'~'+suite in p.splitlines() for p in index.split('\n\n')):
+                  raise SystemExit(1)
+          PY
+          then
+            gh workflow run xemu-perf.yml --repo "$GITHUB_REPOSITORY" --ref main
+          fi
+      - name: Report upstream checks requiring attention
+        if: steps.refresh.outputs.attention == 'true'
+        run: exit 1
