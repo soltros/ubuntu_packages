@@ -105,3 +105,19 @@ jobs:
           path: dist/*.deb
           if-no-files-found: error
           retention-days: 14
+
+  request-publication:
+    needs: [validate, build]
+    if: >-
+      always() && !cancelled() && github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      needs.validate.result == 'success' && needs.validate.outputs.should_build == 'true'
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Dispatch signed publisher explicitly
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish.yml --repo "$GITHUB_REPOSITORY" --ref main
