@@ -1,7 +1,7 @@
 name: Publish signed APT repository
 on:
   workflow_run:
-    workflows: [Build Ubuntu packages, Build optimized xemu]
+    workflows: [Build optimized xemu]
     types: [completed]
   workflow_dispatch:
     inputs:
